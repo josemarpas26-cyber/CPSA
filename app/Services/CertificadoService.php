@@ -14,45 +14,49 @@ class CertificadoService
     /**
      * Gera o certificado PDF para uma inscrição aprovada.
      */
-    public function gerar(Inscricao $inscricao): Certificado
-    {
-        if ($inscricao->status !== 'aprovada') {
-            throw new \RuntimeException('Só é possível gerar certificados para inscrições aprovadas.');
-        }
-
-        // Gerar PDF
-        $pdf = Pdf::loadView('pdf.certificado', compact('inscricao'))
-            ->setPaper('a4', 'landscape')
-            ->setOptions([
-                'defaultFont'          => 'DejaVu Sans',
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled'      => false,
-                'dpi'                  => 150,
-            ]);
-
-        // Path de destino
-        $ano      = now()->year;
-        $filename = "certificado-{$inscricao->numero}.pdf";
-        $path     = "certificados/{$ano}/{$filename}";
-
-        // Salvar em disco privado
-        Storage::disk('private')->put($path, $pdf->output());
-
-        // Criar ou actualizar registo
-        $certificado = Certificado::updateOrCreate(
-            ['inscricao_id' => $inscricao->id],
-            [
-                'path'               => $path,
-                'codigo_verificacao' => Str::uuid()->toString(),
-                'gerado_em'          => now(),
-            ]
-        );
-
-        // Disparar envio por email
-        EnviarCertificado::dispatch($inscricao, $certificado)->onQueue('emails');
-
-        return $certificado;
+public function gerar(Inscricao $inscricao): Certificado
+{
+    if ($inscricao->status !== 'aprovada') {
+        throw new \RuntimeException('Só é possível gerar certificados para inscrições aprovadas.');
     }
+
+    // 1️⃣ Criar certificado primeiro
+    $certificado = Certificado::updateOrCreate(
+        ['inscricao_id' => $inscricao->id],
+        [
+            'codigo_verificacao' => 'CPSA-' . Str::upper(Str::random(8)),
+            'gerado_em' => now(),
+        ]
+    );
+
+    // 2️⃣ Gerar PDF com certificado disponível
+    $pdf = Pdf::loadView('pdf.certificado', [
+        'inscricao' => $inscricao,
+        'certificado' => $certificado
+    ])
+    ->setPaper('a4', 'landscape')
+    ->setOptions([
+        'defaultFont' => 'DejaVu Sans',
+        'isHtml5ParserEnabled' => true,
+        'dpi' => 150,
+    ]);
+
+    $ano = now()->year;
+    $filename = "certificado-{$inscricao->numero}.pdf";
+    $path = "certificados/{$ano}/{$filename}";
+
+    Storage::disk('private')->put($path, $pdf->output());
+
+    // 3️⃣ atualizar path
+    $certificado->update([
+        'path' => $path
+    ]);
+
+    // 4️⃣ enviar email
+    EnviarCertificado::dispatch($inscricao, $certificado)->onQueue('emails');
+
+    return $certificado;
+}
 
     /**
      * Gera certificados em lote para todas as aprovadas sem certificado.

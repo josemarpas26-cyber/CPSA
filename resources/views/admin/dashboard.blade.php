@@ -47,8 +47,11 @@
                         <span class="font-semibold">{{ $val }}</span>
                     </div>
                     <div class="w-full bg-gray-100 rounded-full h-1.5">
+                        @php
+                            $largura = round(($val/$total)*100);
+                        @endphp
                         <div class="bg-blue-600 h-1.5 rounded-full transition-all"
-                             style="width: {{ round(($val/$total)*100) }}%"></div>
+                            style="width: {{ $largura }}%"></div>
                     </div>
                 </div>
             @endforeach
