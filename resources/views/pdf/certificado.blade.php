@@ -1,235 +1,304 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-        @page {
-            size: A4 landscape;
-            margin: 0;
-        }
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
 
-        body {
-            width: 297mm;
-            height: 210mm;
-            font-family: 'DejaVu Sans', sans-serif;
-            background: #fff;
-            overflow: hidden;
-        }
+    body {
+      width: 297mm;
+      height: 210mm;
+      font-family: 'DejaVu Sans', sans-serif;
+      background: #ffffff;
+      overflow: hidden;
+      position: relative;
+    }
 
-        /* ── Bordas decorativas ── */
-        .border-outer {
-            position: absolute;
-            top: 6mm; left: 6mm;
-            right: 6mm; bottom: 6mm;
-            border: 3px solid #1e40af;
-            border-radius: 4px;
-        }
+    /* ── Outer frame ──────────────────────────── */
+    .frame-outer {
+      position: absolute;
+      top: 8mm; left: 8mm;
+      right: 8mm; bottom: 8mm;
+      border: 2px solid #0b1f4a;
+      border-radius: 3px;
+    }
+    .frame-inner {
+      position: absolute;
+      top: 11mm; left: 11mm;
+      right: 11mm; bottom: 11mm;
+      border: 0.5px solid rgba(11,31,74,.18);
+      border-radius: 2px;
+    }
 
-        .border-inner {
-            position: absolute;
-            top: 9mm; left: 9mm;
-            right: 9mm; bottom: 9mm;
-            border: 1px solid #93c5fd;
-            border-radius: 3px;
-        }
+    /* ── Left accent bar ──────────────────────── */
+    .accent-bar {
+      position: absolute;
+      top: 8mm; left: 8mm;
+      bottom: 8mm;
+      width: 14mm;
+      background: linear-gradient(180deg, #0b1f4a 0%, #1a3a8f 60%, #1d4ed8 100%);
+    }
 
-        /* ── Faixa superior ── */
-        .header-band {
-            position: absolute;
-            top: 12mm; left: 12mm; right: 12mm;
-            height: 28mm;
-            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    /* ── Corner ornaments ─────────────────────── */
+    .corner {
+      position: absolute;
+      width: 12mm; height: 12mm;
+      border-color: #1d4ed8;
+      border-style: solid;
+    }
+    .corner-tl { top: 13mm; left: 25mm; border-width: 1.5px 0 0 1.5px; }
+    .corner-tr { top: 13mm; right: 13mm; border-width: 1.5px 1.5px 0 0; }
+    .corner-bl { bottom: 13mm; left: 25mm; border-width: 0 0 1.5px 1.5px; }
+    .corner-br { bottom: 13mm; right: 13mm; border-width: 0 1.5px 1.5px 0; }
 
-        .header-band h1 {
-            color: #ffffff;
-            font-size: 14pt;
-            font-weight: bold;
-            text-align: center;
-            letter-spacing: 1px;
-        }
+    /* ── Left bar content ─────────────────────── */
+    .bar-content {
+      position: absolute;
+      top: 8mm; left: 8mm;
+      width: 14mm;
+      bottom: 8mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .bar-text {
+      color: rgba(255,255,255,.5);
+      font-size: 5pt;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
 
-        .header-band p {
-            color: #bfdbfe;
-            font-size: 8pt;
-            text-align: center;
-            margin-top: 3px;
-        }
+    /* ── Main content ─────────────────────────── */
+    .content {
+      position: absolute;
+      top: 18mm;
+      left: 28mm;
+      right: 16mm;
+      bottom: 20mm;
+    }
 
-        /* ── Corpo ── */
-        .body {
-            position: absolute;
-            top: 46mm; left: 20mm; right: 20mm;
-            text-align: center;
-        }
+    /* Header row */
+    .header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10mm;
+      padding-bottom: 6mm;
+      border-bottom: 0.5px solid rgba(11,31,74,.12);
+    }
+    .org-name {
+      font-size: 7pt;
+      font-weight: 700;
+      color: #1d4ed8;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 2mm;
+    }
+    .event-name {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #0b1f4a;
+      line-height: 1.3;
+    }
+    .event-meta {
+      font-size: 6.5pt;
+      color: #7a8fb5;
+      margin-top: 1.5mm;
+    }
+    .header-logo-area {
+      text-align: right;
+    }
+    .logo-year {
+      font-size: 22pt;
+      font-weight: 700;
+      color: rgba(11,31,74,.08);
+      letter-spacing: -.02em;
+      line-height: 1;
+    }
 
-        .certifica-text {
-            font-size: 10pt;
-            color: #6b7280;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 6mm;
-        }
+    /* Certificate body */
+    .cert-label {
+      font-size: 7pt;
+      font-weight: 700;
+      color: #7a8fb5;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 2.5mm;
+    }
+    .certifies-text {
+      font-size: 8.5pt;
+      color: #3d5080;
+      margin-bottom: 3mm;
+      font-style: italic;
+    }
+    .participant-name {
+      font-size: 22pt;
+      font-weight: 700;
+      color: #0b1f4a;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 4mm;
+      padding-bottom: 3mm;
+      border-bottom: 1.5px solid #1d4ed8;
+    }
+    .cert-desc {
+      font-size: 8.5pt;
+      color: #3d5080;
+      line-height: 1.65;
+      margin-bottom: 4mm;
+      max-width: 180mm;
+    }
+    .cert-meta {
+      font-size: 7pt;
+      color: #7a8fb5;
+    }
 
-        .nome {
-            font-size: 26pt;
-            font-weight: bold;
-            color: #1e40af;
-            margin-bottom: 6mm;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #dbeafe;
-            padding-bottom: 4mm;
-        }
+    /* Signatures */
+    .signatures {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .sig-item {
+      width: 56mm;
+      text-align: center;
+    }
+    .sig-line {
+      border-top: 0.5px solid #0b1f4a;
+      margin-bottom: 2mm;
+    }
+    .sig-name {
+      font-size: 7pt;
+      font-weight: 700;
+      color: #0b1f4a;
+    }
+    .sig-role {
+      font-size: 6pt;
+      color: #7a8fb5;
+      margin-top: 1mm;
+    }
 
-        .descricao {
-            font-size: 10pt;
-            color: #374151;
-            line-height: 1.7;
-            margin-bottom: 8mm;
-        }
+    /* Verification code */
+    .verify-block {
+      position: absolute;
+      bottom: 14mm; right: 14mm;
+      text-align: right;
+    }
+    .verify-label {
+      font-size: 6pt;
+      color: #b0bdd8;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 1.5mm;
+    }
+    .verify-code {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #7a8fb5;
+      font-family: 'Courier New', monospace;
+      letter-spacing: .04em;
+    }
 
-        .descricao strong {
-            color: #1e40af;
-        }
-
-        .meta {
-            font-size: 8pt;
-            color: #9ca3af;
-            margin-bottom: 8mm;
-        }
-
-        /* ── Assinaturas ── */
-        .assinaturas {
-            position: absolute;
-            bottom: 20mm;
-            left: 20mm; right: 20mm;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .assinatura {
-            text-align: center;
-            width: 55mm;
-        }
-
-        .assinatura .linha {
-            border-top: 1px solid #374151;
-            margin-bottom: 2mm;
-        }
-
-        .assinatura .cargo {
-            font-size: 7pt;
-            color: #6b7280;
-        }
-
-        .assinatura .nome-ass {
-            font-size: 8pt;
-            font-weight: bold;
-            color: #374151;
-        }
-
-        /* ── Código de verificação ── */
-        .codigo {
-            position: absolute;
-            bottom: 14mm;
-            right: 14mm;
-            text-align: right;
-        }
-
-        .codigo p {
-            font-size: 6pt;
-            color: #9ca3af;
-        }
-
-        .codigo strong {
-            font-size: 7pt;
-            color: #6b7280;
-            font-family: monospace;
-        }
-
-        /* ── Ornamentos ── */
-        .ornamento-esq {
-            position: absolute;
-            top: 12mm; left: 12mm;
-            width: 12mm; height: 28mm; /* igual à altura da faixa */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .medalha {
-            position: absolute;
-            top: 48mm;
-            left: 50%;
-            margin-left: -8mm;
-            font-size: 18pt;
-        }
-    </style>
+    /* Decorative dots */
+    .dot-grid {
+      position: absolute;
+      top: 8mm; right: 8mm;
+      width: 18mm; height: 18mm;
+      opacity: .07;
+    }
+  </style>
 </head>
 <body>
 
-    {{-- Bordas --}}
-    <div class="border-outer"></div>
-    <div class="border-inner"></div>
+  <!-- Frames -->
+  <div class="frame-outer"></div>
+  <div class="frame-inner"></div>
 
-    {{-- Faixa superior --}}
-    <div class="header-band">
-        <div>
-            <h1>1º CONGRESSO DE PSIQUIATRIA E SAÚDE MENTAL EM ANGOLA</h1>
-            <p>Luanda, Angola · 2025 · CPSA 2025</p>
+  <!-- Accent bar -->
+  <div class="accent-bar"></div>
+  <div class="bar-content">
+    <span class="bar-text">CPSA · 2025 · Angola</span>
+  </div>
+
+  <!-- Corner ornaments -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Dot grid decoration -->
+  <svg class="dot-grid" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    @for($r=0;$r<5;$r++)
+      @for($c=0;$c<5;$c++)
+        <circle cx="{{ 6+$c*12 }}" cy="{{ 6+$r*12 }}" r="2" fill="#0b1f4a"/>
+      @endfor
+    @endfor
+  </svg>
+
+  <!-- Main content -->
+  <div class="content">
+
+    <!-- Header -->
+    <div class="header-row">
+      <div>
+        <div class="org-name">República de Angola</div>
+        <div class="event-name">
+          1º Congresso de Psiquiatria<br>e Saúde Mental em Angola
         </div>
+        <div class="event-meta">Luanda, Angola · 2025 · CPSA 2025</div>
+      </div>
+      <div class="header-logo-area">
+        <div class="logo-year">2025</div>
+      </div>
     </div>
 
-    {{-- Medalha central --}}
-    <div class="medalha">🏅</div>
-
-    {{-- Corpo do certificado --}}
-    <div class="body" style="top: 56mm;">
-        <p class="certifica-text">Certifica-se que</p>
-
-        <p class="nome">{{ $inscricao->nome_completo }}</p>
-
-        <p class="descricao">
-            participou do <strong>1º Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
-            realizado em Luanda, República de Angola, no ano de 2025,<br>
-            na modalidade de participante <strong>{{ ucfirst($inscricao->tipo_participacao) }}</strong>,
-            na categoria de <strong>{{ $inscricao->categoria_label }}</strong>.
-        </p>
-
-        <p class="meta">
-            Inscrição Nº {{ $inscricao->numero }}
-            &nbsp;·&nbsp;
-            Emitido em {{ now()->format('d \d\e F \d\e Y') }}
-        </p>
+    <!-- Certificate body -->
+    <div class="cert-label">Certificado de Participação</div>
+    <div class="certifies-text">Certifica-se que</div>
+    <div class="participant-name">{{ $inscricao->nome_completo }}</div>
+    <div class="cert-desc">
+      participou no <strong>1º Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
+      realizado em Luanda, República de Angola, no ano de 2025, na modalidade de
+      participante <strong>{{ ucfirst($inscricao->tipo_participacao) }}</strong>,
+      na categoria de <strong>{{ $inscricao->categoria_label }}</strong>.
+    </div>
+    <div class="cert-meta">
+      Inscrição {{ $inscricao->numero }}&nbsp;&nbsp;·&nbsp;&nbsp;Emitido em {{ now()->format('d \d\e F \d\e Y') }}
     </div>
 
-    {{-- Assinaturas --}}
-    <div class="assinaturas">
-        <div class="assinatura">
-            <div class="linha"></div>
-            <p class="nome-ass">Presidente da Comissão Científica</p>
-            <p class="cargo">1º Congresso de Psiquiatria e Saúde Mental em Angola</p>
-        </div>
-
-        <div class="assinatura">
-            <div class="linha"></div>
-            <p class="nome-ass">Presidente da Comissão Organizadora</p>
-            <p class="cargo">1º Congresso de Psiquiatria e Saúde Mental em Angola</p>
-        </div>
+    <!-- Signatures -->
+    <div class="signatures">
+      <div class="sig-item">
+        <div class="sig-line"></div>
+        <div class="sig-name">Presidente da Comissão Científica</div>
+        <div class="sig-role">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+      </div>
+      <div class="sig-item">
+        <div class="sig-line"></div>
+        <div class="sig-name">Presidente da Comissão Organizadora</div>
+        <div class="sig-role">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+      </div>
     </div>
+  </div>
 
-    {{-- Código de verificação --}}
-    <div class="codigo">
-        <p>Código de verificação</p>
-        <strong>{{ $certificado->codigo_verificacao }}</strong>
-    </div>
+  <!-- Verification -->
+  <div class="verify-block">
+    <div class="verify-label">Código de verificação</div>
+    <div class="verify-code">{{ $certificado->codigo_verificacao }}</div>
+  </div>
 
 </body>
 </html>

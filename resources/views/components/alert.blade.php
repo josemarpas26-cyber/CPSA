@@ -1,38 +1,26 @@
+{{-- resources/views/components/alert.blade.php --}}
 @props([
-    'type'        => 'info',    // success | warning | danger | info
-    'dismissible' => false,
-    'title'       => null,
+  'type'        => 'info',
+  'title'       => null,
+  'dismissible' => false,
 ])
-
 @php
-    $styles = [
-        'success' => ['bg-green-50 border-green-200', 'text-green-800', 'text-green-700', '✅'],
-        'warning' => ['bg-yellow-50 border-yellow-200', 'text-yellow-800', 'text-yellow-700', '⚠️'],
-        'danger'  => ['bg-red-50 border-red-200',    'text-red-800',   'text-red-700',   '❌'],
-        'info'    => ['bg-blue-50 border-blue-200',  'text-blue-800',  'text-blue-700',  'ℹ️'],
-    ];
-
-    [$bg, $titleColor, $textColor, $icon] = $styles[$type] ?? $styles['info'];
+  $styles = [
+    'success' => ['background:#f0fdf4;border-color:#bbf7d0;','color:#166534;','background:#16a34a;'],
+    'warning' => ['background:#fffbeb;border-color:#fde68a;','color:#92400e;','background:#d97706;'],
+    'danger'  => ['background:#fff1f2;border-color:#fecdd3;','color:#9f1239;','background:#e11d48;'],
+    'info'    => ['background:#eff6ff;border-color:#bfdbfe;','color:#1e40af;','background:#2563eb;'],
+  ];
+  [$bg,$tc,$dc] = $styles[$type] ?? $styles['info'];
 @endphp
-
-<div {{ $attributes->merge([
-    'class' => "rounded-xl border p-4 {$bg}"
-]) }}
-    @if($dismissible) x-data="{ show: true }" x-show="show" @endif
->
-    <div class="flex items-start gap-3">
-        <span class="text-lg flex-shrink-0">{{ $icon }}</span>
-        <div class="flex-1 min-w-0">
-            @if($title)
-                <p class="text-sm font-semibold {{ $titleColor }} mb-0.5">{{ $title }}</p>
-            @endif
-            <div class="text-sm {{ $textColor }}">{{ $slot }}</div>
-        </div>
-        @if($dismissible)
-            <button @click="show = false"
-                    class="text-gray-400 hover:text-gray-600 transition flex-shrink-0 text-lg leading-none">
-                ×
-            </button>
-        @endif
-    </div>
+<div {{ $attributes->merge([]) }}
+     style="display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 1rem;
+            border-radius:10px;border:1px solid;{{ $bg }}">
+  <span style="width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;{{ $dc }}"></span>
+  <div style="flex:1;">
+    @if($title)
+      <p style="font-size:.78rem;font-weight:700;{{ $tc }}margin:0 0 .25rem;">{{ $title }}</p>
+    @endif
+    <div style="font-size:.78rem;{{ $tc }}line-height:1.5;">{{ $slot }}</div>
+  </div>
 </div>

@@ -1,77 +1,82 @@
 @extends('layouts.app')
-@section('title', 'Criar Conta')
-
+@section('title','Criar Conta')
 @section('content')
-<div class="min-h-[60vh] flex items-center justify-center py-8">
-    <div class="w-full max-w-md">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+<style>
+  .auth-wrap{min-height:calc(100vh - 60px - 80px);display:flex;align-items:center;
+             justify-content:center;padding:3rem 1rem;position:relative;overflow:hidden;}
+  .auth-bg{position:absolute;inset:0;
+    background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(37,99,235,.1),transparent 60%),
+               radial-gradient(ellipse 50% 40% at 80% 80%,rgba(109,40,217,.06),transparent 60%);
+    pointer-events:none;}
+  .auth-card{width:100%;max-width:460px;background:var(--card);border:1px solid var(--card-border);
+             border-radius:var(--r-2xl);box-shadow:var(--shadow-lg);padding:2.5rem;position:relative;z-index:1;
+             opacity:0;animation:fadeUp .5s ease .1s forwards;}
+  .auth-divider{height:1px;background:linear-gradient(90deg,transparent,var(--divider) 30%,var(--divider) 70%,transparent);margin:1.5rem 0;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+</style>
 
-            <h2 class="text-2xl font-bold text-gray-900 mb-1">Criar conta</h2>
-            <p class="text-sm text-gray-500 mb-6">Para acompanhar a sua inscrição</p>
-
-            <form method="POST" action="{{ route('register') }}" class="space-y-4">
-                @csrf
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Nome completo</label>
-                    <input type="text" name="name" value="{{ old('name') }}"
-                           class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                                  @error('name') border-red-400 @enderror">
-                    @error('name')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" value="{{ old('email') }}"
-                           class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                                  @error('email') border-red-400 @enderror">
-                    @error('email')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Telefone</label>
-                    <input type="text" name="telefone" value="{{ old('telefone') }}"
-                           placeholder="+244 9XX XXX XXX"
-                           class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                                  @error('telefone') border-red-400 @enderror">
-                    @error('telefone')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Senha</label>
-                    <input type="password" name="password"
-                           class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                                  @error('password') border-red-400 @enderror">
-                    @error('password')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">
-                        Confirmar senha
-                    </label>
-                    <input type="password" name="password_confirmation"
-                           class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                                  focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-
-                <button type="submit"
-                        class="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold
-                               py-2.5 rounded-lg transition text-sm">
-                    Criar conta
-                </button>
-            </form>
-
-            <p class="mt-6 text-center text-sm text-gray-500">
-                Já tem conta?
-                <a href="{{ route('login') }}" class="text-blue-700 font-medium hover:underline">
-                    Entrar
-                </a>
-            </p>
-        </div>
+<div class="auth-wrap">
+  <div class="auth-bg"></div>
+  <div class="auth-card">
+    <div style="margin-bottom:1.75rem;">
+      <p class="section-label" style="margin-bottom:.25rem;">Acesso</p>
+      <h1 style="font-family:var(--font-display);font-style:italic;font-size:1.4rem;color:var(--text-1);margin:0 0 .3rem;">
+        Criar conta
+      </h1>
+      <p style="font-size:.78rem;color:var(--text-3);margin:0;">Para acompanhar e gerir a sua inscrição</p>
     </div>
+
+    <form method="POST" action="{{ route('register') }}"
+          style="display:flex;flex-direction:column;gap:.875rem;">
+      @csrf
+
+      <div>
+        <label class="form-label">Nome completo</label>
+        <input type="text" name="name" value="{{ old('name') }}" class="form-input" required autocomplete="name">
+        @error('name')<p class="form-error">{{ $message }}</p>@enderror
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" name="email" value="{{ old('email') }}" class="form-input" required autocomplete="email">
+          @error('email')<p class="form-error">{{ $message }}</p>@enderror
+        </div>
+        <div>
+          <label class="form-label">Telefone</label>
+          <input type="text" name="telefone" value="{{ old('telefone') }}"
+                 class="form-input" placeholder="+244 9XX XXX XXX" required>
+          @error('telefone')<p class="form-error">{{ $message }}</p>@enderror
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+        <div>
+          <label class="form-label">Senha</label>
+          <input type="password" name="password" class="form-input" required autocomplete="new-password">
+          @error('password')<p class="form-error">{{ $message }}</p>@enderror
+        </div>
+        <div>
+          <label class="form-label">Confirmar senha</label>
+          <input type="password" name="password_confirmation" class="form-input" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary"
+              style="justify-content:center;padding:.7rem;font-size:.85rem;margin-top:.375rem;">
+        Criar conta
+      </button>
+    </form>
+
+    <div class="auth-divider"></div>
+
+    <p style="text-align:center;font-size:.78rem;color:var(--text-3);">
+      Já tem conta?
+      <a href="{{ route('login') }}"
+         style="color:var(--blue-brand);font-weight:600;text-decoration:none;">
+        Entrar
+      </a>
+    </p>
+  </div>
 </div>
 @endsection

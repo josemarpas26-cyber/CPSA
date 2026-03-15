@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\InscricoesExport;
+use App\Http\Controllers\Controller;
 use App\Models\Inscricao;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExportacaoController extends \App\Http\Controllers\Controller
+class ExportacaoController extends Controller
 {
     /** Exportar Excel completo */
     public function excel(Request $request): BinaryFileResponse
@@ -33,14 +34,14 @@ class ExportacaoController extends \App\Http\Controllers\Controller
     /** Lista de presença em PDF */
     public function presenca(Request $request): Response
     {
-        $inscricoes = Inscricao::where('status', 'aprovada')
+        $inscricoes = Inscricao::aprovada()
             ->orderBy('nome_completo')
             ->get();
 
         $pdf = Pdf::loadView('pdf.lista-presenca', compact('inscricoes'))
             ->setPaper('a4', 'portrait')
             ->setOptions([
-                'defaultFont' => 'DejaVu Sans',
+                'defaultFont'          => 'DejaVu Sans',
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled'      => false,
             ]);

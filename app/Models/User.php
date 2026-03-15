@@ -22,12 +22,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'telefone', // FIX: campo estava ausente do fillable
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var array<string, string>
      */
     protected $hidden = [
         'password',
@@ -43,9 +44,10 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);

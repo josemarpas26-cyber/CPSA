@@ -1,139 +1,151 @@
 @extends('layouts.admin')
-@section('title', 'Certificados')
-@section('page-title', 'Gestão de Certificados')
-
+@section('title','Certificados')
+@section('page-title','Certificados')
 @section('content')
+<style>
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .a1{opacity:0;animation:fadeUp .4s ease .04s forwards;}
+  .a2{opacity:0;animation:fadeUp .4s ease .10s forwards;}
+  .a3{opacity:0;animation:fadeUp .4s ease .16s forwards;}
+</style>
 
-{{-- Stats --}}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    @foreach([
-        ['Aprovadas',     $stats['aprovadas'],  'blue',   '✅'],
-        ['Com certificado',$stats['com_cert'],  'green',  '🏅'],
-        ['Sem certificado',$stats['sem_cert'],  'yellow', '⏳'],
-        ['Enviados',       $stats['enviados'],  'purple', '📧'],
-    ] as [$label, $val, $cor, $icon])
-        <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-xl">{{ $icon }}</span>
-                <span class="text-2xl font-bold text-gray-900">{{ $val }}</span>
-            </div>
-            <p class="text-xs text-gray-500 font-medium">{{ $label }}</p>
-        </div>
-    @endforeach
-</div>
+<div style="display:flex;flex-direction:column;gap:1.25rem;">
 
-{{-- Acção em lote --}}
-@if($stats['sem_cert'] > 0)
-    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 mb-6
-                flex items-center justify-between flex-wrap gap-4">
-        <div>
-            <p class="text-sm font-semibold text-yellow-800">
-                {{ $stats['sem_cert'] }} inscrição(ões) sem certificado
-            </p>
-            <p class="text-xs text-yellow-600 mt-0.5">
-                Gere todos de uma vez e envie por email automaticamente.
-            </p>
-        </div>
-        @php
-            $quantidade = $stats['sem_cert'];
-        @endphp
-
-        <form method="POST" action="{{ route('admin.certificados.gerar-todos') }}"
-            onsubmit="return confirm('Gerar {{ $quantidade }} certificado(s)?')">
-            @csrf
-            <button type="submit"
-                    class="bg-yellow-600 hover:bg-yellow-700 text-white
-                        text-sm font-semibold px-5 py-2.5 rounded-lg transition">
-                🏅 Gerar Todos
-            </button>
-        </form>
+  {{-- Header --}}
+  <div class="a1" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <p class="section-label" style="margin-bottom:.2rem;">Gestão</p>
+      <h1 class="heading" style="font-size:1.5rem;margin:0;">Certificados</h1>
     </div>
-@endif
+    @if($stats['sem_cert']>0)
+      <form method="POST" action="{{ route('admin.certificados.gerar-todos') }}"
+            onsubmit="return confirm('Gerar {{ $stats['sem_cert'] }} certificado(s)?')"
+        @csrf
+        <button type="submit" class="btn-primary">
+          Gerar todos pendentes ({{ $stats['sem_cert'] }})
+        </button>
+      </form>
+    @endif
+  </div>
 
-{{-- Tabela --}}
-<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-            <thead>
-                <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide border-b border-gray-100">
-                    <th class="px-6 py-3 text-left font-medium">Número</th>
-                    <th class="px-6 py-3 text-left font-medium">Participante</th>
-                    <th class="px-6 py-3 text-left font-medium">Categoria</th>
-                    <th class="px-6 py-3 text-left font-medium">Certificado</th>
-                    <th class="px-6 py-3 text-left font-medium">Enviado</th>
-                    <th class="px-6 py-3 text-left font-medium">Acções</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-                @forelse($aprovadas as $inscricao)
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 font-mono text-xs text-blue-700 font-semibold">
-                            {{ $inscricao->numero }}
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="font-medium text-gray-900">{{ $inscricao->nome_completo }}</p>
-                            <p class="text-xs text-gray-400">{{ $inscricao->email }}</p>
-                        </td>
-                        <td class="px-6 py-4 text-gray-500 text-xs">{{ $inscricao->categoria_label }}</td>
-                        <td class="px-6 py-4">
-                            @if($inscricao->certificado)
-                                <span class="inline-flex items-center gap-1 text-xs
-                                             text-green-700 bg-green-50 px-2 py-1 rounded-full font-medium">
-                                    ✅ Gerado
-                                </span>
-                                <p class="text-xs text-gray-400 mt-0.5">
-                                    {{ $inscricao->certificado->gerado_em?->format('d/m/Y H:i') }}
-                                </p>
-                            @else
-                                <span class="inline-flex items-center gap-1 text-xs
-                                             text-yellow-700 bg-yellow-50 px-2 py-1 rounded-full font-medium">
-                                    ⏳ Pendente
-                                </span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($inscricao->certificado?->enviado_em)
-                                <span class="text-xs text-purple-700">
-                                    📧 {{ $inscricao->certificado->enviado_em->format('d/m/Y') }}
-                                </span>
-                            @else
-                                <span class="text-xs text-gray-400">—</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            @if($inscricao->certificado)
-                                <a href="{{ route('admin.certificados.download',
-                                              $inscricao->certificado) }}"
-                                   class="text-xs text-blue-700 hover:underline font-medium">
-                                    ⬇ Descarregar
-                                </a>
-                            @else
-                                <form method="POST"
-                                      action="{{ route('admin.certificados.gerar', $inscricao) }}">
-                                    @csrf
-                                    <button type="submit"
-                                            class="text-xs text-green-700 hover:underline font-medium">
-                                        🏅 Gerar
-                                    </button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-gray-400">
-                            <p class="text-2xl mb-2">🏅</p>
-                            <p class="text-sm">Nenhuma inscrição aprovada ainda.</p>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+  {{-- Stats row --}}
+  <div class="a2" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;">
+    @php
+      $cs=[
+        ['Aprovadas',$stats['aprovadas'],'#1d4ed8','#eff6ff'],
+        ['Com Certificado',$stats['com_cert'],'#059669','#ecfdf5'],
+        ['Sem Certificado',$stats['sem_cert'],'#b45309','#fffbeb'],
+        ['Enviados',$stats['enviados'],'#6d28d9','#f5f3ff'],
+      ];
+    @endphp
+    @foreach($cs as [$lbl,$val,$col,$bg])
+      <div style="background:var(--card);border:1px solid var(--card-border);border-radius:var(--r-lg);
+                  padding:1.25rem;box-shadow:var(--shadow-sm);">
+        <div style="font-family:var(--font-mono);font-size:1.75rem;font-weight:600;color:{{ $col }};margin-bottom:.25rem;">
+          {{ $val }}
+        </div>
+        <div style="font-size:.73rem;color:var(--text-3);font-weight:500;">{{ $lbl }}</div>
+      </div>
+    @endforeach
+  </div>
+
+  {{-- Alert if pending --}}
+  @if($stats['sem_cert']>0)
+    <div class="a2" style="background:var(--warning-bg);border:1px solid #fde68a;
+                            border-radius:var(--r-md);padding:1rem 1.25rem;
+                            display:flex;align-items:center;gap:.875rem;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--warning);flex-shrink:0;
+                  animation:pulseRing 2s infinite;"></div>
+      <div>
+        <p style="font-size:.8rem;font-weight:600;color:var(--warning);margin:0 0 .2rem;">
+          {{ $stats['sem_cert'] }} inscrição(ões) aprovada(s) ainda sem certificado
+        </p>
+        <p style="font-size:.72rem;color:#92400e;margin:0;">
+          Utilize o botão "Gerar todos" para processar em lote.
+        </p>
+      </div>
+    </div>
+  @endif
+
+  {{-- Table --}}
+  <div class="a3" style="background:var(--card);border:1px solid var(--card-border);
+                          border-radius:var(--r-lg);box-shadow:var(--shadow-sm);overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th><span class="section-label">Número</span></th>
+            <th><span class="section-label">Participante</span></th>
+            <th><span class="section-label">Categoria</span></th>
+            <th><span class="section-label">Certificado</span></th>
+            <th><span class="section-label">Enviado</span></th>
+            <th><span class="section-label">Acção</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($aprovadas as $insc)
+            <tr>
+              <td><span class="mono" style="font-size:.71rem;font-weight:600;color:var(--blue-vivid);">{{ $insc->numero }}</span></td>
+              <td>
+                <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $insc->nome_completo }}</div>
+                <div style="font-size:.7rem;color:var(--text-3);">{{ $insc->email }}</div>
+              </td>
+              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $insc->categoria_label }}</span></td>
+              <td>
+                @if($insc->certificado)
+                  <div>
+                    <span class="status-badge" style="color:var(--success);background:var(--success-bg);border-color:#a7f3d0;">
+                      <span class="status-dot" style="background:var(--success);"></span>Gerado
+                    </span>
+                    <div style="font-size:.68rem;color:var(--text-3);margin-top:.2rem;">
+                      {{ $insc->certificado->gerado_em?->format('d/m/Y H:i') }}
+                    </div>
+                  </div>
+                @else
+                  <span class="status-badge" style="color:var(--warning);background:var(--warning-bg);border-color:#fde68a;">
+                    <span class="status-dot" style="background:var(--warning);"></span>Pendente
+                  </span>
+                @endif
+              </td>
+              <td>
+                @if($insc->certificado?->enviado_em)
+                  <span style="font-size:.72rem;color:var(--purple);font-weight:500;">
+                    {{ $insc->certificado->enviado_em->format('d/m/Y') }}
+                  </span>
+                @else
+                  <span style="font-size:.72rem;color:var(--text-4);">—</span>
+                @endif
+              </td>
+              <td>
+                @if($insc->certificado)
+                  <a href="{{ route('admin.certificados.download',$insc->certificado) }}"
+                     style="font-size:.73rem;font-weight:600;color:var(--blue-vivid);text-decoration:none;">
+                    Descarregar
+                  </a>
+                @else
+                  <form method="POST" action="{{ route('admin.certificados.gerar',$insc) }}" style="display:inline;">
+                    @csrf
+                    <button type="submit"
+                            style="background:none;border:none;cursor:pointer;font-size:.73rem;
+                                   font-weight:600;color:var(--success);padding:0;">
+                      Gerar
+                    </button>
+                  </form>
+                @endif
+              </td>
+            </tr>
+          @empty
+            <tr><td colspan="6" style="padding:3rem;text-align:center;color:var(--text-3);font-size:.8rem;">Nenhuma inscrição aprovada.</td></tr>
+          @endforelse
+        </tbody>
+      </table>
     </div>
     @if($aprovadas->hasPages())
-        <div class="px-6 py-4 border-t border-gray-100">
-            {{ $aprovadas->links() }}
-        </div>
+      <div style="padding:.875rem 1.25rem;border-top:1px solid var(--divider);">
+        {{ $aprovadas->links() }}
+      </div>
     @endif
+  </div>
+
 </div>
 @endsection

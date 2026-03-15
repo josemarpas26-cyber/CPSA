@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Inscricao extends Model
 {
     use SoftDeletes;
+
     protected $table = 'inscricoes';
+
     protected $fillable = [
         'numero',
         'nome_completo',
@@ -42,18 +45,18 @@ class Inscricao extends Model
 
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
-            'pendente'    => 'Pendente',
-            'em_analise'  => 'Em Análise',
-            'aprovada'    => 'Aprovada',
-            'rejeitada'   => 'Rejeitada',
-            default       => $this->status,
+        return match ($this->status) {
+            'pendente'   => 'Pendente',
+            'em_analise' => 'Em Análise',
+            'aprovada'   => 'Aprovada',
+            'rejeitada'  => 'Rejeitada',
+            default      => $this->status,
         };
     }
 
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pendente'   => 'warning',
             'em_analise' => 'secondary',
             'aprovada'   => 'success',
@@ -64,34 +67,42 @@ class Inscricao extends Model
 
     public function getCategoriaLabelAttribute(): string
     {
-        return match($this->categoria) {
-            'medico'      => 'Médico(a)',
-            'enfermeiro'  => 'Enfermeiro(a)',
-            'psicologo'   => 'Psicólogo(a)',
-            'estudante'   => 'Estudante',
-            'outro'       => 'Outro',
-            default       => $this->categoria,
+        return match ($this->categoria) {
+            'medico'     => 'Médico(a)',
+            'enfermeiro' => 'Enfermeiro(a)',
+            'psicologo'  => 'Psicólogo(a)',
+            'estudante'  => 'Estudante',
+            'outro'      => 'Outro',
+            default      => $this->categoria,
         };
     }
 
     // ─── Geração do número único ──────────────
 
+    /**
+     * Gera o próximo número de inscrição de forma atómica,
+     * evitando race conditions em acessos simultâneos.
+     */
     public static function gerarNumero(): string
     {
-        $ano      = now()->year;
-        $prefixo  = "CPSA-{$ano}-";
+        return DB::transaction(function () {
+            $ano     = now()->year;
+            $prefixo = "CPSA-{$ano}-";
 
-        // Último número gerado no ano corrente
-        $ultimo = self::withTrashed()
-            ->where('numero', 'like', "{$prefixo}%")
-            ->orderByDesc('id')
-            ->value('numero');
+            // lockForUpdate previne race conditions: apenas uma transacção
+            // pode ler e incrementar o contador de cada vez.
+            $ultimo = self::withTrashed()
+                ->where('numero', 'like', "{$prefixo}%")
+                ->lockForUpdate()
+                ->orderByDesc('id')
+                ->value('numero');
 
-        $sequencia = $ultimo
-            ? (int) substr($ultimo, strlen($prefixo)) + 1
-            : 1;
+            $sequencia = $ultimo
+                ? (int) substr($ultimo, strlen($prefixo)) + 1
+                : 1;
 
-        return $prefixo . str_pad($sequencia, 4, '0', STR_PAD_LEFT);
+            return $prefixo . str_pad($sequencia, 4, '0', STR_PAD_LEFT);
+        });
     }
 
     // ─── Relacionamentos ──────────────────────
@@ -120,11 +131,12 @@ class Inscricao extends Model
     {
         return $this->hasOne(Certificado::class);
     }
-    
+
     public function alteracoes(): HasMany
     {
         return $this->hasMany(InscricaoAlteracaoLog::class)->orderByDesc('editado_em');
     }
+
     // ─── Scopes ───────────────────────────────
 
     public function scopePendente($query)
@@ -132,8 +144,18 @@ class Inscricao extends Model
         return $query->where('status', 'pendente');
     }
 
+    public function scopeEmAnalise($query)
+    {
+        return $query->where('status', 'em_analise');
+    }
+
     public function scopeAprovada($query)
     {
         return $query->where('status', 'aprovada');
+    }
+
+    public function scopeRejeitada($query)
+    {
+        return $query->where('status', 'rejeitada');
     }
 }

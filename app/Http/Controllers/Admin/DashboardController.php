@@ -10,12 +10,18 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
+        // FIX: Usar uma única query agregada em vez de 5 queries separadas
+        $contadoresRaw = Inscricao::selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
         $stats = [
-            'total'       => Inscricao::count(),
-            'pendentes'   => Inscricao::where('status', 'pendente')->count(),
-            'em_analise'  => Inscricao::where('status', 'em_analise')->count(),
-            'aprovadas'   => Inscricao::where('status', 'aprovada')->count(),
-            'rejeitadas'  => Inscricao::where('status', 'rejeitada')->count(),
+            'total'      => array_sum($contadoresRaw),
+            'pendentes'  => $contadoresRaw['pendente']   ?? 0,
+            'em_analise' => $contadoresRaw['em_analise'] ?? 0,
+            'aprovadas'  => $contadoresRaw['aprovada']   ?? 0,
+            'rejeitadas' => $contadoresRaw['rejeitada']  ?? 0,
         ];
 
         // Distribuição por categoria

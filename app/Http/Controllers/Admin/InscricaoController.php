@@ -11,9 +11,10 @@ use App\Services\InscricaoService;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+
 class InscricaoController extends Controller
 {
     public function __construct(private InscricaoService $service) {}
@@ -52,13 +53,18 @@ class InscricaoController extends Controller
 
         $inscricoes = $query->paginate(15)->withQueryString();
 
-        // Contadores para badges nos filtros
+        // FIX: Consolidar 5 queries separadas numa única query agregada
+        $contadoresRaw = Inscricao::selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
         $contadores = [
-            'total'      => Inscricao::count(),
-            'pendente'   => Inscricao::where('status', 'pendente')->count(),
-            'em_analise' => Inscricao::where('status', 'em_analise')->count(),
-            'aprovada'   => Inscricao::where('status', 'aprovada')->count(),
-            'rejeitada'  => Inscricao::where('status', 'rejeitada')->count(),
+            'total'      => array_sum($contadoresRaw),
+            'pendente'   => $contadoresRaw['pendente']    ?? 0,
+            'em_analise' => $contadoresRaw['em_analise']  ?? 0,
+            'aprovada'   => $contadoresRaw['aprovada']    ?? 0,
+            'rejeitada'  => $contadoresRaw['rejeitada']   ?? 0,
         ];
 
         return view('admin.inscricoes.index', compact('inscricoes', 'contadores'));
@@ -70,7 +76,7 @@ class InscricaoController extends Controller
     {
         $inscricao->load(['comprovativo', 'certificado', 'avaliador', 'alteracoes.editor']);
 
-        // URL temporária (5 min) para visualização segura do comprovativo
+        // URL para visualização segura do comprovativo
         $urlComprovativo = $inscricao->comprovativo
             ? $inscricao->comprovativo->urlTemporaria(5)
             : null;
@@ -78,19 +84,18 @@ class InscricaoController extends Controller
         return view('admin.inscricoes.show', compact('inscricao', 'urlComprovativo'));
     }
 
-
     // ─── Actualização de dados do participante ──────────────────────────────
 
     public function atualizarDados(AtualizarDadosInscricaoRequest $request, Inscricao $inscricao): RedirectResponse
     {
-        $dados = $request->validated();
+        $dados     = $request->validated();
         $alteracoes = [];
 
         foreach ($dados as $campo => $novoValor) {
             $valorAtual = $inscricao->{$campo};
             if ((string) $valorAtual !== (string) $novoValor) {
                 $alteracoes[$campo] = [
-                    'antes' => (string) $valorAtual,
+                    'antes'  => (string) $valorAtual,
                     'depois' => (string) $novoValor,
                 ];
             }
@@ -105,12 +110,12 @@ class InscricaoController extends Controller
 
             foreach ($alteracoes as $campo => $valores) {
                 InscricaoAlteracaoLog::create([
-                    'inscricao_id' => $inscricao->id,
-                    'editor_id' => auth()->id(),
-                    'campo' => $campo,
+                    'inscricao_id'   => $inscricao->id,
+                    'editor_id'      => auth()->id(),
+                    'campo'          => $campo,
                     'valor_anterior' => $valores['antes'],
-                    'valor_novo' => $valores['depois'],
-                    'editado_em' => now(),
+                    'valor_novo'     => $valores['depois'],
+                    'editado_em'     => now(),
                 ]);
             }
         });
@@ -120,7 +125,26 @@ class InscricaoController extends Controller
             ->with('success', 'Dados do participante actualizados com sucesso.');
     }
 
-    
+    // ─── Marcar Em Análise ────────────────────
+
+    /**
+     * Transição explícita de pendente → em_analise.
+     * Útil para sinalizar que a comissão está a analisar sem ainda decidir.
+     */
+    public function marcarEmAnalise(Inscricao $inscricao): RedirectResponse
+    {
+        if ($inscricao->status !== 'pendente') {
+            return back()->with('error', 'Só inscrições pendentes podem ser marcadas em análise.');
+        }
+
+        $inscricao->update([
+            'status'       => 'em_analise',
+            'avaliado_por' => Auth::id(),
+        ]);
+
+        return back()->with('success', "Inscrição {$inscricao->numero} marcada como em análise.");
+    }
+
     // ─── Aprovar ──────────────────────────────
 
     public function aprovar(AvaliacaoRequest $request, Inscricao $inscricao): RedirectResponse
@@ -151,28 +175,26 @@ class InscricaoController extends Controller
             ->with('success', "Inscrição {$inscricao->numero} rejeitada.");
     }
 
-    /** Download seguro do certificado pelo participante */
-public function downloadCertificado(): Response|RedirectResponse
-{
-    $inscricao = \App\Models\Inscricao::where('user_id', auth()->id())
-        ->where('status', 'aprovada')
-        ->whereHas('certificado')
-        ->with('certificado')
-        ->latest()
-        ->first();
+    // ─── Check-in no evento ───────────────────
 
-    if (! $inscricao?->certificado) {
-        return redirect()
-            ->route('participant.minha-inscricao')
-            ->with('error', 'Certificado não disponível.');
+    /**
+     * Regista a presença do participante no evento.
+     */
+    public function checkin(Inscricao $inscricao): RedirectResponse
+    {
+        if ($inscricao->status !== 'aprovada') {
+            return back()->with('error', 'Apenas participantes aprovados podem fazer check-in.');
+        }
+
+        if ($inscricao->presente) {
+            return back()->with('info', "Check-in de {$inscricao->nome_completo} já foi registado.");
+        }
+
+        $inscricao->update([
+            'presente'   => true,
+            'checkin_em' => now(),
+        ]);
+
+        return back()->with('success', "Check-in de {$inscricao->nome_completo} registado com sucesso.");
     }
-
-    $service  = app(\App\Services\CertificadoService::class);
-    $conteudo = $service->conteudo($inscricao->certificado);
-
-    return response($conteudo, 200, [
-        'Content-Type'        => 'application/pdf',
-        'Content-Disposition' => "attachment; filename=certificado-{$inscricao->numero}.pdf",
-    ]);
-}
 }

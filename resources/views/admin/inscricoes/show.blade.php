@@ -1,272 +1,352 @@
 @extends('layouts.admin')
-@section('title', $inscricao->numero)
-@section('page-title', 'Detalhe da Inscrição')
-
+@section('title',$inscricao->numero)
+@section('page-title','Detalhe da Inscrição')
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
+<style>
+  .detail-label{font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:.25rem;}
+  .detail-val{font-size:.83rem;font-weight:500;color:var(--text-1);}
+  .panel-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);}
+  .action-section{border-radius:var(--r-md);padding:1.25rem;border:1px solid;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .a1{opacity:0;animation:fadeUp .4s ease .04s forwards;}
+  .a2{opacity:0;animation:fadeUp .4s ease .10s forwards;}
+  .a3{opacity:0;animation:fadeUp .4s ease .16s forwards;}
+  .a4{opacity:0;animation:fadeUp .4s ease .22s forwards;}
+</style>
 
-    {{-- Cabeçalho com número e estado --}}
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm
-                flex items-center justify-between flex-wrap gap-4">
-        <div>
-            <p class="text-xs text-gray-400 mb-1">Número de Inscrição</p>
-            <p class="text-2xl font-bold font-mono text-blue-800 tracking-wider">
-                {{ $inscricao->numero }}
-            </p>
-            <p class="text-xs text-gray-400 mt-1">
-                Submetida em {{ $inscricao->created_at->format('d/m/Y \à\s H:i') }}
-            </p>
-        </div>
-        <div class="flex items-center gap-3">
-            @include('admin.partials.status-badge', ['status' => $inscricao->status])
+<div style="display:flex;flex-direction:column;gap:1.25rem;max-width:1000px;">
 
-            <a href="{{ route('admin.inscricoes.index') }}"
-               class="text-sm text-gray-500 hover:text-gray-700 border border-gray-200
-                      px-3 py-1.5 rounded-lg transition">
-                ← Voltar
-            </a>
-        </div>
+  {{-- Breadcrumb + title --}}
+  <div class="a1" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div style="display:flex;align-items:center;gap:.75rem;">
+      <a href="{{ route('admin.inscricoes.index') }}"
+         style="display:inline-flex;align-items:center;gap:.375rem;font-size:.75rem;font-weight:600;
+                color:var(--text-3);text-decoration:none;transition:color .15s;"
+         class="hover:text-blue">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+        </svg>
+        Inscrições
+      </a>
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--text-4)" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+      </svg>
+      <span style="font-family:var(--font-mono);font-size:.75rem;font-weight:600;color:var(--blue-vivid);">{{ $inscricao->numero }}</span>
     </div>
+    @php
+      $sm=['pendente'=>['Pendente','#b45309','#fffbeb','#fde68a'],
+           'em_analise'=>['Em Análise','#6d28d9','#f5f3ff','#ddd6fe'],
+           'aprovada'=>['Aprovada','#059669','#ecfdf5','#a7f3d0'],
+           'rejeitada'=>['Rejeitada','#be123c','#fff1f2','#fecdd3']];
+      [$sl,$sc,$sb,$sbd]=$sm[$inscricao->status]??['—','#64748b','#f8faff','#e2e8f0'];
+    @endphp
+    <span class="status-badge" style="color:{{ $sc }};background:{{ $sb }};border-color:{{ $sbd }};font-size:.78rem;padding:5px 14px;">
+      <span class="status-dot" style="background:{{ $sc }};"></span>
+      {{ $sl }}
+    </span>
+  </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {{-- Main grid --}}
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:1.25rem;" class="responsive-grid">
 
-        {{-- Dados do participante --}}
-        <div class="lg:col-span-2 space-y-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                    <h3 class="text-sm font-semibold text-gray-700">
-                        Dados do Participante
-                    </h3>
-                    <span class="text-xs text-gray-400">Editável por admin/organizador</span>
+    {{-- Left column --}}
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+      {{-- Participant data / Edit form --}}
+      <div class="panel-card a2">
+        <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--divider);
+                    display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <p class="section-label" style="margin-bottom:.15rem;">Ficha do Participante</p>
+            <h3 class="heading" style="font-size:.95rem;margin:0;">{{ $inscricao->nome_completo }}</h3>
+          </div>
+          <span style="font-size:.68rem;color:var(--text-4);font-weight:500;">
+            Inscrito em {{ $inscricao->created_at->format('d/m/Y H:i') }}
+          </span>
+        </div>
+        <div style="padding:1.5rem;">
+          <form method="POST" action="{{ route('admin.inscricoes.atualizar-dados',$inscricao) }}">
+            @csrf @method('PATCH')
+            <div style="display:grid;grid-template-columns:1fr;gap:1rem;">
+              <div>
+                <label class="form-label">Nome completo</label>
+                <input type="text" name="nome_completo" value="{{ old('nome_completo',$inscricao->nome_completo) }}" class="form-input" required>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+                <div>
+                  <label class="form-label">Email</label>
+                  <input type="email" name="email" value="{{ old('email',$inscricao->email) }}" class="form-input" required>
                 </div>
-
-                <form method="POST" action="{{ route('admin.inscricoes.atualizar-dados', $inscricao) }}" class="space-y-4">
-                    @csrf @method('PATCH')
-
-                    <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1">Nome completo</label>
-                        <input type="text" name="nome_completo" value="{{ old('nome_completo', $inscricao->nome_completo) }}"
-                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1">Email</label>
-                            <input type="email" name="email" value="{{ old('email', $inscricao->email) }}"
-                                   class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1">Telefone</label>
-                            <input type="text" name="telefone" value="{{ old('telefone', $inscricao->telefone) }}"
-                                   class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1">Instituição</label>
-                        <input type="text" name="instituicao" value="{{ old('instituicao', $inscricao->instituicao) }}"
-                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1">Cargo</label>
-                        <input type="text" name="cargo" value="{{ old('cargo', $inscricao->cargo) }}"
-                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1">Categoria</label>
-                            <select name="categoria" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                                @foreach(['medico' => 'Médico(a)', 'enfermeiro' => 'Enfermeiro(a)', 'psicologo' => 'Psicólogo(a)', 'estudante' => 'Estudante', 'outro' => 'Outro'] as $value => $label)
-                                    <option value="{{ $value }}" @selected(old('categoria', $inscricao->categoria) === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-  <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1">Modalidade</label>
-                            <select name="tipo_participacao" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
-                                @foreach(['presencial' => 'Presencial', 'online' => 'Online'] as $value => $label)
-                                    <option value="{{ $value }}" @selected(old('tipo_participacao', $inscricao->tipo_participacao) === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <button type="submit"
-                            class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
-                        Guardar alterações
-                    </button>
-                </form>
+                <div>
+                  <label class="form-label">Telefone</label>
+                  <input type="text" name="telefone" value="{{ old('telefone',$inscricao->telefone) }}" class="form-input" required>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+                <div>
+                  <label class="form-label">Instituição</label>
+                  <input type="text" name="instituicao" value="{{ old('instituicao',$inscricao->instituicao) }}" class="form-input" required>
+                </div>
+                <div>
+                  <label class="form-label">Cargo</label>
+                  <input type="text" name="cargo" value="{{ old('cargo',$inscricao->cargo) }}" class="form-input" required>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+                <div>
+                  <label class="form-label">Categoria</label>
+                  <select name="categoria" class="form-input" required>
+                    @foreach(['medico'=>'Médico(a)','enfermeiro'=>'Enfermeiro(a)','psicologo'=>'Psicólogo(a)','estudante'=>'Estudante','outro'=>'Outro'] as $v=>$l)
+                      <option value="{{ $v }}" @selected(old('categoria',$inscricao->categoria)===$v)>{{ $l }}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Modalidade</label>
+                  <select name="tipo_participacao" class="form-input" required>
+                    @foreach(['presencial'=>'Presencial','online'=>'Online'] as $v=>$l)
+                      <option value="{{ $v }}" @selected(old('tipo_participacao',$inscricao->tipo_participacao)===$v)>{{ $l }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
             </div>
-
-            {{-- Comprovativo --}}
-            @if($inscricao->comprovativo)
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">
-                        Comprovativo de Pagamento
-                    </h3>
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-4">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">📎</span>
-                            <div>
-                                <p class="text-sm font-medium text-gray-800">
-                                    {{ $inscricao->comprovativo->nome_original }}
-                                </p>
-                                <p class="text-xs text-gray-400">
-                                    {{ $inscricao->comprovativo->tamanho_formatado }}
-                                    · {{ strtoupper(pathinfo($inscricao->comprovativo->nome_original, PATHINFO_EXTENSION)) }}
-                                </p>
-                            </div>
-                        </div>
-                        @if($urlComprovativo)
-                            <a href="{{ $urlComprovativo }}" target="_blank"
-                               class="text-xs bg-blue-800 text-white px-3 py-1.5
-                                      rounded-lg hover:bg-blue-900 transition font-medium">
-                                Visualizar
-                            </a>
-                        @endif
-                    </div>
-
-                    {{-- Preview se for imagem --}}
-                    @if($urlComprovativo && str_contains($inscricao->comprovativo->mime_type, 'image'))
-                        <img src="{{ $urlComprovativo }}"
-                             alt="Comprovativo"
-                             class="w-full rounded-lg border border-gray-100 max-h-64 object-contain">
-                    @endif
-                </div>
-            @endif
-
-            {{-- Histórico de avaliação --}}
-            @if($inscricao->avaliado_em)
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">
-                        Avaliação
-                    </h3>
-                    <div class="text-sm space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Avaliado por</span>
-                            <span class="font-medium">{{ $inscricao->avaliador?->name ?? '—' }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Em</span>
-                            <span class="font-medium">
-                                {{ $inscricao->avaliado_em->format('d/m/Y H:i') }}
-                            </span>
-                        </div>
-                        @if($inscricao->motivo_rejeicao)
-                            <div class="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                                <p class="text-xs text-red-600 font-semibold mb-1">Motivo da rejeição</p>
-                                <p class="text-sm text-red-800">{{ $inscricao->motivo_rejeicao }}</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
+            <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--divider);display:flex;gap:.5rem;">
+              <button type="submit" class="btn-primary" style="font-size:.75rem;">Guardar alterações</button>
+            </div>
+          </form>
         </div>
+      </div>
 
-     
-        {{-- Painel de acções --}}
-        <div class="space-y-4">
-            @if(in_array($inscricao->status, ['pendente', 'em_analise']))
-                {{-- Aprovar --}}
-                <div class="bg-green-50 border border-green-200 rounded-xl p-5">
-                    <h4 class="text-sm font-semibold text-green-800 mb-3">✅ Aprovar Inscrição</h4>
-                    <p class="text-xs text-green-700 mb-4">
-                        O participante será notificado por email.
-                    </p>
-                    <form method="POST"
-                          action="{{ route('admin.inscricoes.aprovar', $inscricao) }}"
-                          onsubmit="return confirm('Confirmar aprovação de {{ $inscricao->numero }}?')">
-                        @csrf @method('PATCH')
-                        <button type="submit"
-                                class="w-full bg-green-600 hover:bg-green-700 text-white
-                                       text-sm font-semibold py-2 rounded-lg transition">
-                            Aprovar
-                        </button>
-                    </form>
-                </div>
-
-                {{-- Rejeitar --}}
-                <div class="bg-red-50 border border-red-200 rounded-xl p-5">
-                    <h4 class="text-sm font-semibold text-red-800 mb-3">❌ Rejeitar Inscrição</h4>
-                    <form method="POST"
-                          action="{{ route('admin.inscricoes.rejeitar', $inscricao) }}">
-                        @csrf @method('PATCH')
-                        <textarea name="motivo_rejeicao" rows="3"
-                                  placeholder="Motivo da rejeição (obrigatório)..."
-                                  required
-                                  class="w-full border border-red-200 rounded-lg px-3 py-2 text-sm
-                                         focus:outline-none focus:ring-2 focus:ring-red-400
-                                         bg-white mb-3 resize-none"></textarea>
-                        <button type="submit"
-                                onclick="return confirm('Confirmar rejeição?')"
-                                class="w-full bg-red-600 hover:bg-red-700 text-white
-                                       text-sm font-semibold py-2 rounded-lg transition">
-                            Rejeitar
-                        </button>
-                    </form>
-                </div>
+      {{-- Comprovativo --}}
+      @if($inscricao->comprovativo)
+        <div class="panel-card a3">
+          <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--divider);">
+            <p class="section-label" style="margin-bottom:.15rem;">Documento</p>
+            <h3 class="heading" style="font-size:.95rem;margin:0;">Comprovativo de Pagamento</h3>
+          </div>
+          <div style="padding:1.25rem 1.5rem;">
+            <div style="display:flex;align-items:center;gap:1rem;padding:1rem;
+                        background:var(--surface);border-radius:var(--r-md);
+                        border:1px solid var(--card-border);margin-bottom:1rem;">
+              <div style="width:40px;height:40px;border-radius:var(--r-sm);
+                          background:var(--info-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--blue-brand)" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/>
+                </svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:.8rem;font-weight:600;color:var(--text-1);margin:0 0 .15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                  {{ $inscricao->comprovativo->nome_original }}
+                </p>
+                <p style="font-size:.7rem;color:var(--text-3);margin:0;">
+                  {{ $inscricao->comprovativo->tamanho_formatado }}
+                  &nbsp;·&nbsp;
+                  {{ strtoupper(pathinfo($inscricao->comprovativo->nome_original,PATHINFO_EXTENSION)) }}
+                </p>
+              </div>
+              @if($urlComprovativo)
+                <a href="{{ $urlComprovativo }}" target="_blank" class="btn-primary"
+                   style="font-size:.72rem;padding:.4rem .75rem;flex-shrink:0;">Ver ficheiro</a>
+              @endif
+            </div>
+            @if($urlComprovativo && str_contains($inscricao->comprovativo->mime_type,'image'))
+              <img src="{{ $urlComprovativo }}" alt="Comprovativo"
+                   style="width:100%;max-height:280px;object-fit:contain;border-radius:var(--r-sm);
+                          border:1px solid var(--card-border);">
             @endif
-
-            @if($inscricao->status === 'aprovada' && ! $inscricao->certificado)
-                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
-                    <h4 class="text-sm font-semibold text-blue-800 mb-3">🏅 Certificado</h4>
-                    <form method="POST"
-                          action="{{ route('admin.certificados.gerar', $inscricao) }}">
-                        @csrf
-                        <button type="submit"
-                                class="w-full bg-blue-700 hover:bg-blue-800 text-white
-                                       text-sm font-semibold py-2 rounded-lg transition">
-                            Gerar Certificado
-                        </button>
-                    </form>
-                </div>
-            @endif
-
-            @if($inscricao->certificado)
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-5">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-1">🏅 Certificado Gerado</h4>
-                    <p class="text-xs text-gray-500 mb-3">
-                        {{ $inscricao->certificado->gerado_em?->format('d/m/Y H:i') }}
-                    </p>
-                    <a href="{{ Storage::url($inscricao->certificado->path) }}" target="_blank"
-                       class="block text-center text-sm text-blue-700 hover:underline font-medium">
-                        Descarregar PDF
-                    </a>
-                </div>
-            @endif
+          </div>
         </div>
+      @endif
+
+      {{-- Evaluation history --}}
+      @if($inscricao->avaliado_em)
+        <div class="panel-card a3" style="padding:1.25rem 1.5rem;">
+          <p class="section-label" style="margin-bottom:.5rem;">Avaliação</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:.875rem;">
+            <div>
+              <p class="detail-label">Avaliado por</p>
+              <p class="detail-val">{{ $inscricao->avaliador?->name ?? '—' }}</p>
+            </div>
+            <div>
+              <p class="detail-label">Em</p>
+              <p class="detail-val">{{ $inscricao->avaliado_em->format('d/m/Y H:i') }}</p>
+            </div>
+          </div>
+          @if($inscricao->motivo_rejeicao)
+            <div style="padding:.875rem 1rem;background:var(--danger-bg);border-radius:var(--r-sm);
+                        border:1px solid #fecdd3;">
+              <p style="font-size:.68rem;font-weight:700;color:var(--danger);text-transform:uppercase;
+                        letter-spacing:.08em;margin:0 0 .375rem;">Motivo da rejeição</p>
+              <p style="font-size:.8rem;color:#9f1239;margin:0;line-height:1.5;">{{ $inscricao->motivo_rejeicao }}</p>
+            </div>
+          @endif
+        </div>
+      @endif
+
+      {{-- Change logs --}}
+      <div class="panel-card a4">
+        <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--divider);">
+          <p class="section-label" style="margin-bottom:.15rem;">Auditoria</p>
+          <h3 class="heading" style="font-size:.95rem;margin:0;">Log de Alterações</h3>
+        </div>
+        <div style="padding:1.25rem 1.5rem;">
+          @if($inscricao->alteracoes->isEmpty())
+            <p style="font-size:.78rem;color:var(--text-3);margin:0;">Sem alterações registadas.</p>
+          @else
+            <div style="display:flex;flex-direction:column;gap:.625rem;">
+              @foreach($inscricao->alteracoes as $log)
+                <div style="padding:.75rem 1rem;background:var(--surface);border-radius:var(--r-sm);
+                            border:1px solid var(--card-border);">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:.375rem;">
+                    <span style="font-size:.73rem;font-weight:600;color:var(--text-2);">
+                      {{ $log->editor?->name ?? 'Sistema' }}
+                    </span>
+                    <span style="font-size:.68rem;color:var(--text-3);">{{ $log->editado_em?->format('d/m/Y H:i') }}</span>
+                  </div>
+                  <p style="font-size:.73rem;color:var(--text-2);margin:0 0 .25rem;">
+                    Campo: <strong>{{ str_replace('_',' ',ucfirst($log->campo)) }}</strong>
+                  </p>
+                  <div style="font-size:.7rem;color:var(--text-3);line-height:1.5;">
+                    <span style="text-decoration:line-through;">{{ $log->valor_anterior ?: '—' }}</span>
+                    &nbsp;
+                    <svg style="display:inline;vertical-align:middle;" width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                    </svg>
+                    &nbsp;
+                    <span style="font-weight:600;color:var(--text-1);">{{ $log->valor_novo ?: '—' }}</span>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          @endif
+        </div>
+      </div>
     </div>
+
+    {{-- Right column — actions --}}
+    <div style="display:flex;flex-direction:column;gap:.875rem;">
+
+      {{-- Transition to em_analise --}}
+      @if($inscricao->status==='pendente')
+        <div class="a2 action-section" style="background:#f5f3ff;border-color:#ddd6fe;">
+          <p style="font-size:.73rem;font-weight:700;color:var(--purple);margin:0 0 .375rem;">Iniciar Análise</p>
+          <p style="font-size:.72rem;color:#7c3aed;margin:0 0 .875rem;line-height:1.5;">
+            Sinaliza que a comissão está a analisar o comprovativo.
+          </p>
+          <form method="POST" action="{{ route('admin.inscricoes.em-analise',$inscricao) }}">
+            @csrf @method('PATCH')
+            <button type="submit" style="width:100%;padding:.5rem;border-radius:var(--r-sm);
+                    background:var(--purple);color:white;font-size:.75rem;font-weight:600;
+                    border:none;cursor:pointer;transition:background .18s;"
+                    onmouseover="this.style.background='#5b21b6'"
+                    onmouseout="this.style.background='var(--purple)'">
+              Marcar em Análise
+            </button>
+          </form>
+        </div>
+      @endif
+
+      {{-- Approve --}}
+      @if(in_array($inscricao->status,['pendente','em_analise']))
+        <div class="a2 action-section" style="background:var(--success-bg);border-color:#a7f3d0;">
+          <p style="font-size:.73rem;font-weight:700;color:var(--success);margin:0 0 .375rem;">Aprovar Inscrição</p>
+          <p style="font-size:.72rem;color:#047857;margin:0 0 .875rem;line-height:1.5;">
+            O participante será notificado por email imediatamente.
+          </p>
+          <form method="POST" action="{{ route('admin.inscricoes.aprovar',$inscricao) }}"
+                onsubmit="return confirm('Confirmar aprovação de {{ $inscricao->numero }}?')">
+            @csrf @method('PATCH')
+            <button type="submit" style="width:100%;padding:.5rem;border-radius:var(--r-sm);
+                    background:var(--success);color:white;font-size:.75rem;font-weight:600;
+                    border:none;cursor:pointer;transition:background .18s;"
+                    onmouseover="this.style.background='#047857'"
+                    onmouseout="this.style.background='var(--success)'">
+              Aprovar
+            </button>
+          </form>
+        </div>
+
+        {{-- Reject --}}
+        <div class="a2 action-section" style="background:var(--danger-bg);border-color:#fecdd3;">
+          <p style="font-size:.73rem;font-weight:700;color:var(--danger);margin:0 0 .375rem;">Rejeitar Inscrição</p>
+          <form method="POST" action="{{ route('admin.inscricoes.rejeitar',$inscricao) }}">
+            @csrf @method('PATCH')
+            <textarea name="motivo_rejeicao" rows="3" required
+                      placeholder="Motivo obrigatório..."
+                      class="form-input" style="resize:none;margin-bottom:.625rem;
+                      border-color:#fecdd3;font-size:.75rem;"></textarea>
+            <button type="submit" onclick="return confirm('Confirmar rejeição?')"
+                    style="width:100%;padding:.5rem;border-radius:var(--r-sm);
+                    background:var(--danger);color:white;font-size:.75rem;font-weight:600;
+                    border:none;cursor:pointer;transition:background .18s;"
+                    onmouseover="this.style.background='#9f1239'"
+                    onmouseout="this.style.background='var(--danger)'">
+              Rejeitar
+            </button>
+          </form>
+        </div>
+      @endif
+
+      {{-- Generate certificate --}}
+      @if($inscricao->status==='aprovada' && !$inscricao->certificado)
+        <div class="a3 action-section" style="background:#eff6ff;border-color:#bfdbfe;">
+          <p style="font-size:.73rem;font-weight:700;color:var(--blue-brand);margin:0 0 .375rem;">Certificado</p>
+          <p style="font-size:.72rem;color:#1d4ed8;margin:0 0 .875rem;line-height:1.5;">
+            Gerar e enviar PDF por email ao participante.
+          </p>
+          <form method="POST" action="{{ route('admin.certificados.gerar',$inscricao) }}">
+            @csrf
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:.75rem;">
+              Gerar Certificado
+            </button>
+          </form>
+        </div>
+      @endif
+
+      @if($inscricao->certificado)
+        <div class="a3 action-section" style="background:var(--surface);border-color:var(--card-border);">
+          <p style="font-size:.73rem;font-weight:700;color:var(--text-2);margin:0 0 .2rem;">Certificado Gerado</p>
+          <p style="font-size:.7rem;color:var(--text-3);margin:0 0 .875rem;">
+            {{ $inscricao->certificado->gerado_em?->format('d/m/Y H:i') }}
+          </p>
+          <a href="{{ route('admin.certificados.download',$inscricao->certificado) }}"
+             class="btn-secondary" style="width:100%;justify-content:center;font-size:.75rem;">
+            Descarregar PDF
+          </a>
+        </div>
+      @endif
+
+      {{-- Check-in --}}
+      @if($inscricao->status==='aprovada')
+        <div class="a3 action-section" style="background:var(--surface);border-color:var(--card-border);">
+          <p style="font-size:.73rem;font-weight:700;color:var(--text-2);margin:0 0 .5rem;">Presença no Evento</p>
+          @if($inscricao->presente)
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--success);"></span>
+              <span style="font-size:.75rem;font-weight:600;color:var(--success);">Presente</span>
+              <span style="font-size:.7rem;color:var(--text-3);">{{ $inscricao->checkin_em?->format('d/m H:i') }}</span>
+            </div>
+          @else
+            <form method="POST" action="{{ route('admin.inscricoes.checkin',$inscricao) }}"
+                  onsubmit="return confirm('Registar presença?')">
+              @csrf @method('PATCH')
+              <button type="submit" class="btn-secondary" style="width:100%;justify-content:center;font-size:.75rem;">
+                Registar Presença
+              </button>
+            </form>
+          @endif
+        </div>
+      @endif
+
+    </div>
+  </div>
 </div>
 
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">
-                    Logs de Alterações dos Dados
-                </h3>
-
-                @if($inscricao->alteracoes->isEmpty())
-                    <p class="text-sm text-gray-500">Ainda não existem alterações registadas.</p>
-                @else
-                    <div class="space-y-3">
-                        @foreach($inscricao->alteracoes as $log)
-                            <div class="border border-gray-100 rounded-lg p-3 bg-gray-50">
-                                <p class="text-xs text-gray-500 mb-1">
-                                    <span class="font-semibold text-gray-700">{{ $log->editor?->name ?? 'Sistema' }}</span>
-                                    editou em {{ $log->editado_em?->format('d/m/Y H:i') }}
-                                </p>
-                                <p class="text-sm text-gray-800">
-                                    <span class="font-medium">Campo:</span> {{ str_replace('_', ' ', ucfirst($log->campo)) }}
-                                </p>
-                                <p class="text-xs text-gray-600 mt-1">
-                                    <span class="font-medium">Antes:</span> {{ $log->valor_anterior ?: '—' }}
-                                    <br>
-                                    <span class="font-medium">Depois:</span> {{ $log->valor_novo ?: '—' }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-       
+<style>
+  @media(max-width:768px){
+    .responsive-grid{grid-template-columns:1fr !important;}
+  }
+  .hover\:text-blue:hover{color:var(--blue-vivid)!important;}
+</style>
 @endsection

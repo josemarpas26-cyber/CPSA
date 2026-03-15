@@ -35,8 +35,14 @@ class Comprovativo extends Model
         return $this->belongsTo(User::class, 'revisto_por');
     }
 
-    /** URL temporária para visualização segura (somente admin) */
-    public function urlTemporaria(): string
+    /**
+     * URL de download seguro para o comprovativo.
+     * Apenas utilizadores autenticados com permissão podem aceder.
+     *
+     * O parâmetro $minutos é mantido na assinatura para compatibilidade futura
+     * (ex.: se se migrar para URLs assinadas com expiração via S3 ou similar).
+     */
+    public function urlTemporaria(int $minutos = 5): string
     {
         return route('comprovativo.download', ['comprovativo' => $this->id]);
     }
@@ -45,8 +51,12 @@ class Comprovativo extends Model
     public function getTamanhoFormatadoAttribute(): string
     {
         $bytes = $this->tamanho;
-        if ($bytes < 1024) return "{$bytes} B";
-        if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
-        return round($bytes / 1048576, 1) . ' MB';
+        if ($bytes < 1024) {
+            return "{$bytes} B";
+        }
+        if ($bytes < 1_048_576) {
+            return round($bytes / 1024, 1) . ' KB';
+        }
+        return round($bytes / 1_048_576, 1) . ' MB';
     }
 }
