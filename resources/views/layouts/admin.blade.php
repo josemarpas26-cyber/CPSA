@@ -28,6 +28,10 @@
                     ['route' => 'admin.certificados.index','label' => 'Certificados', 'icon' => '🏅'],
                     ['route' => 'admin.exportar.excel',    'label' => 'Exportar',     'icon' => '📥'],
                 ];
+
+                if (Auth::user()?->hasRole('admin')) {
+                    $navItems[] = ['route' => 'admin.utilizadores.index', 'label' => 'Utilizadores', 'icon' => '👥'];
+                }
             @endphp
 
             @foreach($navItems as $item)

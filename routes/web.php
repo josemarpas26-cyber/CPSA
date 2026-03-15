@@ -5,6 +5,7 @@ use App\Http\Controllers\Participant\InscricaoController as ParticipantInscricao
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InscricaoController as AdminInscricao;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UtilizadorController;
 use App\Http\Controllers\ComprovativoController;
 // ─────────────────────────────────────────
 // PORTAL PÚBLICO
@@ -63,6 +64,14 @@ Route::middleware(['auth', 'role:admin,organizador'])
         Route::patch('/inscricoes/{inscricao}/dados', [AdminInscricao::class, 'atualizarDados'])->name('inscricoes.atualizar-dados');
         Route::patch('/inscricoes/{inscricao}/aprovar',  [AdminInscricao::class, 'aprovar'])->name('inscricoes.aprovar');
         Route::patch('/inscricoes/{inscricao}/rejeitar', [AdminInscricao::class, 'rejeitar'])->name('inscricoes.rejeitar');
+
+        // Gestão de utilizadores (apenas admin)
+        Route::get('/utilizadores', [UtilizadorController::class, 'index'])
+            ->middleware('role:admin')
+            ->name('utilizadores.index');
+        Route::post('/utilizadores', [UtilizadorController::class, 'store'])
+            ->middleware('role:admin')
+            ->name('utilizadores.store');
 
         // Exportação
         Route::get('/exportar/excel',    [\App\Http\Controllers\Admin\ExportacaoController::class, 'excel'])->name('exportar.excel');
