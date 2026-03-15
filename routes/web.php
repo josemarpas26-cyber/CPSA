@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InscricaoController as AdminInscricao;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComprovativoController;
-
 // ─────────────────────────────────────────
 // PORTAL PÚBLICO
 // ─────────────────────────────────────────
@@ -42,9 +41,10 @@ Route::get('/inscricao/sucesso', [ParticipantInscricao::class, 'sucesso'])->name
 Route::middleware('auth')->prefix('minha-inscricao')->name('participant.')->group(function () {
     Route::get('/', [ParticipantInscricao::class, 'show'])->name('minha-inscricao');
         // Dentro do grupo auth → participant:
-    Route::get('/minha-inscricao/certificado',
+   // Route::get('/minha-inscricao/certificado',
+    Route::get('/certificado',
         [ParticipantInscricao::class, 'downloadCertificado']
-    )->name('participant.certificado.download');
+        )->name('certificado.download');
 });
 
 // ─────────────────────────────────────────

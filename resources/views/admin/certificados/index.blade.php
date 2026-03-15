@@ -34,12 +34,16 @@
                 Gere todos de uma vez e envie por email automaticamente.
             </p>
         </div>
+        @php
+            $quantidade = $stats['sem_cert'];
+        @endphp
+
         <form method="POST" action="{{ route('admin.certificados.gerar-todos') }}"
-              onsubmit="return confirm('Gerar {{ $stats['sem_cert'] }} certificado(s)?')">
+            onsubmit="return confirm('Gerar {{ $quantidade }} certificado(s)?')">
             @csrf
             <button type="submit"
                     class="bg-yellow-600 hover:bg-yellow-700 text-white
-                           text-sm font-semibold px-5 py-2.5 rounded-lg transition">
+                        text-sm font-semibold px-5 py-2.5 rounded-lg transition">
                 🏅 Gerar Todos
             </button>
         </form>

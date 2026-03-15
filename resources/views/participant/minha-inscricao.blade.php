@@ -194,21 +194,21 @@
         @endif
 
         {{-- Certificado --}}
-        @if($inscricao->status === 'aprovada')
+        @if($inscricaoComCertificado || $inscricao->status === 'aprovada')
             <div class="rounded-2xl border p-6 shadow-sm mb-5
-                        {{ $inscricao->certificado
+                        {{ $inscricaoComCertificado
                            ? 'bg-gradient-to-br from-blue-50 to-violet-50 border-blue-200'
                            : 'bg-gray-50 border-gray-100' }}">
                 <div class="flex items-center gap-4">
                     <span class="text-4xl">🏅</span>
                     <div class="flex-1">
-                        @if($inscricao->certificado)
+                        @if($inscricaoComCertificado)
                             <h3 class="text-sm font-semibold text-blue-900 mb-0.5">
                                 Certificado Disponível
                             </h3>
                             <p class="text-xs text-blue-700">
                                 Gerado em
-                                {{ $inscricao->certificado->gerado_em?->format('d/m/Y') }}
+                                {{ $inscricaoComCertificado->certificado->gerado_em?->format('d/m/Y') }}
                                 · Enviado para o seu email
                             </p>
                         @else
@@ -220,7 +220,7 @@
                             </p>
                         @endif
                     </div>
-                    @if($inscricao->certificado)
+                    @if($inscricaoComCertificado)
                         <a href="{{ route('participant.certificado.download') }}"
                            class="bg-blue-800 hover:bg-blue-900 text-white text-xs
                                   font-semibold px-4 py-2.5 rounded-lg transition flex-shrink-0">

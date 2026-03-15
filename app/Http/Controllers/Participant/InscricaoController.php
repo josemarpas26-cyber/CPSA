@@ -5,13 +5,20 @@ namespace App\Http\Controllers\Participant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InscricaoRequest;
 use App\Models\Inscricao;
+use App\Services\CertificadoService;
 use App\Services\InscricaoService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class InscricaoController extends Controller
 {
-    public function __construct(private InscricaoService $service) {}
+    //public function __construct(private InscricaoService $service) {}
+    public function __construct(
+        private InscricaoService $service,
+        private CertificadoService $certificadoService,
+    ) {}
 
     /** Página inicial pública */
     public function index(): View
@@ -40,9 +47,9 @@ class InscricaoController extends Controller
     }
 
     /** Página de sucesso */
-    public function sucesso(): View
+
+    public function sucesso(): View|RedirectResponse
     {
-        // Prevenir acesso directo sem submissão
         if (! session('inscricao_numero')) {
             return redirect()->route('inscricao.create');
         }
@@ -58,6 +65,35 @@ class InscricaoController extends Controller
             ->latest()
             ->first();
 
-        return view('participant.minha-inscricao', compact('inscricao'));
+           $inscricaoComCertificado = Inscricao::where('user_id', auth()->id())
+            ->whereHas('certificado')
+            ->with('certificado')
+            ->latest()
+            ->first();
+
+        return view('participant.minha-inscricao', compact('inscricao', 'inscricaoComCertificado'));
+    }
+
+    /** Download do certificado do participante autenticado */
+    public function downloadCertificado(): Response|RedirectResponse
+    {
+        $inscricao = Inscricao::where('user_id', auth()->id())
+            ->whereHas('certificado')
+            ->with('certificado')
+            ->latest()
+            ->first();
+
+        if (! $inscricao) {
+            return redirect()
+                ->route('participant.minha-inscricao')
+                ->with('error', 'Ainda não existe nenhum certificado disponível para download.');
+        }
+
+        $conteudo = $this->certificadoService->conteudo($inscricao->certificado);
+
+        return response($conteudo, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=certificado-{$inscricao->numero}.pdf",
+        ]);
     }
 }
