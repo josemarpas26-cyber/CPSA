@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AvaliacaoRequest;
+use App\Http\Requests\AtualizarDadosInscricaoRequest;
 use App\Models\Inscricao;
+use App\Models\InscricaoAlteracaoLog;
 use App\Services\InscricaoService;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 class InscricaoController extends Controller
 {
@@ -41,9 +44,9 @@ class InscricaoController extends Controller
             $termo = $request->busca;
             $query->where(function ($q) use ($termo) {
                 $q->where('nome_completo', 'like', "%{$termo}%")
-                  ->orWhere('email', 'like', "%{$termo}%")
-                  ->orWhere('numero', 'like', "%{$termo}%")
-                  ->orWhere('instituicao', 'like', "%{$termo}%");
+                    ->orWhere('email', 'like', "%{$termo}%")
+                    ->orWhere('numero', 'like', "%{$termo}%")
+                    ->orWhere('instituicao', 'like', "%{$termo}%");
             });
         }
 
@@ -65,7 +68,7 @@ class InscricaoController extends Controller
 
     public function show(Inscricao $inscricao): View
     {
-        $inscricao->load(['comprovativo', 'certificado', 'avaliador']);
+        $inscricao->load(['comprovativo', 'certificado', 'avaliador', 'alteracoes.editor']);
 
         // URL temporária (5 min) para visualização segura do comprovativo
         $urlComprovativo = $inscricao->comprovativo
@@ -75,6 +78,49 @@ class InscricaoController extends Controller
         return view('admin.inscricoes.show', compact('inscricao', 'urlComprovativo'));
     }
 
+
+    // ─── Actualização de dados do participante ──────────────────────────────
+
+    public function atualizarDados(AtualizarDadosInscricaoRequest $request, Inscricao $inscricao): RedirectResponse
+    {
+        $dados = $request->validated();
+        $alteracoes = [];
+
+        foreach ($dados as $campo => $novoValor) {
+            $valorAtual = $inscricao->{$campo};
+            if ((string) $valorAtual !== (string) $novoValor) {
+                $alteracoes[$campo] = [
+                    'antes' => (string) $valorAtual,
+                    'depois' => (string) $novoValor,
+                ];
+            }
+        }
+
+        if (empty($alteracoes)) {
+            return back()->with('info', 'Nenhuma alteração detectada nos dados do participante.');
+        }
+
+        DB::transaction(function () use ($inscricao, $dados, $alteracoes) {
+            $inscricao->update($dados);
+
+            foreach ($alteracoes as $campo => $valores) {
+                InscricaoAlteracaoLog::create([
+                    'inscricao_id' => $inscricao->id,
+                    'editor_id' => auth()->id(),
+                    'campo' => $campo,
+                    'valor_anterior' => $valores['antes'],
+                    'valor_novo' => $valores['depois'],
+                    'editado_em' => now(),
+                ]);
+            }
+        });
+
+        return redirect()
+            ->route('admin.inscricoes.show', $inscricao)
+            ->with('success', 'Dados do participante actualizados com sucesso.');
+    }
+
+    
     // ─── Aprovar ──────────────────────────────
 
     public function aprovar(AvaliacaoRequest $request, Inscricao $inscricao): RedirectResponse

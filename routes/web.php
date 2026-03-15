@@ -60,6 +60,7 @@ Route::middleware(['auth', 'role:admin,organizador'])
         // Inscrições
         Route::get('/inscricoes',          [AdminInscricao::class, 'index'])->name('inscricoes.index');
         Route::get('/inscricoes/{inscricao}', [AdminInscricao::class, 'show'])->name('inscricoes.show');
+        Route::patch('/inscricoes/{inscricao}/dados', [AdminInscricao::class, 'atualizarDados'])->name('inscricoes.atualizar-dados');
         Route::patch('/inscricoes/{inscricao}/aprovar',  [AdminInscricao::class, 'aprovar'])->name('inscricoes.aprovar');
         Route::patch('/inscricoes/{inscricao}/rejeitar', [AdminInscricao::class, 'rejeitar'])->name('inscricoes.rejeitar');
 

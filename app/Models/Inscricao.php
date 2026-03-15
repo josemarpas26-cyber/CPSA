@@ -120,7 +120,11 @@ class Inscricao extends Model
     {
         return $this->hasOne(Certificado::class);
     }
-
+    
+    public function alteracoes(): HasMany
+    {
+        return $this->hasMany(InscricaoAlteracaoLog::class)->orderByDesc('editado_em');
+    }
     // ─── Scopes ───────────────────────────────
 
     public function scopePendente($query)

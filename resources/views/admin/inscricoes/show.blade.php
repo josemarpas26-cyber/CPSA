@@ -33,25 +33,71 @@
         {{-- Dados do participante --}}
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">
-                    Dados do Participante
-                </h3>
-                <dl class="space-y-3">
-                    @foreach([
-                        'Nome completo'  => $inscricao->nome_completo,
-                        'Email'          => $inscricao->email,
-                        'Telefone'       => $inscricao->telefone,
-                        'Instituição'    => $inscricao->instituicao,
-                        'Cargo'          => $inscricao->cargo,
-                        'Categoria'      => $inscricao->categoria_label,
-                        'Modalidade'     => ucfirst($inscricao->tipo_participacao),
-                    ] as $label => $value)
-                        <div class="flex justify-between text-sm border-b border-gray-50 pb-2">
-                            <dt class="text-gray-500 font-medium">{{ $label }}</dt>
-                            <dd class="text-gray-800 font-medium text-right">{{ $value }}</dd>
+              <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                    <h3 class="text-sm font-semibold text-gray-700">
+                        Dados do Participante
+                    </h3>
+                    <span class="text-xs text-gray-400">Editável por admin/organizador</span>
+                </div>
+
+                <form method="POST" action="{{ route('admin.inscricoes.atualizar-dados', $inscricao) }}" class="space-y-4">
+                    @csrf @method('PATCH')
+
+                    <div>
+                        <label class="block text-xs text-gray-500 font-medium mb-1">Nome completo</label>
+                        <input type="text" name="nome_completo" value="{{ old('nome_completo', $inscricao->nome_completo) }}"
+                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-500 font-medium mb-1">Email</label>
+                            <input type="email" name="email" value="{{ old('email', $inscricao->email) }}"
+                                   class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
                         </div>
-                    @endforeach
-                </dl>
+                        <div>
+                            <label class="block text-xs text-gray-500 font-medium mb-1">Telefone</label>
+                            <input type="text" name="telefone" value="{{ old('telefone', $inscricao->telefone) }}"
+                                   class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-gray-500 font-medium mb-1">Instituição</label>
+                        <input type="text" name="instituicao" value="{{ old('instituicao', $inscricao->instituicao) }}"
+                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-gray-500 font-medium mb-1">Cargo</label>
+                        <input type="text" name="cargo" value="{{ old('cargo', $inscricao->cargo) }}"
+                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-500 font-medium mb-1">Categoria</label>
+                            <select name="categoria" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                                @foreach(['medico' => 'Médico(a)', 'enfermeiro' => 'Enfermeiro(a)', 'psicologo' => 'Psicólogo(a)', 'estudante' => 'Estudante', 'outro' => 'Outro'] as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('categoria', $inscricao->categoria) === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+  <div>
+                            <label class="block text-xs text-gray-500 font-medium mb-1">Modalidade</label>
+                            <select name="tipo_participacao" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                                @foreach(['presencial' => 'Presencial', 'online' => 'Online'] as $value => $label)
+                                    <option value="{{ $value }}" @selected(old('tipo_participacao', $inscricao->tipo_participacao) === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+                        Guardar alterações
+                    </button>
+                </form>
             </div>
 
             {{-- Comprovativo --}}
@@ -119,6 +165,7 @@
             @endif
         </div>
 
+     
         {{-- Painel de acções --}}
         <div class="space-y-4">
             @if(in_array($inscricao->status, ['pendente', 'em_analise']))
@@ -192,4 +239,34 @@
         </div>
     </div>
 </div>
+
+            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+                <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">
+                    Logs de Alterações dos Dados
+                </h3>
+
+                @if($inscricao->alteracoes->isEmpty())
+                    <p class="text-sm text-gray-500">Ainda não existem alterações registadas.</p>
+                @else
+                    <div class="space-y-3">
+                        @foreach($inscricao->alteracoes as $log)
+                            <div class="border border-gray-100 rounded-lg p-3 bg-gray-50">
+                                <p class="text-xs text-gray-500 mb-1">
+                                    <span class="font-semibold text-gray-700">{{ $log->editor?->name ?? 'Sistema' }}</span>
+                                    editou em {{ $log->editado_em?->format('d/m/Y H:i') }}
+                                </p>
+                                <p class="text-sm text-gray-800">
+                                    <span class="font-medium">Campo:</span> {{ str_replace('_', ' ', ucfirst($log->campo)) }}
+                                </p>
+                                <p class="text-xs text-gray-600 mt-1">
+                                    <span class="font-medium">Antes:</span> {{ $log->valor_anterior ?: '—' }}
+                                    <br>
+                                    <span class="font-medium">Depois:</span> {{ $log->valor_novo ?: '—' }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+       
 @endsection
