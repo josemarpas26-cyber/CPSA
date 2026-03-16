@@ -9,12 +9,28 @@ use App\Http\Controllers\Admin\ExportacaoController;
 use App\Http\Controllers\Admin\UtilizadorController;
 use App\Http\Controllers\ComprovativoController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\SpeakerController;
+use App\Http\Controllers\Admin\AdminSpeakerController;
 // ─────────────────────────────────────────
 // PORTAL PÚBLICO
 // ─────────────────────────────────────────
 Route::get('/', fn () => view('participant.index'))->name('home');
 
+
+Route::get('/palestrantes', [SpeakerController::class, 'index'])
+    ->name('speakers.index');
+ 
+Route::get('/palestrantes/{speaker}', [SpeakerController::class, 'show'])
+    ->name('speakers.show');
+
+    
+// routes/web.php
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])
+     ->name('newsletter.subscribe');
+
+Route::get('/newsletter/cancelar', [NewsletterController::class, 'unsubscribe'])
+     ->name('newsletter.unsubscribe');
 // Download seguro de comprovativos (auth obrigatório)
 Route::middleware('auth')->group(function () {
     Route::get('/comprovativo/{comprovativo}/download', [ComprovativoController::class, 'download'])
@@ -82,4 +98,20 @@ Route::middleware(['auth', 'role:admin,organizador'])
         Route::post('/certificados/{inscricao}/gerar',       [CertificadoController::class, 'gerar'])->name('certificados.gerar');
         Route::post('/certificados/gerar-todos',             [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
         Route::get('/certificados/{certificado}/download',   [CertificadoController::class, 'download'])->name('certificados.download');
-    });
+  
+        Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+        
+            Route::resource('speakers', AdminSpeakerController::class)
+                ->names('speakers')
+                ->except(['show']);
+        
+            // Rotas extras de toggle
+            Route::patch('speakers/{speaker}/toggle-ativo', [AdminSpeakerController::class, 'toggleAtivo'])
+                ->name('speakers.toggle-ativo');
+        
+            Route::patch('speakers/{speaker}/toggle-destaque', [AdminSpeakerController::class, 'toggleDestaque'])
+                ->name('speakers.toggle-destaque');
+        
+        });
+
+        });
