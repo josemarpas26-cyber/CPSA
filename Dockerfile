@@ -1,8 +1,9 @@
 FROM php:8.3-apache
 
-# 💥 FIX CRÍTICO (antes de tudo)
-RUN a2dismod mpm_event mpm_worker || true \
+# 💥 RESET MPM (ESSENCIAL)
+RUN rm -f /etc/apache2/mods-enabled/mpm_* \
  && a2enmod mpm_prefork
+
 RUN apt-get update && apt-get install -y \
     git unzip curl \
     libzip-dev zip \
@@ -15,9 +16,5 @@ RUN apt-get update && apt-get install -y \
         zip \
         xml \
         gd
-
-# 🔥 FIX DO ERRO
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork
 
 RUN a2enmod rewrite
