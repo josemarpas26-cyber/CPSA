@@ -8,30 +8,44 @@ use App\Jobs\EnviarEmailAprovacao;
 use App\Jobs\EnviarEmailRejeicao;
 use App\Models\Comprovativo;
 use App\Models\Inscricao;
+use App\Models\InscricaoCurso;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class InscricaoService
 {
-    // ─── Criação (etapa anterior) ─────────────
+    // ── Criação ───────────────────────────────
 
     public function criar(array $dados, UploadedFile $ficheiro): Inscricao
     {
         return DB::transaction(function () use ($dados, $ficheiro) {
             $inscricao = Inscricao::create([
-                'numero'            => Inscricao::gerarNumero(),
-                'nome_completo'     => $dados['nome_completo'],
-                'email'             => $dados['email'],
-                'telefone'          => $dados['telefone'],
-                'instituicao'       => $dados['instituicao'],
-                'cargo'             => $dados['cargo'],
-                'categoria'         => $dados['categoria'],
-                'tipo_participacao' => $dados['tipo_participacao'],
-                'status'            => 'pendente',
-                'user_id'           => auth()->id(),
+                'numero'             => Inscricao::gerarNumero(),
+                'full_name'          => $dados['full_name'],
+                'gender'             => $dados['gender'],
+                'date_of_birth'      => $dados['date_of_birth'],
+                'nationality'        => $dados['nationality'],
+                'document_number'    => $dados['document_number'],
+                'profession'         => $dados['profession'],
+                'institution'        => $dados['institution'],
+                'category'           => $dados['category'],
+                'phone'              => $dados['phone'],
+                'email'              => $dados['email'],
+                'province'           => $dados['province'],
+                'participation_mode' => $dados['participation_mode'],
+                'observations'       => $dados['observations'] ?? null,
+                'status'             => 'pendente',
+                'user_id'            => auth()->id(),
             ]);
 
+            // Ligar ao curso escolhido
+            InscricaoCurso::create([
+                'inscricao_id' => $inscricao->id,
+                'curso_id'     => $dados['curso_id'],
+            ]);
+
+            // Guardar comprovativo
             $path = $this->salvarFicheiro($ficheiro, $inscricao->numero);
 
             Comprovativo::create([
@@ -51,7 +65,7 @@ class InscricaoService
         });
     }
 
-    // ─── Aprovação ────────────────────────────
+    // ── Aprovação ─────────────────────────────
 
     public function aprovar(Inscricao $inscricao): void
     {
@@ -62,7 +76,6 @@ class InscricaoService
                 'avaliado_em'  => now(),
             ]);
 
-            // Marcar comprovativo como aceite
             $inscricao->comprovativo?->update([
                 'status'      => 'aceite',
                 'revisto_por' => Auth::id(),
@@ -73,16 +86,16 @@ class InscricaoService
         });
     }
 
-    // ─── Rejeição ─────────────────────────────
+    // ── Rejeição ──────────────────────────────
 
     public function rejeitar(Inscricao $inscricao, string $motivo): void
     {
         DB::transaction(function () use ($inscricao, $motivo) {
             $inscricao->update([
-                'status'           => 'rejeitada',
-                'motivo_rejeicao'  => $motivo,
-                'avaliado_por'     => Auth::id(),
-                'avaliado_em'      => now(),
+                'status'          => 'rejeitada',
+                'motivo_rejeicao' => $motivo,
+                'avaliado_por'    => Auth::id(),
+                'avaliado_em'     => now(),
             ]);
 
             $inscricao->comprovativo?->update([
@@ -95,13 +108,13 @@ class InscricaoService
         });
     }
 
-    // ─── Upload privado ───────────────────────
+    // ── Upload privado ────────────────────────
 
     private function salvarFicheiro(UploadedFile $ficheiro, string $numero): string
     {
-        $ano       = now()->year;
-        $extensao  = $ficheiro->getClientOriginalExtension();
-        $nome      = "{$numero}-" . time() . ".{$extensao}";
+        $ano      = now()->year;
+        $extensao = $ficheiro->getClientOriginalExtension();
+        $nome     = "{$numero}-" . time() . ".{$extensao}";
 
         return $ficheiro->storeAs("comprovativos/{$ano}", $nome, 'private');
     }

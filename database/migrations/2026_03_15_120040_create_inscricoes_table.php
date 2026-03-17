@@ -14,31 +14,30 @@ return new class extends Migration
             // Número único de inscrição: CPSA-2025-0001
             $table->string('numero', 20)->unique();
 
-            // Dados pessoais
-            $table->string('nome_completo');
+            // ── Dados pessoais ───────────────────────────
+            $table->string('full_name'); // substitui nome_completo
+            $table->enum('gender', ['masculino', 'feminino', 'outro']);
+            $table->date('date_of_birth');
+            $table->string('nationality', 100);
+            $table->string('document_number', 50)->unique();
+            $table->string('profession', 150);
+            $table->string('institution');
             $table->string('email')->index();
-            $table->string('telefone', 20);
-            $table->string('instituicao');
-            $table->string('cargo');
+            $table->string('phone', 20);
 
-            // Classificação
-            $table->enum('categoria', [
-                'medico',
-                'enfermeiro',
-                'psicologo',
+            // ── Categoria e participação ─────────────────
+            $table->enum('category', [
+                'profissional',
                 'estudante',
-                'outro',
+                'orador',
+                'convidado',
+                'imprensa',
             ]);
+            $table->string('province', 100);
+            $table->enum('participation_mode', ['presencial', 'online']);
+            $table->text('observations')->nullable();
 
-            $table->enum('tipo_participacao', [
-                'presencial',
-                'online',
-            ]);
-
-            // Valores (AOA)
-            $table->decimal('valor', 10, 2)->default(0);
-
-            // Status do fluxo
+            // ── Status do fluxo ─────────────────────────
             $table->enum('status', [
                 'pendente',
                 'em_analise',
@@ -46,17 +45,17 @@ return new class extends Migration
                 'rejeitada',
             ])->default('pendente')->index();
 
-            // Avaliação pela comissão
+            // ── Avaliação pela comissão ─────────────────
             $table->foreignId('avaliado_por')->nullable()
                   ->constrained('users')->nullOnDelete();
             $table->timestamp('avaliado_em')->nullable();
             $table->text('motivo_rejeicao')->nullable();
 
-            // Vínculo com user (se criou conta)
+            // ── Vínculo com usuário ─────────────────────
             $table->foreignId('user_id')->nullable()
                   ->constrained()->nullOnDelete();
 
-            // Controlo de presença
+            // ── Controlo de presença ────────────────────
             $table->boolean('presente')->default(false);
             $table->timestamp('checkin_em')->nullable();
 

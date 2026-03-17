@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        // FIX: Usar uma única query agregada em vez de 5 queries separadas
+        // Contadores por status (1 query agregada)
         $contadoresRaw = Inscricao::selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status')
@@ -24,15 +24,15 @@ class DashboardController extends Controller
             'rejeitadas' => $contadoresRaw['rejeitada']  ?? 0,
         ];
 
-        // Distribuição por categoria
-        $porCategoria = Inscricao::selectRaw('categoria, count(*) as total')
-            ->groupBy('categoria')
-            ->pluck('total', 'categoria');
+        // Distribuição por categoria (campo novo: category)
+        $porCategoria = Inscricao::selectRaw('category, count(*) as total')
+            ->groupBy('category')
+            ->pluck('total', 'category');
 
-        // Distribuição por tipo
-        $porTipo = Inscricao::selectRaw('tipo_participacao, count(*) as total')
-            ->groupBy('tipo_participacao')
-            ->pluck('total', 'tipo_participacao');
+        // Distribuição por modalidade (campo novo: participation_mode)
+        $porTipo = Inscricao::selectRaw('participation_mode, count(*) as total')
+            ->groupBy('participation_mode')
+            ->pluck('total', 'participation_mode');
 
         // Últimas 8 inscrições
         $ultimas = Inscricao::with('comprovativo')

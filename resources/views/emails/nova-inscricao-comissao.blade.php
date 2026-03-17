@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Nova Inscrição — CPSA 2025</title>
+  <title>Nova Inscrição — CPSM 2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -80,7 +80,7 @@
       </a>
     </div>
 
-    <div class="footer">CPSA 2025 — Sistema de Gestão de Inscrições</div>
+    <div class="footer">CPSM 2026 — Sistema de Gestão de Inscrições</div>
   </div>
 </div>
 </body>

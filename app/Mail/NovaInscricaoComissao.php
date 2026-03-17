@@ -18,7 +18,7 @@ class NovaInscricaoComissao extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "🔔 Nova Inscrição — {$this->inscricao->numero} | CPSA 2025",
+            subject: "🔔 Nova Inscrição — {$this->inscricao->numero} | CPSM 2026",
         );
     }
 

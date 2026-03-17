@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Inscrição Aprovada — CPSA 2025</title>
+  <title>Inscrição Aprovada — CPSM 2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -58,7 +58,7 @@
       </p>
       <p style="font-size:14px;color:#3d5080;line-height:1.65;margin-bottom:0;">
         Temos o prazer de informar que a sua inscrição foi <strong>aprovada</strong>
-        pela comissão organizadora. Bem-vindo(a) ao CPSA 2025!
+        pela comissão organizadora. Bem-vindo(a) ao CPSM 2026!
       </p>
 
       <div class="numero-box">
@@ -91,7 +91,7 @@
     </div>
 
     <div class="footer">
-      © {{ date('Y') }} CPSA 2025 · Luanda, Angola
+      © {{ date('Y') }} CPSM 2026 · Luanda, Angola
     </div>
   </div>
 </div>

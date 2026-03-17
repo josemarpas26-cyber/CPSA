@@ -18,7 +18,7 @@ class InscricaoAprovada extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "✅ Inscrição Aprovada — {$this->inscricao->numero} | CPSA 2025",
+            subject: "✅ Inscrição Aprovada — {$this->inscricao->numero} | CPSM 2026",
         );
     }
 

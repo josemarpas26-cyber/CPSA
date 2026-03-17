@@ -777,11 +777,11 @@
       </div>
       <div class="map-embed">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d505919.0989296624!2d12.851787!3d-8.840628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f15cdc8d2c7d%3A0x850c1c59764daa7e!2sLuanda%2C%20Angola!5e0!3m2!1spt!2s!4v1700000000000!5m2!1spt!2s"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3942.55997446184!2d13.223397724450628!3d-8.827341690338166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f3aeb535e5c7%3A0xb93943805dd1c735!2sHospital%20Psiqui%C3%A1trico%20de%20Luanda%2C%20Luanda!5e0!3m2!1spt-PT!2sao!4v1773784587531!5m2!1spt-PT!2sao"
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Localização do evento em Luanda, Angola">
+          title="Localização do evento - Hospital Psiquiátrico de Luanda">
         </iframe>
       </div>
     </div>

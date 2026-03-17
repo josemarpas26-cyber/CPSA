@@ -26,7 +26,7 @@ class InscricoesExport implements
 
     public function title(): string
     {
-        return 'Inscrições CPSA 2025';
+        return 'Inscrições CPSM 2026';
     }
 
     public function query()

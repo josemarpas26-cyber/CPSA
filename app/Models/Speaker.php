@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Speaker extends Model
@@ -33,7 +34,7 @@ class Speaker extends Model
         'ordem'    => 'integer',
     ];
 
-    /* ── Scopes ───────────────────────────────────── */
+    // ── Scopes ────────────────────────────────
 
     public function scopeAtivo($query)
     {
@@ -50,11 +51,15 @@ class Speaker extends Model
         return $query->orderBy('ordem')->orderBy('nome');
     }
 
-    /* ── Accessors ────────────────────────────────── */
+    // ── Relacionamentos ───────────────────────
 
-    /**
-     * URL pública da foto ou null se não tiver.
-     */
+    public function cursos(): BelongsToMany
+    {
+        return $this->belongsToMany(Curso::class, 'curso_speaker');
+    }
+
+    // ── Accessors ─────────────────────────────
+
     public function getFotoUrlAttribute(): ?string
     {
         if (! $this->foto) {
@@ -63,9 +68,6 @@ class Speaker extends Model
         return Storage::url($this->foto);
     }
 
-    /**
-     * Inicial do nome para o avatar placeholder.
-     */
     public function getInicialAttribute(): string
     {
         return strtoupper(mb_substr($this->nome, 0, 1));

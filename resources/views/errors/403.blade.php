@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Acesso negado — CPSA 2025</title>
+  <title>Acesso negado — CPSM 2026</title>
   @vite(['resources/css/app.css','resources/js/app.js'])
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Instrument+Serif:ital@0;1&display=swap');
@@ -47,7 +47,7 @@
         </form>
       @endauth
     </div>
-    <p style="font-size:.68rem;color:#b0bdd8;margin-top:2.5rem;">CPSA 2025 · Luanda, Angola</p>
+    <p style="font-size:.68rem;color:#b0bdd8;margin-top:2.5rem;">CPSM 2026 · Luanda, Angola</p>
   </div>
 </body>
 </html>

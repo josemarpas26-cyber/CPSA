@@ -4,17 +4,16 @@ namespace App\Http\Controllers\Participant;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InscricaoRequest;
+use App\Models\Curso;
 use App\Models\Inscricao;
 use App\Services\CertificadoService;
 use App\Services\InscricaoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
 
 class InscricaoController extends Controller
 {
-    //public function __construct(private InscricaoService $service) {}
     public function __construct(
         private InscricaoService $service,
         private CertificadoService $certificadoService,
@@ -26,10 +25,15 @@ class InscricaoController extends Controller
         return view('participant.index');
     }
 
-    /** Formulário de inscrição */
+    /** Formulário de inscrição — carrega cursos activos */
     public function create(): View
     {
-        return view('participant.inscricao');
+        $cursos = Curso::ativo()
+            ->with(['speakers', 'inscricoes'])
+            ->ordenado()
+            ->get();
+
+        return view('participant.inscricao', compact('cursos'));
     }
 
     /** Processar submissão */
@@ -47,13 +51,11 @@ class InscricaoController extends Controller
     }
 
     /** Página de sucesso */
-
     public function sucesso(): View|RedirectResponse
     {
         if (! session('inscricao_numero')) {
             return redirect()->route('inscricao.create');
         }
-
         return view('participant.sucesso');
     }
 
@@ -61,11 +63,11 @@ class InscricaoController extends Controller
     public function show(): View
     {
         $inscricao = Inscricao::where('user_id', auth()->id())
-            ->with(['comprovativo', 'certificado'])
+            ->with(['comprovativo', 'certificado', 'inscricaoCurso.curso.speakers'])
             ->latest()
             ->first();
 
-           $inscricaoComCertificado = Inscricao::where('user_id', auth()->id())
+        $inscricaoComCertificado = Inscricao::where('user_id', auth()->id())
             ->whereHas('certificado')
             ->with('certificado')
             ->latest()
@@ -74,7 +76,7 @@ class InscricaoController extends Controller
         return view('participant.minha-inscricao', compact('inscricao', 'inscricaoComCertificado'));
     }
 
-    /** Download do certificado do participante autenticado */
+    /** Download do certificado */
     public function downloadCertificado(): Response|RedirectResponse
     {
         $inscricao = Inscricao::where('user_id', auth()->id())
@@ -86,7 +88,7 @@ class InscricaoController extends Controller
         if (! $inscricao) {
             return redirect()
                 ->route('participant.minha-inscricao')
-                ->with('error', 'Ainda não existe nenhum certificado disponível para download.');
+                ->with('error', 'Ainda não existe nenhum certificado disponível.');
         }
 
         $conteudo = $this->certificadoService->conteudo($inscricao->certificado);

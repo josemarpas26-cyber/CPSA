@@ -258,7 +258,7 @@
         <div class="event-name">
           1º Congresso de Psiquiatria<br>e Saúde Mental em Angola
         </div>
-        <div class="event-meta">Luanda, Angola · 2025 · CPSA 2025</div>
+        <div class="event-meta">Luanda, Angola · 2025 · CPSM 2026</div>
       </div>
       <div class="header-logo-area">
         <div class="logo-year">2025</div>

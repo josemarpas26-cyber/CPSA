@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Inscrição Confirmada — CPSA 2025</title>
+  <title>Inscrição Confirmada — CPSM 2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -97,7 +97,7 @@
     </div>
 
     <div class="footer">
-      © {{ date('Y') }} CPSA 2025 · Luanda, Angola<br>
+      © {{ date('Y') }} CPSM 2026 · Luanda, Angola<br>
       Este é um email automático — não responda directamente.
     </div>
   </div>

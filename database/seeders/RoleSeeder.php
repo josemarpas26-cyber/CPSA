@@ -11,6 +11,7 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
+        // ── Roles ─────────────────────────────────
         $roles = [
             ['name' => 'admin',        'display_name' => 'Administrador'],
             ['name' => 'organizador',  'display_name' => 'Organizador'],
@@ -21,7 +22,7 @@ class RoleSeeder extends Seeder
             Role::firstOrCreate(['name' => $role['name']], $role);
         }
 
-        // Criar admin padrão
+        // ── Admin padrão ──────────────────────────
         $admin = User::firstOrCreate(
             ['email' => 'admin@cpsa2025.ao'],
             [

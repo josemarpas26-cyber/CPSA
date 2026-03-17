@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', 'Painel') — CPSA 2025</title>
+  <title>@yield('title', 'Painel') — CPSM 2026</title>
   @vite(['resources/css/app.css','resources/js/app.js'])
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -453,7 +453,7 @@
         </svg>
       </div>
       <div class="sidebar-logo-text">
-        <div class="sidebar-logo-name">CPSA 2025</div>
+        <div class="sidebar-logo-name">CPSM 2026</div>
         <div class="sidebar-logo-sub">Painel da Comissão</div>
       </div>
     </div>
@@ -462,50 +462,49 @@
   <div class="sidebar-nav">
     <div class="sidebar-section-label">Principal</div>
 
-    @php
-      $navItems = [
-        ['route'=>'admin.dashboard','label'=>'Dashboard','icon'=>'chart'],
-        ['route'=>'admin.inscricoes.index','label'=>'Inscrições','icon'=>'list'],
-        ['route'=>'admin.certificados.index','label'=>'Certificados','icon'=>'badge'],
-      ];
-      $exportItems = [
-        ['route'=>'admin.exportar.excel','label'=>'Exportar Excel','icon'=>'download'],
-        ['route'=>'admin.exportar.csv','label'=>'Exportar CSV','icon'=>'download'],
-        ['route'=>'admin.exportar.presenca','label'=>'Lista de Presença','icon'=>'users'],
-      ];
-      if(Auth::user()?->hasRole('admin')) {
-        $adminItems = [
-          ['route'=>'admin.utilizadores.index','label'=>'Utilizadores','icon'=>'users'],
-        ];
-      }
-    @endphp
+@php
+  $navItems = [
+    ['route'=>'admin.dashboard',        'label'=>'Dashboard',    'icon'=>'chart'],
+    ['route'=>'admin.inscricoes.index', 'label'=>'Inscrições',   'icon'=>'list'],
+    ['route'=>'admin.certificados.index','label'=>'Certificados','icon'=>'badge'],
+  ];
+  $exportItems = [
+    ['route'=>'admin.exportar.excel',   'label'=>'Exportar Excel',     'icon'=>'download'],
+    ['route'=>'admin.exportar.csv',     'label'=>'Exportar CSV',       'icon'=>'download'],
+    ['route'=>'admin.exportar.presenca','label'=>'Lista de Presença',  'icon'=>'users'],
+  ];
+@endphp
 
-    @foreach($navItems as $item)
-      <a href="{{ route($item['route']) }}"
-         class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}">
-        @if($item['icon']==='chart')
-          <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
-          </svg>
-        @elseif($item['icon']==='list')
-          <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
-          </svg>
-        @else
-          <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/>
-          </svg>
-        @endif
-        {{ $item['label'] }}
-        @if($item['route']==='admin.inscricoes.index')
-          @php $pending = \App\Models\Inscricao::where('status','pendente')->count(); @endphp
-          @if($pending > 0)
-            <span class="nav-badge">{{ $pending }}</span>
-          @endif
-        @endif
-      </a>
-    @endforeach
 
+{{-- Nav principal (acessível a admin + organizador) --}}
+@foreach($navItems as $item)
+  <a href="{{ route($item['route']) }}"
+     class="nav-item {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+    @if($item['icon']==='chart')
+      <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+      </svg>
+    @elseif($item['icon']==='list')
+      <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+      </svg>
+    @else
+      <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/>
+      </svg>
+    @endif
+    {{ $item['label'] }}
+    @if($item['route']==='admin.inscricoes.index')
+      @php $pending = \App\Models\Inscricao::where('status','pendente')->count(); @endphp
+      @if($pending > 0)
+        <span class="nav-badge">{{ $pending }}</span>
+      @endif
+    @endif
+  </a>
+@endforeach
+
+
+    {{-- Exportação --}}
     <div class="sidebar-section-label">Exportação</div>
     @foreach($exportItems as $item)
       <a href="{{ route($item['route']) }}" class="nav-item">
@@ -516,12 +515,38 @@
       </a>
     @endforeach
 
-    @if(Auth::user()?->hasRole('admin'))
-      <div class="sidebar-section-label">Administração</div>
+
+{{-- Administração (apenas admin) --}}
+@if(Auth::user()?->hasRole('admin'))
+  <div class="sidebar-section-label">Administração</div>
+ 
+  {{-- Cursos --}}
+  <a href="{{ route('admin.cursos.index') }}"
+     class="nav-item {{ request()->routeIs('admin.cursos.*') ? 'active' : '' }}">
+    <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/>
+    </svg>
+    Cursos
+  </a>
+
+    {{-- Palestrantes --}}
+  <a href="{{ route('admin.speakers.index') }}"
+     class="nav-item {{ request()->routeIs('admin.speakers.*') ? 'active' : '' }}">
+    <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+    </svg>
+    Palestrantes
+  </a>
+
+
+      {{-- Utilizadores --}}
       <a href="{{ route('admin.utilizadores.index') }}"
-         class="nav-item {{ request()->routeIs('admin.utilizadores.*') ? 'active' : '' }}">
+        class="nav-item {{ request()->routeIs('admin.utilizadores.*') ? 'active' : '' }}">
         <svg class="nav-item-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
         </svg>
         Utilizadores
       </a>
@@ -564,7 +589,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
       </svg>
     </button>
-    <span class="topbar-breadcrumb hidden sm:block">CPSA 2025</span>
+    <span class="topbar-breadcrumb hidden sm:block">CPSM 2026</span>
     <span class="topbar-sep hidden sm:block">/</span>
     <span class="topbar-title">@yield('page-title', 'Dashboard')</span>
     <div class="topbar-date">

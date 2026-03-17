@@ -17,14 +17,21 @@ class Inscricao extends Model
 
     protected $fillable = [
         'numero',
-        'nome_completo',
+        // Dados pessoais (novo esquema)
+        'full_name',
+        'gender',
+        'date_of_birth',
+        'nationality',
+        'document_number',
+        'profession',
+        'institution',
+        'category',
+        'phone',
         'email',
-        'telefone',
-        'instituicao',
-        'cargo',
-        'categoria',
-        'tipo_participacao',
-        'valor',
+        'province',
+        'participation_mode',
+        'observations',
+        // Workflow
         'status',
         'avaliado_por',
         'avaliado_em',
@@ -35,13 +42,13 @@ class Inscricao extends Model
     ];
 
     protected $casts = [
-        'avaliado_em' => 'datetime',
-        'checkin_em'  => 'datetime',
-        'presente'    => 'boolean',
-        'valor'       => 'decimal:2',
+        'date_of_birth' => 'date',
+        'avaliado_em'   => 'datetime',
+        'checkin_em'    => 'datetime',
+        'presente'      => 'boolean',
     ];
 
-    // ─── Labels para UI ───────────────────────
+    // ── Labels para UI ────────────────────────
 
     public function getStatusLabelAttribute(): string
     {
@@ -65,32 +72,61 @@ class Inscricao extends Model
         };
     }
 
-    public function getCategoriaLabelAttribute(): string
+    public function getCategoryLabelAttribute(): string
     {
-        return match ($this->categoria) {
-            'medico'     => 'Médico(a)',
-            'enfermeiro' => 'Enfermeiro(a)',
-            'psicologo'  => 'Psicólogo(a)',
-            'estudante'  => 'Estudante',
-            'outro'      => 'Outro',
-            default      => $this->categoria,
+        return match ($this->category) {
+            'profissional' => 'Profissional',
+            'estudante'    => 'Estudante',
+            'orador'       => 'Orador',
+            'convidado'    => 'Convidado',
+            'imprensa'     => 'Imprensa',
+            default        => $this->category,
         };
     }
 
-    // ─── Geração do número único ──────────────
+    public function getGenderLabelAttribute(): string
+    {
+        return match ($this->gender) {
+            'masculino' => 'Masculino',
+            'feminino'  => 'Feminino',
+            'outro'     => 'Outro',
+            default     => $this->gender,
+        };
+    }
+
+    public function getParticipationModeLabelAttribute(): string
+    {
+        return match ($this->participation_mode) {
+            'presencial' => 'Presencial',
+            'online'     => 'Online',
+            default      => $this->participation_mode,
+        };
+    }
 
     /**
-     * Gera o próximo número de inscrição de forma atómica,
-     * evitando race conditions em acessos simultâneos.
+     * Alias de compatibilidade: muitas views usam $inscricao->nome_completo
      */
+    public function getNomeCompletoAttribute(): string
+    {
+        return $this->full_name;
+    }
+
+    /**
+     * Alias de compatibilidade: muitas views usam $inscricao->categoria_label
+     */
+    public function getCategoriaLabelAttribute(): string
+    {
+        return $this->category_label;
+    }
+
+    // ── Geração do número único ───────────────
+
     public static function gerarNumero(): string
     {
         return DB::transaction(function () {
             $ano     = now()->year;
             $prefixo = "CPSA-{$ano}-";
 
-            // lockForUpdate previne race conditions: apenas uma transacção
-            // pode ler e incrementar o contador de cada vez.
             $ultimo = self::withTrashed()
                 ->where('numero', 'like', "{$prefixo}%")
                 ->lockForUpdate()
@@ -105,7 +141,7 @@ class Inscricao extends Model
         });
     }
 
-    // ─── Relacionamentos ──────────────────────
+    // ── Relacionamentos ───────────────────────
 
     public function user(): BelongsTo
     {
@@ -137,7 +173,18 @@ class Inscricao extends Model
         return $this->hasMany(InscricaoAlteracaoLog::class)->orderByDesc('editado_em');
     }
 
-    // ─── Scopes ───────────────────────────────
+    /** Curso escolhido (1 por inscrição) */
+    public function inscricaoCurso(): HasOne
+    {
+        return $this->hasOne(InscricaoCurso::class);
+    }
+
+    public function getCursoAttribute(): ?Curso
+    {
+        return $this->inscricaoCurso?->curso;
+    }
+
+    // ── Scopes ────────────────────────────────
 
     public function scopePendente($query)
     {

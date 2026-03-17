@@ -24,7 +24,7 @@ class CertificadoDisponivel extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "🏅 O seu Certificado — CPSA 2025 | {$this->inscricao->numero}",
+            subject: "🏅 O seu Certificado — CPSM 2026 | {$this->inscricao->numero}",
         );
     }
 

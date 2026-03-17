@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Inscrição Não Aprovada — CPSA 2025</title>
+  <title>Inscrição Não Aprovada — CPSM 2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -62,12 +62,12 @@
 
       <div class="note">
         Se tiver dúvidas ou quiser submeter um novo comprovativo,
-        entre em contacto com a organização do CPSA 2025.
+        entre em contacto com a organização do CPSM 2026.
       </div>
     </div>
 
     <div class="footer">
-      © {{ date('Y') }} CPSA 2025 · Luanda, Angola
+      © {{ date('Y') }} CPSM 2026 · Luanda, Angola
     </div>
   </div>
 </div>

@@ -106,7 +106,7 @@
   <div class="doc-header">
     <div>
       <div class="doc-title">Lista de Presença</div>
-      <div class="doc-sub">1º Congresso de Psiquiatria e Saúde Mental em Angola · CPSA 2025</div>
+      <div class="doc-sub">1º Congresso de Psiquiatria e Saúde Mental em Angola · CPSM 2026</div>
     </div>
     <div class="doc-meta">
       Gerada em {{ now()->format('d/m/Y H:i') }}<br>
@@ -160,7 +160,7 @@
 
   <!-- Footer -->
   <div class="doc-footer">
-    CPSA 2025 — Lista de presença gerada automaticamente pelo sistema de gestão de inscrições.<br>
+    CPSM 2026 — Lista de presença gerada automaticamente pelo sistema de gestão de inscrições.<br>
     Documento confidencial — não reproduzir sem autorização.
   </div>
 

@@ -54,7 +54,7 @@
       </div>
       <h1 style="font-family:var(--font-display);font-style:italic;font-size:1.5rem;
                  color:var(--text-1);margin:0 0 .3rem;">Bem-vindo de volta</h1>
-      <p style="font-size:.8rem;color:var(--text-3);margin:0;">CPSA 2025 — Portal de Inscrições</p>
+      <p style="font-size:.8rem;color:var(--text-3);margin:0;">CPSM 2026 — Portal de Inscrições</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}"
