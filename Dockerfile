@@ -30,7 +30,7 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /et
 # Copiar projeto e ajustar permissões
 COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
+RUN chown -R www-data:www-data storage bootstrap/cache
 WORKDIR /var/www/html
 
 RUN composer install --no-dev --optimize-autoloader
