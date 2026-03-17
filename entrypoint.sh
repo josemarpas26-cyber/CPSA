@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+# Cria o .env com variáveis de ambiente
 cat > .env <<EOF
 APP_NAME=Laravel
 APP_ENV=${APP_ENV:-production}
@@ -28,10 +29,16 @@ EOF
 # Gera a key real por cima do placeholder
 php artisan key:generate --force --ansi
 
+# Limpa cache
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 
+# Roda migrations
 php artisan migrate --force
 
+# ⚡️ Roda os seeders
+php artisan db:seed --force
+
+# Inicia o servidor PHP
 php -S 0.0.0.0:$PORT -t public
