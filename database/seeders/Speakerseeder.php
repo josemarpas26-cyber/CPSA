@@ -9,6 +9,7 @@ class SpeakerSeeder extends Seeder
 {
     public function run(): void
     {
+        
         $speakers = [
             [
                 'nome'          => 'Prof. Dr. António Sebastião Mbala',

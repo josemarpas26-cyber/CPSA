@@ -10,6 +10,7 @@ class CursoSeeder extends Seeder
 {
     public function run(): void
     {
+        
         // Dias do congresso (exemplo: 14 e 15 de Agosto de 2026)
         $dia1 = '2026-08-14';
         $dia2 = '2026-08-15';
