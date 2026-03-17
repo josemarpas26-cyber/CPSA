@@ -254,7 +254,7 @@ class InscricaoSeeder extends Seeder
 
             // Comprovativo fictício
             $path = "comprovativos/2026/comprovativo-{$inscricao->numero}.pdf";
-            Storage::disk('private')->put($path, '%PDF-1.4 placeholder');
+            Storage::put($path, '%PDF-1.4 placeholder');
 
             Comprovativo::create([
                 'inscricao_id'  => $inscricao->id,
