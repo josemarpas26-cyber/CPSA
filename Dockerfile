@@ -4,6 +4,9 @@ FROM php:8.3-apache
 RUN a2dismod mpm_event mpm_worker || true \
     && a2enmod mpm_prefork
 
+# Instala Composer
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 # Instalar dependências do PHP
 RUN apt-get update && apt-get install -y \
     git unzip curl \
