@@ -19,13 +19,10 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
+# Copia o script de entrypoint e dá permissão
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
 
-# ⚠️ Remova o cp .env.example e key:generate da build!
-# Use um script de entrada que rode em runtime
-CMD bash -c "\
-  cp .env.example .env && \
-  php artisan key:generate --ansi && \
-  php artisan config:clear && \
-  php artisan migrate --force && \
-  php artisan serve --host=0.0.0.0 --port=80"
+CMD ["/entrypoint.sh"]
