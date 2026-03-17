@@ -38,7 +38,7 @@ php artisan view:clear
 php artisan migrate --force
 
 # ⚡️ Roda os seeders
-php artisan db:seed --force
+php artisan db:seed --force || true
 
 # Inicia o servidor PHP
 php -S 0.0.0.0:$PORT -t public

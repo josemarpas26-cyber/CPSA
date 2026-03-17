@@ -158,6 +158,10 @@ class CursoSeeder extends Seeder
 
             // Associar palestrantes pelo nome
             $speakerIds = Speaker::whereIn('nome', $speakerNames)->pluck('id');
+            if ($speakerIds->isEmpty()) {
+            $this->command->error("❌ Nenhum speaker encontrado para: " . implode(', ', $speakerNames));
+            continue;
+        }
             $curso->speakers()->syncWithoutDetaching($speakerIds);
         }
 
