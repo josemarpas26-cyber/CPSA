@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Database\Seeders;
 
 use App\Models\Speaker;
@@ -9,7 +10,7 @@ class SpeakerSeeder extends Seeder
 {
     public function run(): void
     {
-        
+
         $speakers = [
             [
                 'nome'          => 'Prof. Dr. António Sebastião Mbala',
