@@ -35,7 +35,7 @@ class ExportacaoController extends Controller
     public function presenca(Request $request): Response
     {
         $inscricoes = Inscricao::aprovada()
-            ->orderBy('nome_completo')
+            ->orderBy('full_name')
             ->get();
 
         $pdf = Pdf::loadView('pdf.lista-presenca', compact('inscricoes'))
