@@ -171,7 +171,7 @@
         @endphp
         <div style="display:flex;flex-direction:column;gap:.875rem;">
           @foreach($cats as $k => [$lbl, $col, $ibg])
-            @php $v = $porCategoria[$k] ?? 0; $p = round(($v/$total)*100); @endphp
+            @php $v = $porcategory[$k] ?? 0; $p = round(($v/$total)*100); @endphp
             <div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
                 <div style="display:flex;align-items:center;gap:.5rem;">

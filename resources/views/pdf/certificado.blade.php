@@ -273,7 +273,7 @@
       participou no <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
       realizado em Luanda, República de Angola, no ano de 2025, na modalidade de
       participante <strong>{{ ucfirst($inscricao->participation_mode) }}</strong>,
-      na categoria de <strong>{{ $inscricao->categoria_label }}</strong>.
+      na categoria de <strong>{{ $inscricao->category_label }}</strong>.
     </div>
     <div class="cert-meta">
       Inscrição {{ $inscricao->numero }}&nbsp;&nbsp;·&nbsp;&nbsp;Emitido em {{ now()->format('d \d\e F \d\e Y') }}

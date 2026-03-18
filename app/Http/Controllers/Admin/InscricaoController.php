@@ -30,9 +30,9 @@ class InscricaoController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filtro por categoria
-        if ($request->filled('categoria')) {
-            $query->where('categoria', $request->categoria);
+        // Filtro por category
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
         }
 
         // Filtro por tipo

@@ -143,7 +143,7 @@
             <div class="name-sub">{{ $inscricao->cargo }}</div>
           </td>
           <td style="font-size:7.5pt;">{{ Str::limit($inscricao->instituicao, 24) }}</td>
-          <td style="font-size:7.5pt;">{{ $inscricao->categoria_label }}</td>
+          <td style="font-size:7.5pt;">{{ $inscricao->category_label }}</td>
           <td>
             <span class="badge"
                   style="{{ $inscricao->participation_mode==='presencial'

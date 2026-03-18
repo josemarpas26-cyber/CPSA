@@ -90,7 +90,7 @@
                 <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $insc->nome_completo }}</div>
                 <div style="font-size:.7rem;color:var(--text-3);">{{ $insc->email }}</div>
               </td>
-              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $insc->categoria_label }}</span></td>
+              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $insc->category_label }}</span></td>
               <td>
                 @if($insc->certificado)
                   <div>

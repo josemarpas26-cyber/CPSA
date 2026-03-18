@@ -76,7 +76,7 @@
       </div>
       <div class="info-row">
         <span class="info-label">Categoria</span>
-        <span class="info-val">{{ $inscricao->categoria_label }}</span>
+        <span class="info-val">{{ $inscricao->category_label }}</span>
       </div>
       <div class="info-row">
         <span class="info-label">Modalidade</span>

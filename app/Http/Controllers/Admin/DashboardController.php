@@ -24,8 +24,8 @@ class DashboardController extends Controller
             'rejeitadas' => $contadoresRaw['rejeitada']  ?? 0,
         ];
 
-        // Distribuição por categoria (campo novo: category)
-        $porCategoria = Inscricao::selectRaw('category, count(*) as total')
+        // Distribuição por category (campo novo: category)
+        $porcategory = Inscricao::selectRaw('category, count(*) as total')
             ->groupBy('category')
             ->pluck('total', 'category');
 
@@ -48,7 +48,7 @@ class DashboardController extends Controller
             ->pluck('total', 'dia');
 
         return view('admin.dashboard', compact(
-            'stats', 'porCategoria', 'porTipo', 'ultimas', 'porDia'
+            'stats', 'porcategory', 'porTipo', 'ultimas', 'porDia'
         ));
     }
 }

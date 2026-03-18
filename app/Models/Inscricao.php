@@ -112,7 +112,7 @@ class Inscricao extends Model
     }
 
     /**
-     * Alias de compatibilidade: muitas views usam $inscricao->categoria_label
+     * Alias de compatibilidade: muitas views usam $inscricao->category_label
      */
     public function getCategoriaLabelAttribute(): string
     {

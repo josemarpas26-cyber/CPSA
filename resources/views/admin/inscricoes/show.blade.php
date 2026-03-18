@@ -94,10 +94,10 @@
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
-                  <label class="form-label">Categoria</label>
-                  <select name="categoria" class="form-input" required>
+                  <label class="form-label">category</label>
+                  <select name="category" class="form-input" required>
                     @foreach(['medico'=>'Médico(a)','enfermeiro'=>'Enfermeiro(a)','psicologo'=>'Psicólogo(a)','estudante'=>'Estudante','outro'=>'Outro'] as $v=>$l)
-                      <option value="{{ $v }}" @selected(old('categoria',$inscricao->categoria)===$v)>{{ $l }}</option>
+                      <option value="{{ $v }}" @selected(old('category',$inscricao->category)===$v)>{{ $l }}</option>
                     @endforeach
                   </select>
                 </div>
