@@ -256,7 +256,7 @@
       <div>
         <div class="org-name">República de Angola</div>
         <div class="event-name">
-          1º Congresso de Psiquiatria<br>e Saúde Mental em Angola
+          Iº Congresso de Psiquiatria<br>e Saúde Mental em Angola
         </div>
         <div class="event-meta">Luanda, Angola · 2025 · CPSM 2026</div>
       </div>
@@ -270,7 +270,7 @@
     <div class="certifies-text">Certifica-se que</div>
     <div class="participant-name">{{ $inscricao->nome_completo }}</div>
     <div class="cert-desc">
-      participou no <strong>1º Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
+      participou no <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
       realizado em Luanda, República de Angola, no ano de 2025, na modalidade de
       participante <strong>{{ ucfirst($inscricao->tipo_participacao) }}</strong>,
       na categoria de <strong>{{ $inscricao->categoria_label }}</strong>.
@@ -284,12 +284,12 @@
       <div class="sig-item">
         <div class="sig-line"></div>
         <div class="sig-name">Presidente da Comissão Científica</div>
-        <div class="sig-role">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+        <div class="sig-role">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
       </div>
       <div class="sig-item">
         <div class="sig-line"></div>
         <div class="sig-name">Presidente da Comissão Organizadora</div>
-        <div class="sig-role">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+        <div class="sig-role">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
       </div>
     </div>
   </div>

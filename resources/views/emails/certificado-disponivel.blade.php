@@ -46,7 +46,7 @@
         </svg>
       </div>
       <div class="header-title">O seu Certificado está disponível</div>
-      <div class="header-sub">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+      <div class="header-sub">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
     </div>
 
     <div class="body">
@@ -55,7 +55,7 @@
       </p>
       <p style="font-size:14px;color:#3d5080;line-height:1.65;margin-bottom:0;">
         O seu certificado de participação no
-        <strong>1º Congresso de Psiquiatria e Saúde Mental em Angola</strong>
+        <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong>
         está em anexo neste email, em formato PDF.
       </p>
 

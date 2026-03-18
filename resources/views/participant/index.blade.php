@@ -354,7 +354,7 @@
       Luanda · Angola · 2026
     </div>
     <h1 class="hero-title">
-      1º Congresso de Psiquiatria<br>e Saúde Mental em Angola
+      Iº Congresso de Psiquiatria<br>e Saúde Mental em Angola
     </h1>
     <p class="hero-sub">
       O maior evento científico de psiquiatria e saúde mental do país.<br>
@@ -442,7 +442,7 @@
       <h2 style="font-family:var(--font-display);font-style:italic;font-size:1.4rem;
                  color:var(--text-1);margin:0 0 1rem;">O que é o CPSA 2026?</h2>
       <p style="font-size:.85rem;color:var(--text-2);line-height:1.75;margin:0 0 .875rem;">
-        O <strong>1º Congresso de Psiquiatria e Saúde Mental em Angola</strong> é um evento científico
+        O <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong> é um evento científico
         de referência que reúne profissionais de saúde, investigadores, académicos e estudantes
         para debater os avanços e desafios na área da saúde mental em Angola e em África.
       </p>

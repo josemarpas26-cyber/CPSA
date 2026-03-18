@@ -106,7 +106,7 @@
   <div class="doc-header">
     <div>
       <div class="doc-title">Lista de Presença</div>
-      <div class="doc-sub">1º Congresso de Psiquiatria e Saúde Mental em Angola · CPSM 2026</div>
+      <div class="doc-sub">Iº Congresso de Psiquiatria e Saúde Mental em Angola · CPSM 2026</div>
     </div>
     <div class="doc-meta">
       Gerada em {{ now()->format('d/m/Y H:i') }}<br>

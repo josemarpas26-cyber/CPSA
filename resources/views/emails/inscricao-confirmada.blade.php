@@ -51,7 +51,7 @@
         </svg>
       </div>
       <div class="header-title">Inscrição Recebida</div>
-      <div class="header-sub">1º Congresso de Psiquiatria e Saúde Mental em Angola</div>
+      <div class="header-sub">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
     </div>
 
     <div class="body">

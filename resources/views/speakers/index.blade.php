@@ -151,7 +151,7 @@
     <p style="font-size:.88rem;color:rgba(255,255,255,.5);max-width:480px;
               margin:0 auto;line-height:1.7;">
       Conheça os especialistas nacionais e internacionais que irão partilhar
-      o seu conhecimento no 1º Congresso de Psiquiatria e Saúde Mental em Angola.
+      o seu conhecimento no Iº Congresso de Psiquiatria e Saúde Mental em Angola.
     </p>
   </div>
 </div>

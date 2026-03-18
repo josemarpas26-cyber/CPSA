@@ -70,7 +70,7 @@
     <h1 style="font-family:var(--font-display);font-style:italic;font-size:1.75rem;
                color:var(--text-1);margin:0 0 .5rem;">Formulário de Inscrição</h1>
     <p style="font-size:.82rem;color:var(--text-3);margin:0;">
-      1º Congresso de Psiquiatria e Saúde Mental em Angola
+      Iº Congresso de Psiquiatria e Saúde Mental em Angola
     </p>
   </div>
 
