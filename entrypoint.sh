@@ -35,7 +35,7 @@ php artisan cache:clear
 php artisan view:clear
 
 # Roda migrations
-php artisan migrate:fresh --force
+php artisan migrate --force
 
 # ⚡️ Roda os seeders
 php artisan db:seed --force || true
