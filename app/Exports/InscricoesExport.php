@@ -70,7 +70,7 @@ class InscricoesExport implements
             $inscricao->instituicao,
             $inscricao->cargo,
             $inscricao->categoria_label,
-            ucfirst($inscricao->tipo_participacao),
+            ucfirst($inscricao->participation_mode),
             $inscricao->status_label,
             $inscricao->comprovativo ? 'Sim' : 'Não',
             $inscricao->avaliador?->name ?? '—',

@@ -118,7 +118,7 @@
                 <div style="font-size:.7rem;color:var(--text-3);">{{ $i->email }}</div>
               </td>
               <td><span style="font-size:.75rem;color:var(--text-2);">{{ $i->categoria_label }}</span></td>
-              <td><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->tipo_participacao }}</span></td>
+              <td><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->participation_mode }}</span></td>
               <td>
                 <span class="status-badge" style="color:{{ $sc }};background:{{ $sb }};border-color:{{ $sbd }};">
                   <span class="status-dot" style="background:{{ $sc }};"></span>{{ $sl }}

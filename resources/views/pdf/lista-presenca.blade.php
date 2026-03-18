@@ -146,10 +146,10 @@
           <td style="font-size:7.5pt;">{{ $inscricao->categoria_label }}</td>
           <td>
             <span class="badge"
-                  style="{{ $inscricao->tipo_participacao==='presencial'
+                  style="{{ $inscricao->participation_mode==='presencial'
                     ? 'background:#eff6ff;color:#1d4ed8;'
                     : 'background:#f5f3ff;color:#6d28d9;' }}">
-              {{ ucfirst($inscricao->tipo_participacao) }}
+              {{ ucfirst($inscricao->participation_mode) }}
             </span>
           </td>
           <td class="sig-cell"></td>

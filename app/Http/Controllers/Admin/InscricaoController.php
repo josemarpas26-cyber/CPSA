@@ -37,7 +37,7 @@ class InscricaoController extends Controller
 
         // Filtro por tipo
         if ($request->filled('tipo')) {
-            $query->where('tipo_participacao', $request->tipo);
+            $query->where('participation_mode', $request->tipo);
         }
 
         // Busca por nome, email ou número

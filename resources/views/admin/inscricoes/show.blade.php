@@ -103,9 +103,9 @@
                 </div>
                 <div>
                   <label class="form-label">Modalidade</label>
-                  <select name="tipo_participacao" class="form-input" required>
+                  <select name="participation_mode" class="form-input" required>
                     @foreach(['presencial'=>'Presencial','online'=>'Online'] as $v=>$l)
-                      <option value="{{ $v }}" @selected(old('tipo_participacao',$inscricao->tipo_participacao)===$v)>{{ $l }}</option>
+                      <option value="{{ $v }}" @selected(old('participation_mode',$inscricao->participation_mode)===$v)>{{ $l }}</option>
                     @endforeach
                   </select>
                 </div>

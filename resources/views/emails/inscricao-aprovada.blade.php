@@ -70,7 +70,7 @@
 
       <div class="info-row">
         <span class="info-label">Modalidade</span>
-        <span class="info-val">{{ ucfirst($inscricao->tipo_participacao) }}</span>
+        <span class="info-val">{{ ucfirst($inscricao->participation_mode) }}</span>
       </div>
       <div class="info-row">
         <span class="info-label">Categoria</span>

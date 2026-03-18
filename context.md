@@ -167,7 +167,7 @@ inscricoes
   id · numero (CPSA-2025-XXXX) · nome_completo · email
   telefone · instituicao · cargo
   categoria (medico|enfermeiro|psicologo|estudante|outro)
-  tipo_participacao (presencial|online)
+  participation_mode (presencial|online)
   status (pendente|em_analise|aprovada|rejeitada)
   avaliado_por · avaliado_em · motivo_rejeicao
   user_id · presente · checkin_em
