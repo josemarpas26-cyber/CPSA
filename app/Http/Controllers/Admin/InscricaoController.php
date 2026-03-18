@@ -30,12 +30,12 @@ class InscricaoController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filtro por category
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
+        // Filtro por categoria — coluna correta: category
+        if ($request->filled('categoria')) {
+            $query->where('category', $request->categoria);
         }
 
-        // Filtro por tipo
+        // Filtro por tipo — coluna correta: participation_mode
         if ($request->filled('tipo')) {
             $query->where('participation_mode', $request->tipo);
         }
@@ -44,16 +44,16 @@ class InscricaoController extends Controller
         if ($request->filled('busca')) {
             $termo = $request->busca;
             $query->where(function ($q) use ($termo) {
-                $q->where('nome_completo', 'like', "%{$termo}%")
+                $q->where('full_name', 'like', "%{$termo}%")
                     ->orWhere('email', 'like', "%{$termo}%")
                     ->orWhere('numero', 'like', "%{$termo}%")
-                    ->orWhere('instituicao', 'like', "%{$termo}%");
+                    ->orWhere('institution', 'like', "%{$termo}%");
             });
         }
 
         $inscricoes = $query->paginate(15)->withQueryString();
 
-        // FIX: Consolidar 5 queries separadas numa única query agregada
+        // Consolidar contadores numa única query agregada
         $contadoresRaw = Inscricao::selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status')
@@ -127,10 +127,6 @@ class InscricaoController extends Controller
 
     // ─── Marcar Em Análise ────────────────────
 
-    /**
-     * Transição explícita de pendente → em_analise.
-     * Útil para sinalizar que a comissão está a analisar sem ainda decidir.
-     */
     public function marcarEmAnalise(Inscricao $inscricao): RedirectResponse
     {
         if ($inscricao->status !== 'pendente') {
@@ -177,9 +173,6 @@ class InscricaoController extends Controller
 
     // ─── Check-in no evento ───────────────────
 
-    /**
-     * Regista a presença do participante no evento.
-     */
     public function checkin(Inscricao $inscricao): RedirectResponse
     {
         if ($inscricao->status !== 'aprovada') {
@@ -187,7 +180,7 @@ class InscricaoController extends Controller
         }
 
         if ($inscricao->presente) {
-            return back()->with('info', "Check-in de {$inscricao->nome_completo} já foi registado.");
+            return back()->with('info', "Check-in de {$inscricao->full_name} já foi registado.");
         }
 
         $inscricao->update([
@@ -195,6 +188,6 @@ class InscricaoController extends Controller
             'checkin_em' => now(),
         ]);
 
-        return back()->with('success', "Check-in de {$inscricao->nome_completo} registado com sucesso.");
+        return back()->with('success', "Check-in de {$inscricao->full_name} registado com sucesso.");
     }
 }

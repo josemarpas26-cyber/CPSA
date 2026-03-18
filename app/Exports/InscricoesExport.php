@@ -48,8 +48,8 @@ class InscricoesExport implements
             'Email',
             'Telefone',
             'Instituição',
-            'Cargo',
-            'category',
+            'Profissão',
+            'Categoria',
             'Modalidade',
             'Estado',
             'Comprovativo',
@@ -64,13 +64,13 @@ class InscricoesExport implements
     {
         return [
             $inscricao->numero,
-            $inscricao->nome_completo,
+            $inscricao->full_name,
             $inscricao->email,
-            $inscricao->telefone,
-            $inscricao->instituicao,
-            $inscricao->cargo,
+            $inscricao->phone,                                          // era: telefone
+            $inscricao->institution,                                    // era: instituicao
+            $inscricao->profession,                                     // era: cargo
             $inscricao->category_label,
-            ucfirst($inscricao->participation_mode),
+            ucfirst($inscricao->participation_mode),                    // era: tipo_participacao
             $inscricao->status_label,
             $inscricao->comprovativo ? 'Sim' : 'Não',
             $inscricao->avaliador?->name ?? '—',
@@ -94,7 +94,6 @@ class InscricoesExport implements
     public function styles(Worksheet $sheet): array
     {
         return [
-            // Cabeçalho
             1 => [
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => [

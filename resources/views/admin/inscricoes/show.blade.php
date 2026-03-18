@@ -58,7 +58,7 @@
                     display:flex;align-items:center;justify-content:space-between;">
           <div>
             <p class="section-label" style="margin-bottom:.15rem;">Ficha do Participante</p>
-            <h3 class="heading" style="font-size:.95rem;margin:0;">{{ $inscricao->nome_completo }}</h3>
+            <h3 class="heading" style="font-size:.95rem;margin:0;">{{ $inscricao->full_name }}</h3>
           </div>
           <span style="font-size:.68rem;color:var(--text-4);font-weight:500;">
             Inscrito em {{ $inscricao->created_at->format('d/m/Y H:i') }}
@@ -70,42 +70,54 @@
             <div style="display:grid;grid-template-columns:1fr;gap:1rem;">
               <div>
                 <label class="form-label">Nome completo</label>
-                <input type="text" name="nome_completo" value="{{ old('nome_completo',$inscricao->nome_completo) }}" class="form-input" required>
+                {{-- Coluna correcta: full_name --}}
+                <input type="text" name="full_name" value="{{ old('full_name', $inscricao->full_name) }}" class="form-input" required>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
                   <label class="form-label">Email</label>
-                  <input type="email" name="email" value="{{ old('email',$inscricao->email) }}" class="form-input" required>
+                  <input type="email" name="email" value="{{ old('email', $inscricao->email) }}" class="form-input" required>
                 </div>
                 <div>
                   <label class="form-label">Telefone</label>
-                  <input type="text" name="telefone" value="{{ old('telefone',$inscricao->telefone) }}" class="form-input" required>
+                  {{-- Coluna correcta: phone --}}
+                  <input type="text" name="phone" value="{{ old('phone', $inscricao->phone) }}" class="form-input" required>
                 </div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
                   <label class="form-label">Instituição</label>
-                  <input type="text" name="instituicao" value="{{ old('instituicao',$inscricao->instituicao) }}" class="form-input" required>
+                  {{-- Coluna correcta: institution --}}
+                  <input type="text" name="institution" value="{{ old('institution', $inscricao->institution) }}" class="form-input" required>
                 </div>
                 <div>
-                  <label class="form-label">Cargo</label>
-                  <input type="text" name="cargo" value="{{ old('cargo',$inscricao->cargo) }}" class="form-input" required>
+                  <label class="form-label">Profissão</label>
+                  {{-- Coluna correcta: profession (era: cargo) --}}
+                  <input type="text" name="profession" value="{{ old('profession', $inscricao->profession) }}" class="form-input" required>
                 </div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
-                  <label class="form-label">category</label>
+                  <label class="form-label">Categoria</label>
+                  {{-- Coluna correcta: category — valores alinhados com enum da BD --}}
                   <select name="category" class="form-input" required>
-                    @foreach(['medico'=>'Médico(a)','enfermeiro'=>'Enfermeiro(a)','psicologo'=>'Psicólogo(a)','estudante'=>'Estudante','outro'=>'Outro'] as $v=>$l)
-                      <option value="{{ $v }}" @selected(old('category',$inscricao->category)===$v)>{{ $l }}</option>
+                    @foreach([
+                      'profissional' => 'Profissional',
+                      'estudante'    => 'Estudante',
+                      'orador'       => 'Orador',
+                      'convidado'    => 'Convidado',
+                      'imprensa'     => 'Imprensa',
+                    ] as $v => $l)
+                      <option value="{{ $v }}" @selected(old('category', $inscricao->category) === $v)>{{ $l }}</option>
                     @endforeach
                   </select>
                 </div>
                 <div>
                   <label class="form-label">Modalidade</label>
+                  {{-- Coluna correcta: participation_mode --}}
                   <select name="participation_mode" class="form-input" required>
                     @foreach(['presencial'=>'Presencial','online'=>'Online'] as $v=>$l)
-                      <option value="{{ $v }}" @selected(old('participation_mode',$inscricao->participation_mode)===$v)>{{ $l }}</option>
+                      <option value="{{ $v }}" @selected(old('participation_mode', $inscricao->participation_mode) === $v)>{{ $l }}</option>
                     @endforeach
                   </select>
                 </div>

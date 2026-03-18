@@ -62,10 +62,17 @@
       </div>
       <div style="min-width:140px;">
         <label class="form-label">Categoria</label>
-        <select name="category" class="form-input">
+        <select name="categoria" class="form-input">
           <option value="">Todas</option>
-          @foreach(['medico'=>'Médico','enfermeiro'=>'Enfermeiro','psicologo'=>'Psicólogo','estudante'=>'Estudante','outro'=>'Outro'] as $v=>$l)
-            <option value="{{ $v }}" {{ request('category')===$v?'selected':'' }}>{{ $l }}</option>
+          {{-- Valores correctos alinhados com a coluna `category` na BD --}}
+          @foreach([
+            'profissional' => 'Profissional',
+            'estudante'    => 'Estudante',
+            'orador'       => 'Orador',
+            'convidado'    => 'Convidado',
+            'imprensa'     => 'Imprensa',
+          ] as $v => $l)
+            <option value="{{ $v }}" {{ request('categoria')===$v ? 'selected' : '' }}>{{ $l }}</option>
           @endforeach
         </select>
       </div>
@@ -79,7 +86,7 @@
       </div>
       <div style="display:flex;gap:.375rem;">
         <button type="submit" class="btn-primary" style="font-size:.75rem;padding:.5rem .875rem;">Filtrar</button>
-        @if(request()->hasAny(['busca','category','tipo','status']))
+        @if(request()->hasAny(['busca','categoria','tipo','status']))
           <a href="{{ route('admin.inscricoes.index') }}" class="btn-secondary" style="font-size:.75rem;padding:.5rem .875rem;">Limpar</a>
         @endif
       </div>
@@ -114,11 +121,11 @@
             <tr class="row-hover">
               <td><span class="mono" style="font-size:.71rem;font-weight:600;color:var(--blue-vivid);">{{ $i->numero }}</span></td>
               <td>
-                <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $i->nome_completo }}</div>
+                <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $i->full_name }}</div>{{-- era: nome_completo --}}
                 <div style="font-size:.7rem;color:var(--text-3);">{{ $i->email }}</div>
               </td>
-              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $i->category_label }}</span></td>
-              <td><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->participation_mode }}</span></td>
+              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $i->category_label }}</span></td>{{-- era: categoria_label (alias ainda funciona) --}}
+              <td><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->participation_mode }}</span></td>{{-- era: tipo_participacao --}}
               <td>
                 <span class="status-badge" style="color:{{ $sc }};background:{{ $sb }};border-color:{{ $sbd }};">
                   <span class="status-dot" style="background:{{ $sc }};"></span>{{ $sl }}
