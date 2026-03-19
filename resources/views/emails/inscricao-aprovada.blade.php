@@ -54,7 +54,7 @@
 
     <div class="body">
       <p style="font-size:15px;color:#0b1f4a;margin-bottom:14px;line-height:1.6;">
-        Caro(a) <strong>{{ $inscricao->nome_completo }}</strong>,
+        Caro(a) <strong>{{ $inscricao->full_name }}</strong>,
       </p>
       <p style="font-size:14px;color:#3d5080;line-height:1.65;margin-bottom:0;">
         Temos o prazer de informar que a sua inscrição foi <strong>aprovada</strong>

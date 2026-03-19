@@ -87,7 +87,7 @@
             <tr>
               <td><span class="mono" style="font-size:.71rem;font-weight:600;color:var(--blue-vivid);">{{ $insc->numero }}</span></td>
               <td>
-                <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $insc->nome_completo }}</div>
+                <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $insc->full_name }}</div>
                 <div style="font-size:.7rem;color:var(--text-3);">{{ $insc->email }}</div>
               </td>
               <td><span style="font-size:.75rem;color:var(--text-2);">{{ $insc->category_label }}</span></td>

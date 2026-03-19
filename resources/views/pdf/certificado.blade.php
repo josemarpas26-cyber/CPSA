@@ -268,7 +268,7 @@
     <!-- Certificate body -->
     <div class="cert-label">Certificado de Participação</div>
     <div class="certifies-text">Certifica-se que</div>
-    <div class="participant-name">{{ $inscricao->nome_completo }}</div>
+    <div class="participant-name">{{ $inscricao->full_name }}</div>
     <div class="cert-desc">
       participou no <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
       realizado em Luanda, República de Angola, no ano de 2025, na modalidade de

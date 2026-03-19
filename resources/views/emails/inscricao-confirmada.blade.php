@@ -56,7 +56,7 @@
 
     <div class="body">
       <p class="greeting">
-        Caro(a) <strong>{{ $inscricao->nome_completo }}</strong>,
+        Caro(a) <strong>{{ $inscricao->full_name }}</strong>,
       </p>
       <p style="font-size:14px;color:#3d5080;line-height:1.65;margin-bottom:0;">
         A sua inscrição foi recebida e encontra-se em análise pela comissão organizadora.
@@ -72,7 +72,7 @@
 
       <div class="info-row">
         <span class="info-label">Nome</span>
-        <span class="info-val">{{ $inscricao->nome_completo }}</span>
+        <span class="info-val">{{ $inscricao->full_name }}</span>
       </div>
       <div class="info-row">
         <span class="info-label">Categoria</span>

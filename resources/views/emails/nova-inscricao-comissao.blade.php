@@ -49,7 +49,7 @@
       </div>
       <div class="info-row">
         <span class="info-label">Nome</span>
-        <span class="info-val">{{ $inscricao->nome_completo }}</span>
+        <span class="info-val">{{ $inscricao->full_name }}</span>
       </div>
       <div class="info-row">
         <span class="info-label">Email</span>
