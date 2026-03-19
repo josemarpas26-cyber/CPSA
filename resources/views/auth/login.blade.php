@@ -13,9 +13,23 @@
     font-family: 'DM Sans', sans-serif;
     background: #0b1f4a;
     display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
   }
+
+ /* Esconde estrutura global do layout na tela de login */
+  body #navbar,
+  body #mobile-menu,
+  body #footer,
+  body .flash {
+    display: none !important;
+  }
+
+  body #page-content {
+    min-height: 100vh !important;
+  }
+
 
   /* ── Fundo decorativo ──────────────────────── */
   .lg-grid {
@@ -35,8 +49,8 @@
   /* ── Card ──────────────────────────────────── */
   .lg-card {
     position: relative; z-index: 1;
-    width: 100%; max-width: 420px;
-    margin: 1.5rem;
+    width: 100%; max-width: 450px;
+    margin: 0;
     background: #ffffff;
     border: 1px solid rgba(26,58,143,.09);
     border-radius: 20px;
@@ -52,17 +66,22 @@
   /* ── Header ────────────────────────────────── */
   .lg-header {
     background: linear-gradient(135deg, #0b1f4a 0%, #1a3a8f 100%);
-    padding: 2rem 2rem 1.75rem;
+    padding: 0.5rem 2rem 1.75rem;
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255,.06);
   }
+  
   .lg-icon {
-    width: 52px; height: 52px; border-radius: 12px;
-    background: linear-gradient(135deg, #2563eb, #6d28d9);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1rem;
-    box-shadow: 0 4px 16px rgba(37,99,235,.4);
-  }
+  width: 52px; 
+  height: 52px; 
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #6d28d9);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  margin: 1rem auto 1rem; /* Distanciamento de 1rem em cima, centralizado à esquerda/direita, e 1rem em baixo */
+  box-shadow: 0 4px 16px rgba(37,99,235,.4);
+}
   .lg-title {
     font-family: 'Instrument Serif', serif; font-style: italic;
     font-size: 1.35rem; color: white; margin-bottom: .25rem;
@@ -176,6 +195,25 @@
   }
 
   @keyframes lgSpin { to { transform: rotate(360deg); } }
+  
+   @media (max-width: 520px) {
+    #login-scene {
+      padding: .75rem;
+    }
+
+    .lg-header {
+      padding: 1.5rem 1.25rem 1.25rem;
+    }
+
+    .lg-body {
+      padding: 1.25rem;
+    }
+
+    .lg-footer {
+      padding: .875rem 1.25rem 1.1rem;
+    }
+  }
+
 </style>
 @endpush
 
