@@ -11,18 +11,25 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // ── Roles ─────────────────────────────────
+        // Apenas roles de gestão — participantes não têm conta
         $roles = [
-            ['name' => 'admin',        'display_name' => 'Administrador'],
-            ['name' => 'organizador',  'display_name' => 'Organizador'],
-            ['name' => 'participante', 'display_name' => 'Participante'],
+            [
+                'name'         => 'admin',
+                'display_name' => 'Administrador',
+                'description'  => 'Acesso total ao painel de gestão.',
+            ],
+            [
+                'name'         => 'organizador',
+                'display_name' => 'Organizador',
+                'description'  => 'Gestão de inscrições, aprovações e certificados.',
+            ],
         ];
 
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role['name']], $role);
         }
 
-        // ── Admin padrão ──────────────────────────
+        // Admin padrão
         $admin = User::firstOrCreate(
             ['email' => 'admin@cpsa2025.ao'],
             [
@@ -35,5 +42,8 @@ class RoleSeeder extends Seeder
         $admin->roles()->syncWithoutDetaching(
             Role::whereIn('name', ['admin', 'organizador'])->pluck('id')
         );
+
+        $this->command->info('✅ Roles e admin padrão criados.');
+        $this->command->warn('⚠️  Altere a senha do admin imediatamente após o primeiro login!');
     }
 }

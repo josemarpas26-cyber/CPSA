@@ -1,93 +1,150 @@
+{{-- resources/views/participant/sucesso.blade.php --}}
 @extends('layouts.app')
-@section('title','Inscrição Submetida')
+
+@section('title', 'Inscrição Recebida — CPSA 2025')
+
 @section('content')
-<style>
-  .success-wrap{min-height:calc(100vh - 60px - 80px);display:flex;align-items:center;
-                justify-content:center;padding:3rem 1.5rem;position:relative;overflow:hidden;}
-  .success-bg{position:absolute;inset:0;
-    background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(5,150,105,.07),transparent 60%),
-               radial-gradient(ellipse 50% 40% at 80% 90%,rgba(37,99,235,.05),transparent 60%);
-    pointer-events:none;}
-  .success-card{width:100%;max-width:520px;background:var(--card);border:1px solid var(--card-border);
-                border-radius:var(--r-2xl);box-shadow:var(--shadow-lg);overflow:hidden;
-                opacity:0;animation:fadeUp .5s ease .1s forwards;}
-  .success-header{background:linear-gradient(135deg,var(--navy),var(--blue));
-                  padding:2.5rem;text-align:center;}
-  .success-body{padding:2rem;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-  .info-row{display:flex;justify-content:space-between;align-items:center;
-            padding:.625rem 0;border-bottom:1px solid var(--divider);font-size:.8rem;}
-  .info-row:last-child{border-bottom:none;}
-</style>
+<div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
 
-<div class="success-wrap">
-  <div class="success-bg"></div>
-  <div class="success-card">
-    <div class="success-header">
-      <div style="width:56px;height:56px;border-radius:50%;
-                  background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);
-                  display:flex;align-items:center;justify-content:center;
-                  margin:0 auto 1.25rem;">
-        <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-      </div>
-      <h1 style="font-family:var(--font-display);font-style:italic;font-size:1.6rem;
-                 color:white;margin:0 0 .5rem;">Inscrição Recebida</h1>
-      <p style="font-size:.82rem;color:rgba(255,255,255,.6);margin:0;">A sua inscrição foi submetida com sucesso.</p>
+    {{-- Ícone de sucesso --}}
+    <div class="mb-6 flex justify-center">
+        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+            <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
     </div>
 
-    <div class="success-body">
-      <div style="background:var(--surface);border-radius:var(--r-md);
-                  border:1px solid var(--card-border);padding:1.25rem;
-                  text-align:center;margin-bottom:1.5rem;">
-        <p style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
-                  color:var(--text-3);margin:0 0 .375rem;">Número de inscrição</p>
-        <p style="font-family:var(--font-mono);font-size:1.4rem;font-weight:600;
-                  color:var(--blue-vivid);margin:0;">
-          {{ session('inscricao_numero') }}
+    <div class="text-center mb-10">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Inscrição recebida!</h1>
+        <p class="text-gray-600">
+            Obrigado pela sua inscrição no CPSA 2025. A comissão irá analisar o seu pedido e
+            receberá uma resposta por email em breve.
         </p>
-        <p style="font-size:.72rem;color:var(--text-3);margin:.5rem 0 0;">
-          Confirmação enviada para <strong>{{ session('inscricao_email') }}</strong>
-        </p>
-      </div>
+    </div>
 
-      <p style="font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-                color:var(--text-3);margin:0 0 .75rem;">Próximos passos</p>
-      <div style="display:flex;flex-direction:column;gap:.625rem;margin-bottom:1.75rem;">
-        @foreach([
-          ['A comissão irá analisar o seu comprovativo de pagamento.'],
-          ['Receberá um email de notificação com o resultado da avaliação.'],
-          ['Após aprovação, o seu certificado ficará disponível para download.'],
-        ] as $i=>[$t])
-          <div style="display:flex;align-items:flex-start;gap:.75rem;
-                      padding:.75rem;background:var(--surface);border-radius:var(--r-sm);
-                      border:1px solid var(--card-border);">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--navy);
-                        color:white;display:flex;align-items:center;justify-content:center;
-                        font-size:.6rem;font-weight:700;flex-shrink:0;margin-top:1px;">
-              {{ $i+1 }}
+    {{-- Número da inscrição --}}
+    @if(session('inscricao_numero'))
+    <div class="mb-6 rounded-xl border border-gray-200 bg-gray-50 px-6 py-4 text-center">
+        <p class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-1">Número de inscrição</p>
+        <p class="text-xl font-mono font-semibold text-gray-900">{{ session('inscricao_numero') }}</p>
+        @if(session('inscricao_email'))
+        <p class="mt-1 text-sm text-gray-500">Confirmação enviada para <strong>{{ session('inscricao_email') }}</strong></p>
+        @endif
+    </div>
+    @endif
+
+    {{-- Link único de acesso --}}
+    @if(session('inscricao_token'))
+    <div class="rounded-xl border-2 border-blue-200 bg-blue-50 p-6 mb-6">
+        <div class="flex items-start gap-3 mb-4">
+            <div class="mt-0.5 flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>
             </div>
-            <p style="font-size:.78rem;color:var(--text-2);margin:0;line-height:1.5;">{{ $t }}</p>
-          </div>
-        @endforeach
-      </div>
+            <div>
+                <p class="font-semibold text-blue-900 text-sm mb-1">O seu link de acesso pessoal</p>
+                <p class="text-xs text-blue-700">
+                    Use este link para consultar o estado da sua inscrição e descarregar o certificado — sem precisar de criar conta.
+                    Guarde-o num local seguro.
+                </p>
+            </div>
+        </div>
 
-      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
-        <a href="{{ route('home') }}" class="btn-secondary" style="font-size:.78rem;">
-          Voltar ao início
-        </a>
-        @auth
-          <a href="{{ route('participant.minha-inscricao') }}" class="btn-primary" style="font-size:.78rem;">
-            Ver minha inscrição
-          </a>
-        @else
-          <a href="{{ route('login') }}" class="btn-primary" style="font-size:.78rem;">
-            Acompanhar inscrição
-          </a>
-        @endauth
-      </div>
+        {{-- URL visível --}}
+        <div class="flex items-center gap-2 rounded-lg border border-blue-300 bg-white px-3 py-2.5">
+            <span id="access-url" class="flex-1 truncate font-mono text-xs text-gray-700 select-all">
+                {{ route('inscricao.consultar', session('inscricao_token')) }}
+            </span>
+            <button
+                id="copy-btn"
+                type="button"
+                onclick="copiarLink()"
+                class="flex-shrink-0 rounded-md bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                Copiar
+            </button>
+        </div>
+
+        <p id="copy-feedback" class="mt-2 text-xs text-green-700 hidden">
+            ✓ Link copiado!
+        </p>
+
+        {{-- Ir para a área pessoal --}}
+        <div class="mt-4">
+            <a
+                href="{{ route('inscricao.consultar', session('inscricao_token')) }}"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-blue-700 hover:text-blue-900 underline underline-offset-2"
+            >
+                Abrir a minha área pessoal
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
     </div>
-  </div>
+    @endif
+
+    {{-- Próximos passos --}}
+    <div class="rounded-xl border border-gray-200 bg-white p-6 mb-8">
+        <h2 class="text-sm font-semibold text-gray-900 mb-3">O que acontece a seguir?</h2>
+        <ol class="space-y-3">
+            <li class="flex gap-3 text-sm text-gray-600">
+                <span class="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">1</span>
+                A comissão irá analisar o seu comprovativo de pagamento.
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <span class="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">2</span>
+                Receberá um email de confirmação de aprovação ou pedido de esclarecimento.
+            </li>
+            <li class="flex gap-3 text-sm text-gray-600">
+                <span class="flex-shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">3</span>
+                Após o congresso, o certificado de participação estará disponível no seu link pessoal.
+            </li>
+        </ol>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 underline underline-offset-2">
+            Voltar à página inicial
+        </a>
+    </div>
+
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function copiarLink() {
+    const url = document.getElementById('access-url').textContent.trim();
+    const feedback = document.getElementById('copy-feedback');
+    const btn = document.getElementById('copy-btn');
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(() => mostrarFeedback());
+    } else {
+        // Fallback para browsers mais antigos
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); mostrarFeedback(); } catch {}
+        document.body.removeChild(ta);
+    }
+
+    function mostrarFeedback() {
+        btn.textContent = 'Copiado!';
+        btn.classList.replace('bg-blue-700', 'bg-green-600');
+        feedback.classList.remove('hidden');
+        setTimeout(() => {
+            btn.textContent = 'Copiar';
+            btn.classList.replace('bg-green-600', 'bg-blue-700');
+            feedback.classList.add('hidden');
+        }, 3000);
+    }
+}
+</script>
+@endpush

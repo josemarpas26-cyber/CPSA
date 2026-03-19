@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Inscricao extends Model
 {
@@ -17,7 +18,8 @@ class Inscricao extends Model
 
     protected $fillable = [
         'numero',
-        // Dados pessoais (novo esquema)
+        'access_token',
+        // Dados pessoais
         'full_name',
         'gender',
         'date_of_birth',
@@ -47,6 +49,17 @@ class Inscricao extends Model
         'checkin_em'    => 'datetime',
         'presente'      => 'boolean',
     ];
+
+    // ── Gerar token de acesso único ───────────
+
+    public static function gerarAccessToken(): string
+    {
+        do {
+            $token = Str::random(48);
+        } while (self::where('access_token', $token)->exists());
+
+        return $token;
+    }
 
     // ── Labels para UI ────────────────────────
 
@@ -103,17 +116,13 @@ class Inscricao extends Model
         };
     }
 
-    /**
-     * Alias de compatibilidade: muitas views usam $inscricao->nome_completo
-     */
+    /** Alias de compatibilidade */
     public function getNomeCompletoAttribute(): string
     {
         return $this->full_name;
     }
 
-    /**
-     * Alias de compatibilidade: muitas views usam $inscricao->category_label
-     */
+    /** Alias de compatibilidade */
     public function getCategoriaLabelAttribute(): string
     {
         return $this->category_label;
@@ -173,7 +182,6 @@ class Inscricao extends Model
         return $this->hasMany(InscricaoAlteracaoLog::class)->orderByDesc('editado_em');
     }
 
-    /** Curso escolhido (1 por inscrição) */
     public function inscricaoCurso(): HasOne
     {
         return $this->hasOne(InscricaoCurso::class);

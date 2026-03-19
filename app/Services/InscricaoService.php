@@ -22,6 +22,7 @@ class InscricaoService
         return DB::transaction(function () use ($dados, $ficheiro) {
             $inscricao = Inscricao::create([
                 'numero'             => Inscricao::gerarNumero(),
+                'access_token'       => Inscricao::gerarAccessToken(),
                 'full_name'          => $dados['full_name'],
                 'gender'             => $dados['gender'],
                 'date_of_birth'      => $dados['date_of_birth'],
@@ -36,7 +37,7 @@ class InscricaoService
                 'participation_mode' => $dados['participation_mode'],
                 'observations'       => $dados['observations'] ?? null,
                 'status'             => 'pendente',
-                'user_id'            => auth()->id(),
+                // Sem user_id — participantes não criam conta
             ]);
 
             // Ligar ao curso escolhido
