@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\UploadedFile;
+
 
 class InscricaoRequest extends FormRequest
 {
@@ -53,13 +55,22 @@ class InscricaoRequest extends FormRequest
                 'max:5120',
                 'mimes:pdf,jpg,jpeg,png',
                 function ($attribute, $value, $fail) {
-                    $parts = explode('.', $value->getClientOriginalName());
-                    if (count($parts) > 2) {
-                        $fail('Nome de ficheiro inválido. Não são permitidos ficheiros com múltiplas extensões.');
+                    if (! $value instanceof UploadedFile) {
+
                         return;
                     }
+
+                    $filename = strtolower($value->getClientOriginalName());
+
+                    // Bloqueia apenas extensões duplas potencialmente perigosas (ex.: .php.pdf)
+                    if (preg_match('/\.(php|phtml|phar|pl|py|jsp|asp|aspx)\.(pdf|jpe?g|png)$/', $filename)) {
+                        $fail('Nome de ficheiro inválido. Não são permitidos ficheiros com extensões duplas perigosas.');
+                        return;
+                    }
+
+
                     $allowed = ['application/pdf', 'image/jpeg', 'image/png'];
-                    if (! in_array($value->getMimeType(), $allowed)) {
+                    if (! in_array($value->getMimeType(), $allowed, true)) {
                         $fail('O tipo de ficheiro não é permitido. Utilize PDF, JPG ou PNG.');
                     }
                 },
