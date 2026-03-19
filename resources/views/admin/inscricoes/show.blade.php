@@ -17,7 +17,7 @@
 <div style="display:flex;flex-direction:column;gap:1.25rem;max-width:1000px;">
 
   {{-- Breadcrumb + title --}}
-  <div class="a1" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+  <div class="a1 action-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
     <div style="display:flex;align-items:center;gap:.75rem;">
       <a href="{{ route('admin.inscricoes.index') }}"
          style="display:inline-flex;align-items:center;gap:.375rem;font-size:.75rem;font-weight:600;
@@ -73,7 +73,7 @@
                 {{-- Coluna correcta: full_name --}}
                 <input type="text" name="full_name" value="{{ old('full_name', $inscricao->full_name) }}" class="form-input" required>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+              <div class="field-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
                   <label class="form-label">Email</label>
                   <input type="email" name="email" value="{{ old('email', $inscricao->email) }}" class="form-input" required>
@@ -84,7 +84,7 @@
                   <input type="text" name="phone" value="{{ old('phone', $inscricao->phone) }}" class="form-input" required>
                 </div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+              <div class="field-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
                   <label class="form-label">Instituição</label>
                   {{-- Coluna correcta: institution --}}
@@ -96,7 +96,7 @@
                   <input type="text" name="profession" value="{{ old('profession', $inscricao->profession) }}" class="form-input" required>
                 </div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
+              <div class="field-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;">
                 <div>
                   <label class="form-label">Categoria</label>
                   {{-- Coluna correcta: category — valores alinhados com enum da BD --}}
@@ -175,7 +175,7 @@
       @if($inscricao->avaliado_em)
         <div class="panel-card a3" style="padding:1.25rem 1.5rem;">
           <p class="section-label" style="margin-bottom:.5rem;">Avaliação</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:.875rem;">
+          <div class="field-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:.875rem;">
             <div>
               <p class="detail-label">Avaliado por</p>
               <p class="detail-val">{{ $inscricao->avaliador?->name ?? '—' }}</p>
@@ -356,8 +356,16 @@
 </div>
 
 <style>
-  @media(max-width:768px){
+  @media(max-width:900px){
     .responsive-grid{grid-template-columns:1fr !important;}
+  }
+  @media(max-width:640px){
+    .responsive-grid{grid-template-columns:1fr !important;}
+    .field-grid-2{grid-template-columns:1fr !important;}
+    .action-header{flex-direction:column !important;align-items:flex-start !important;}
+    .action-header-btns{flex-wrap:wrap;width:100%;}
+    .action-header-btns a,.action-header-btns button{flex:1;justify-content:center;}
+    .comprovativo-preview{flex-direction:column !important;}
   }
   .hover\:text-blue:hover{color:var(--blue-vivid)!important;}
 </style>

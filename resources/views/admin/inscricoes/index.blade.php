@@ -17,12 +17,19 @@
   .mono{font-family:var(--font-mono);}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
   .animate-in{opacity:0;animation:fadeUp .4s ease forwards;}
+  @media(max-width:640px){
+    .page-header{flex-direction:column!important;align-items:flex-start!important;}
+    .filter-form{flex-direction:column!important;}
+    .filter-form>div{min-width:0!important;width:100%!important;}
+    .col-hide-mobile{display:none!important;}
+    .pagination-bar{flex-direction:column!important;gap:.5rem;text-align:center;}
+  }
 </style>
 
 <div style="display:flex;flex-direction:column;gap:1.25rem;">
 
   {{-- Header --}}
-  <div class="animate-in" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+  <div class="animate-in page-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
     <div>
       <p class="section-label" style="margin-bottom:.2rem;">Gestão</p>
       <h1 class="heading" style="font-size:1.5rem;margin:0;">Inscrições</h1>
@@ -47,7 +54,7 @@
   {{-- Search filters --}}
   <div class="card animate-in" style="animation-delay:.1s;padding:1rem 1.25rem;">
     <form method="GET" action="{{ route('admin.inscricoes.index') }}"
-          style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;">
+          class="filter-form" style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;">
       <div style="flex:1;min-width:200px;">
         <label class="form-label">Pesquisar</label>
         <div style="position:relative;">
@@ -101,11 +108,11 @@
           <tr>
             <th><span class="section-label">Número</span></th>
             <th><span class="section-label">Participante</span></th>
-            <th><span class="section-label">Categoria</span></th>
-            <th><span class="section-label">Modalidade</span></th>
+            <th class="col-hide-mobile"><span class="section-label">Categoria</span></th>
+            <th class="col-hide-mobile"><span class="section-label">Modalidade</span></th>
             <th><span class="section-label">Estado</span></th>
-            <th><span class="section-label">Comprovativo</span></th>
-            <th><span class="section-label">Data</span></th>
+            <th class="col-hide-mobile"><span class="section-label">Comprovativo</span></th>
+            <th class="col-hide-mobile"><span class="section-label">Data</span></th>
             <th></th>
           </tr>
         </thead>
@@ -124,8 +131,8 @@
                 <div style="font-size:.8rem;font-weight:600;color:var(--text-1);">{{ $i->full_name }}</div>{{-- era: nome_completo --}}
                 <div style="font-size:.7rem;color:var(--text-3);">{{ $i->email }}</div>
               </td>
-              <td><span style="font-size:.75rem;color:var(--text-2);">{{ $i->category_label }}</span></td>{{-- era: categoria_label (alias ainda funciona) --}}
-              <td><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->participation_mode }}</span></td>{{-- era: tipo_participacao --}}
+              <td class="col-hide-mobile"><span style="font-size:.75rem;color:var(--text-2);">{{ $i->category_label }}</span></td>{{-- era: categoria_label (alias ainda funciona) --}}
+              <td class="col-hide-mobile"><span style="font-size:.75rem;color:var(--text-2);text-transform:capitalize;">{{ $i->participation_mode }}</span></td>{{-- era: tipo_participacao --}}
               <td>
                 <span class="status-badge" style="color:{{ $sc }};background:{{ $sb }};border-color:{{ $sbd }};">
                   <span class="status-dot" style="background:{{ $sc }};"></span>{{ $sl }}
@@ -145,7 +152,7 @@
                   <span style="font-size:.7rem;color:var(--text-4);">—</span>
                 @endif
               </td>
-              <td>
+              <td class="col-hide-mobile">
                 <span style="font-size:.72rem;color:var(--text-3);">{{ $i->created_at->format('d/m/Y') }}</span><br>
                 <span style="font-size:.68rem;color:var(--text-4);">{{ $i->created_at->format('H:i') }}</span>
               </td>
@@ -168,9 +175,9 @@
       </table>
     </div>
     @if($inscricoes->hasPages())
-      <div style="padding:.875rem 1.25rem;border-top:1px solid var(--divider);
-                  display:flex;align-items:center;justify-content:space-between;
-                  font-size:.73rem;color:var(--text-3);">
+      <div class="pagination-bar" style="padding:.875rem 1.25rem;border-top:1px solid var(--divider);
+                display:flex;align-items:center;justify-content:space-between;
+                font-size:.73rem;color:var(--text-3);">
         <span>A mostrar {{ $inscricoes->firstItem() }}–{{ $inscricoes->lastItem() }} de {{ $inscricoes->total() }} resultados</span>
         {{ $inscricoes->links() }}
       </div>

@@ -20,7 +20,7 @@ class CertificadoController extends Controller
     {
         $aprovadas = Inscricao::where('status', 'aprovada')
             ->with('certificado')
-            ->orderBy('nome_completo')
+            ->orderBy('full_name')
             ->paginate(20);
 
         $stats = [
@@ -41,7 +41,7 @@ class CertificadoController extends Controller
             $this->service->gerar($inscricao);
 
             return back()->with('success',
-                "Certificado de {$inscricao->nome_completo} gerado e enviado por email."
+                "Certificado de {$inscricao->full_name} gerado e enviado por email."
             );
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
