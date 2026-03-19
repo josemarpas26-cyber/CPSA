@@ -66,7 +66,7 @@
   /* ── Header ────────────────────────────────── */
   .lg-header {
     background: linear-gradient(135deg, #0b1f4a 0%, #1a3a8f 100%);
-    padding: 0.5rem 2rem 1.75rem;
+    padding: 0.1rem 2rem 1.75rem;
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255,.06);
   }
