@@ -3,7 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    @font-face {
+      font-family: 'Lora';
+      src: url('/fonts/Lora/static/Lora-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Lora';
+      src: url('/fonts/Lora/static/Lora-Italic.ttf') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+    }
+    @font-face {
+      font-family: 'Lora';
+      src: url('/fonts/Lora/static/Lora-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'WorkSans';
+      src: url('/fonts/WorkSans/static/WorkSans-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'WorkSans';
+      src: url('/fonts/WorkSans/static/WorkSans-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'NothingYouCouldDo';
+      src: url('/fonts/NothingYouCouldDo/static/NothingYouCouldDo-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     @page {
       size: A4 landscape;
@@ -13,291 +50,397 @@
     body {
       width: 297mm;
       height: 210mm;
-      font-family: 'DejaVu Sans', sans-serif;
-      background: #ffffff;
+      font-family: 'Lora', Georgia, serif;
+      background: #f7f3ea;
       overflow: hidden;
       position: relative;
     }
 
-    /* ── Outer frame ──────────────────────────── */
-    .frame-outer {
+    /* ── Background watercolor blobs ─────────────────── */
+    /* Top-left pink blob */
+    .blob-tl {
       position: absolute;
-      top: 8mm; left: 8mm;
-      right: 8mm; bottom: 8mm;
-      border: 2px solid #0b1f4a;
-      border-radius: 3px;
-    }
-    .frame-inner {
-      position: absolute;
-      top: 11mm; left: 11mm;
-      right: 11mm; bottom: 11mm;
-      border: 0.5px solid rgba(11,31,74,.18);
-      border-radius: 2px;
-    }
-
-    /* ── Left accent bar ──────────────────────── */
-    .accent-bar {
-      position: absolute;
-      top: 8mm; left: 8mm;
-      bottom: 8mm;
-      width: 14mm;
-      background: linear-gradient(180deg, #0b1f4a 0%, #1a3a8f 60%, #1d4ed8 100%);
+      top: -10mm;
+      left: -8mm;
+      width: 90mm;
+      height: 70mm;
+      background: radial-gradient(ellipse at 40% 40%,
+        rgba(240, 170, 160, 0.45) 0%,
+        rgba(230, 140, 130, 0.25) 40%,
+        transparent 70%);
+      border-radius: 50% 60% 55% 45% / 55% 45% 60% 50%;
+      transform: rotate(-15deg);
+      pointer-events: none;
     }
 
-    /* ── Corner ornaments ─────────────────────── */
-    .corner {
+    /* Top-right pink blob */
+    .blob-tr {
       position: absolute;
-      width: 12mm; height: 12mm;
-      border-color: #1d4ed8;
-      border-style: solid;
+      top: -5mm;
+      right: -5mm;
+      width: 70mm;
+      height: 55mm;
+      background: radial-gradient(ellipse at 55% 35%,
+        rgba(240, 170, 160, 0.40) 0%,
+        rgba(235, 155, 145, 0.20) 45%,
+        transparent 70%);
+      border-radius: 45% 55% 60% 40% / 60% 40% 55% 45%;
+      transform: rotate(10deg);
+      pointer-events: none;
     }
-    .corner-tl { top: 13mm; left: 25mm; border-width: 1.5px 0 0 1.5px; }
-    .corner-tr { top: 13mm; right: 13mm; border-width: 1.5px 1.5px 0 0; }
-    .corner-bl { bottom: 13mm; left: 25mm; border-width: 0 0 1.5px 1.5px; }
-    .corner-br { bottom: 13mm; right: 13mm; border-width: 0 1.5px 1.5px 0; }
 
-    /* ── Left bar content ─────────────────────── */
-    .bar-content {
+    /* Bottom-left faint blob */
+    .blob-bl {
       position: absolute;
-      top: 8mm; left: 8mm;
-      width: 14mm;
-      bottom: 8mm;
+      bottom: 0mm;
+      left: 5mm;
+      width: 65mm;
+      height: 45mm;
+      background: radial-gradient(ellipse at 40% 60%,
+        rgba(240, 170, 160, 0.28) 0%,
+        rgba(235, 155, 145, 0.12) 50%,
+        transparent 75%);
+      border-radius: 55% 45% 40% 60% / 45% 60% 55% 40%;
+      transform: rotate(5deg);
+      pointer-events: none;
+    }
+
+    /* ── Logo area (top-left) ─────────────────────────── */
+    .logo-area {
+      position: absolute;
+      top: 10mm;
+      left: 10mm;
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+      z-index: 5;
+    }
+    .logo-img {
+      width: 22mm;
+      height: 22mm;
+      object-fit: contain;
+    }
+    .logo-text-block {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
     }
-    .bar-text {
-      color: rgba(255,255,255,.5);
+    .logo-cpsm {
+      font-family: 'WorkSans', sans-serif;
+      font-weight: 700;
+      font-size: 16pt;
+      color: #1a2e5a;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+    .logo-angola {
+      font-family: 'WorkSans', sans-serif;
+      font-weight: 700;
+      font-size: 10pt;
+      color: #1a2e5a;
+      letter-spacing: 0.15em;
+      line-height: 1.2;
+    }
+    .logo-sub {
+      font-family: 'WorkSans', sans-serif;
+      font-weight: 700;
       font-size: 5pt;
-      font-weight: 700;
-      letter-spacing: .15em;
+      color: #1a2e5a;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      white-space: nowrap;
-    }
-
-    /* ── Main content ─────────────────────────── */
-    .content {
-      position: absolute;
-      top: 18mm;
-      left: 28mm;
-      right: 16mm;
-      bottom: 20mm;
-    }
-
-    /* Header row */
-    .header-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 10mm;
-      padding-bottom: 6mm;
-      border-bottom: 0.5px solid rgba(11,31,74,.12);
-    }
-    .org-name {
-      font-size: 7pt;
-      font-weight: 700;
-      color: #1d4ed8;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 2mm;
-    }
-    .event-name {
-      font-size: 11pt;
-      font-weight: 700;
-      color: #0b1f4a;
       line-height: 1.3;
+      max-width: 32mm;
     }
-    .event-meta {
-      font-size: 6.5pt;
-      color: #7a8fb5;
-      margin-top: 1.5mm;
+
+    /* ── Tagline (below logo) ─────────────────────────── */
+    .tagline {
+      position: absolute;
+      top: 35mm;
+      left: 10mm;
+      font-family: 'WorkSans', sans-serif;
+      font-size: 5.5pt;
+      color: #4a4a4a;
+      letter-spacing: 0.06em;
+      z-index: 5;
     }
-    .header-logo-area {
-      text-align: right;
+
+    /* ── Top-right gold ornament image ───────────────── */
+    .ornament-tr {
+      position: absolute;
+      top: 3mm;
+      right: 8mm;
+      width: 22mm;
+      height: 22mm;
+      object-fit: contain;
+      opacity: 0.85;
+      z-index: 5;
     }
-    .logo-year {
-      font-size: 22pt;
+
+    /* ── Bottom-right animal illustration ────────────── */
+    .animal-br {
+      position: absolute;
+      bottom: 0mm;
+      right: 2mm;
+      width: 48mm;
+      height: 42mm;
+      object-fit: contain;
+      z-index: 5;
+    }
+
+    /* ── CERTIFICADO heading ──────────────────────────── */
+    .cert-heading {
+      position: absolute;
+      top: 12mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      /* offset right slightly to avoid logo overlap */
+      padding-left: 50mm;
+      padding-right: 10mm;
+      z-index: 3;
+    }
+    .cert-heading h1 {
+      font-family: 'WorkSans', sans-serif;
       font-weight: 700;
-      color: rgba(11,31,74,.08);
-      letter-spacing: -.02em;
+      font-size: 34pt;
+      color: #1a1a1a;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
       line-height: 1;
     }
 
-    /* Certificate body */
-    .cert-label {
-      font-size: 7pt;
-      font-weight: 700;
-      color: #7a8fb5;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      margin-bottom: 2.5mm;
-    }
-    .certifies-text {
-      font-size: 8.5pt;
-      color: #3d5080;
-      margin-bottom: 3mm;
-      font-style: italic;
-    }
-    .participant-name {
-      font-size: 22pt;
-      font-weight: 700;
-      color: #0b1f4a;
-      letter-spacing: -.02em;
-      line-height: 1.1;
-      margin-bottom: 4mm;
-      padding-bottom: 3mm;
-      border-bottom: 1.5px solid #1d4ed8;
-    }
-    .cert-desc {
-      font-size: 8.5pt;
-      color: #3d5080;
-      line-height: 1.65;
-      margin-bottom: 4mm;
-      max-width: 180mm;
-    }
-    .cert-meta {
-      font-size: 7pt;
-      color: #7a8fb5;
+    /* ── Body content (centered) ──────────────────────── */
+    .cert-body {
+      position: absolute;
+      top: 50mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 0 28mm;
+      z-index: 3;
     }
 
-    /* Signatures */
+    .cert-concedido {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      letter-spacing: 0.04em;
+      margin-bottom: 4mm;
+      font-style: italic;
+    }
+
+    .cert-name {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 28pt;
+      color: #1a1a1a;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      margin-bottom: 5mm;
+      /* Small caps effect using font-variant */
+      font-variant: small-caps;
+    }
+
+    .cert-course-line {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      font-style: italic;
+      margin-bottom: 3mm;
+    }
+
+    .cert-course-title {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      font-style: italic;
+      margin-bottom: 3mm;
+      /* Underline simulating blanks */
+    }
+
+    .cert-course-blank {
+      display: inline-block;
+      min-width: 120mm;
+      border-bottom: 1px solid #2a2a2a;
+      vertical-align: bottom;
+      /* blank area for course name */
+    }
+
+    .cert-hours-line {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      font-style: italic;
+      margin-bottom: 2mm;
+    }
+
+    .cert-hours-blank {
+      display: inline-block;
+      width: 10mm;
+      border-bottom: 1px solid #2a2a2a;
+      vertical-align: bottom;
+    }
+
+    .cert-desc-line {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      font-style: italic;
+      margin-bottom: 5mm;
+    }
+
+    /* ── Date line ────────────────────────────────────── */
+    .cert-date {
+      font-family: 'Lora', serif;
+      font-size: 10pt;
+      color: #2a2a2a;
+      font-style: italic;
+      margin-bottom: 3mm;
+    }
+
+    .cert-date-blank-day {
+      display: inline-block;
+      width: 8mm;
+      border-bottom: 1px solid #2a2a2a;
+      vertical-align: bottom;
+    }
+    .cert-date-blank-month {
+      display: inline-block;
+      width: 24mm;
+      border-bottom: 1px solid #2a2a2a;
+      vertical-align: bottom;
+    }
+
+    /* ── Script tagline ───────────────────────────────── */
+    .cert-script {
+      font-family: 'NothingYouCouldDo', cursive;
+      font-size: 9pt;
+      color: #3a3a3a;
+      margin-bottom: 6mm;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Signatures ───────────────────────────────────── */
     .signatures {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      bottom: 14mm;
+      left: 28mm;
+      right: 55mm; /* leave room for animal on right */
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      z-index: 5;
     }
     .sig-item {
       width: 56mm;
-      text-align: center;
+      text-align: left;
     }
     .sig-line {
-      border-top: 0.5px solid #0b1f4a;
+      width: 44mm;
+      border-top: 1px solid #1a1a1a;
       margin-bottom: 2mm;
     }
-    .sig-name {
+    .sig-label {
+      font-family: 'Lora', serif;
       font-size: 7pt;
-      font-weight: 700;
-      color: #0b1f4a;
-    }
-    .sig-role {
-      font-size: 6pt;
-      color: #7a8fb5;
-      margin-top: 1mm;
+      color: #2a2a2a;
+      font-style: italic;
     }
 
-    /* Verification code */
-    .verify-block {
+    /* ── Horizontal divider under heading ────────────── */
+    .divider {
       position: absolute;
-      bottom: 14mm; right: 14mm;
-      text-align: right;
-    }
-    .verify-label {
-      font-size: 6pt;
-      color: #b0bdd8;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      margin-bottom: 1.5mm;
-    }
-    .verify-code {
-      font-size: 7.5pt;
-      font-weight: 700;
-      color: #7a8fb5;
-      font-family: 'Courier New', monospace;
-      letter-spacing: .04em;
-    }
-
-    /* Decorative dots */
-    .dot-grid {
-      position: absolute;
-      top: 8mm; right: 8mm;
-      width: 18mm; height: 18mm;
-      opacity: .07;
+      top: 46mm;
+      left: 10mm;
+      right: 10mm;
+      border: none;
+      border-top: 0.3px solid rgba(30, 30, 30, 0.15);
+      z-index: 3;
     }
   </style>
 </head>
 <body>
 
-  <!-- Frames -->
-  <div class="frame-outer"></div>
-  <div class="frame-inner"></div>
+  <!-- Watercolor background blobs -->
+  <div class="blob-tl"></div>
+  <div class="blob-tr"></div>
+  <div class="blob-bl"></div>
 
-  <!-- Accent bar -->
-  <div class="accent-bar"></div>
-  <div class="bar-content">
-    <span class="bar-text">CPSA · 2025 · Angola</span>
-  </div>
-
-  <!-- Corner ornaments -->
-  <div class="corner corner-tl"></div>
-  <div class="corner corner-tr"></div>
-  <div class="corner corner-bl"></div>
-  <div class="corner corner-br"></div>
-
-  <!-- Dot grid decoration -->
-  <svg class="dot-grid" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    @for($r=0;$r<5;$r++)
-      @for($c=0;$c<5;$c++)
-        <circle cx="{{ 6+$c*12 }}" cy="{{ 6+$r*12 }}" r="2" fill="#0b1f4a"/>
-      @endfor
-    @endfor
-  </svg>
-
-  <!-- Main content -->
-  <div class="content">
-
-    <!-- Header -->
-    <div class="header-row">
-      <div>
-        <div class="org-name">República de Angola</div>
-        <div class="event-name">
-          Iº Congresso de Psiquiatria<br>e Saúde Mental em Angola
-        </div>
-        <div class="event-meta">Luanda, Angola · 2025 · CPSM 2026</div>
-      </div>
-      <div class="header-logo-area">
-        <div class="logo-year">2025</div>
-      </div>
-    </div>
-
-    <!-- Certificate body -->
-    <div class="cert-label">Certificado de Participação</div>
-    <div class="certifies-text">Certifica-se que</div>
-    <div class="participant-name">{{ $inscricao->full_name }}</div>
-    <div class="cert-desc">
-      participou no <strong>Iº Congresso de Psiquiatria e Saúde Mental em Angola</strong>,
-      realizado em Luanda, República de Angola, no ano de 2025, na modalidade de
-      participante <strong>{{ ucfirst($inscricao->participation_mode) }}</strong>,
-      na categoria de <strong>{{ $inscricao->category_label }}</strong>.
-    </div>
-    <div class="cert-meta">
-      Inscrição {{ $inscricao->numero }}&nbsp;&nbsp;·&nbsp;&nbsp;Emitido em {{ now()->format('d \d\e F \d\e Y') }}
-    </div>
-
-    <!-- Signatures -->
-    <div class="signatures">
-      <div class="sig-item">
-        <div class="sig-line"></div>
-        <div class="sig-name">Presidente da Comissão Científica</div>
-        <div class="sig-role">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
-      </div>
-      <div class="sig-item">
-        <div class="sig-line"></div>
-        <div class="sig-name">Presidente da Comissão Organizadora</div>
-        <div class="sig-role">Iº Congresso de Psiquiatria e Saúde Mental em Angola</div>
-      </div>
+  <!-- Logo top-left -->
+  <div class="logo-area">
+    {{-- Coloque o ficheiro do logótipo em: public/images/cpsm-logo.png --}}
+    <img class="logo-img" src="{{ asset('images/cpsm-logo.png') }}" alt="CPSM Angola Logo">
+    <div class="logo-text-block">
+      <span class="logo-cpsm">CPSM</span>
+      <span class="logo-angola">ANGOLA</span>
+      <span class="logo-sub">I Congresso de Psiquiatria e<br>Saúde Mental em Angola</span>
     </div>
   </div>
 
-  <!-- Verification -->
-  <div class="verify-block">
-    <div class="verify-label">Código de verificação</div>
-    <div class="verify-code">{{ $certificado->codigo_verificacao }}</div>
+  <!-- Tagline below logo -->
+  <div class="tagline">Saúde Mental: Um Olhar &nbsp;Para o Futuro .</div>
+
+  <!-- Gold ornament top-right -->
+  {{-- Coloque o ficheiro do ornamento dourado em: public/images/ornamento-dourado.png --}}
+  <img class="ornament-tr" src="{{ asset('images/ornamento-dourado.png') }}" alt="">
+
+  <!-- Animal illustration bottom-right -->
+  {{-- Coloque a ilustração do animal em: public/images/antilope-cpsm.png --}}
+  <img class="animal-br" src="{{ asset('images/antilope-cpsm.png') }}" alt="">
+
+  <!-- CERTIFICADO heading -->
+  <div class="cert-heading">
+    <h1>Certificado</h1>
+  </div>
+
+  <!-- Horizontal divider -->
+  <hr class="divider">
+
+  <!-- Certificate body -->
+  <div class="cert-body">
+
+    <div class="cert-concedido">Certificado concedido a</div>
+
+    <div class="cert-name">{{ $inscricao->full_name }}</div>
+
+    <div class="cert-course-line">
+      <em>concluiu com aproveitamento o curso de</em>
+    </div>
+
+    <div class="cert-course-title">
+      <em>"&nbsp;<span class="cert-course-blank">{{ $inscricao->curso_nome ?? '' }}</span>&nbsp;",</em>
+    </div>
+
+    <div class="cert-hours-line">
+      <em>realizado no âmbito do Congresso, com carga horária de
+      <span class="cert-hours-blank">{{ $inscricao->carga_horaria ?? '' }}</span>
+      horas,</em>
+    </div>
+
+    <div class="cert-desc-line">
+      <em>demonstrando elevado empenho e desempenho técnico-científico</em>
+    </div>
+
+    <div class="cert-date">
+      <em>Luanda, <span class="cert-date-blank-day">{{ $inscricao->dia ?? '' }}</span>
+      de <span class="cert-date-blank-month">{{ $inscricao->mes ?? '' }}</span>
+      de 2026.</em>
+    </div>
+
+    <div class="cert-script">
+      Psiquiatria e Saúde Mental: Uma Abordagem Integrada Para Uma Angola Mais Saudável
+    </div>
+
+  </div>
+
+  <!-- Signatures -->
+  <div class="signatures">
+    <div class="sig-item">
+      <div class="sig-line"></div>
+      <div class="sig-label">Director</div>
+    </div>
+    <div class="sig-item">
+      <div class="sig-line"></div>
+      <div class="sig-label">Coordenador</div>
+    </div>
   </div>
 
 </body>
