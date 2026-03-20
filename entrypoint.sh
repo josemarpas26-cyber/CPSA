@@ -1,16 +1,14 @@
 #!/bin/bash
 set -e
 
-# Define a porta padrão se não estiver definida
 PORT=${PORT:-8000}
 
-# Cria o .env com variáveis de ambiente
 cat > .env <<EOF
 APP_NAME="CPSA 2025"
-APP_ENV=${APP_ENV:-production}
-APP_KEY=base64:placeholder
-APP_DEBUG=${APP_DEBUG:-false}
-APP_URL=${APP_URL:-http://localhost}
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=${APP_URL}
 
 LOG_CHANNEL=stderr
 LOG_LEVEL=debug
@@ -22,32 +20,35 @@ DB_DATABASE=${DB_DATABASE}
 DB_USERNAME=${DB_USERNAME}
 DB_PASSWORD=${DB_PASSWORD}
 
-CACHE_STORE=database
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-SESSION_SECURE_COOKIE=false
-SESSION_SAME_SITE=lax
+CACHE_STORE=file
+SESSION_DRIVER=file
 QUEUE_CONNECTION=sync
-FILESYSTEM_DISK=local
 EOF
 
-# Autoload (garante que os Seeders são encontrados)
-composer dump-autoload --optimize
+# Composer
+composer install --no-dev --optimize-autoloader
 
-# Gera a key real
-php artisan key:generate --force --ansi
+# Key
+php artisan key:generate --force
 
-# Limpa caches antigas
+# Espera DB (CRÍTICO)
+until php artisan migrate --force; do
+  echo "DB não pronto, retry..."
+  sleep 5
+done
+
+# Limpa cache
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
-
-php artisan migrate:fresh --seed
-# Corre apenas uma vez as migrações + seeders
+php artisan migrate:fresh --seed --force
+# Migrações (SAFE)
 php artisan migrate --force
-php artisan db:seed --force
 
-# Inicia o servidor PHP utilizando o Laravel Artisan
+# Seed opcional
+php artisan db:seed --force || true
+
+# Start
 php artisan serve --host=0.0.0.0 --port=$PORT
