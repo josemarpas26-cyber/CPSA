@@ -279,7 +279,7 @@
         Palestrantes
       </a>
       <a href="#programa" class="navbar-link">Programa</a>
-      <a href="#local" class="navbar-link">Local</a>
+      <a href="#local" class="navbar-link">Galeria</a>
     </div>
 
     {{-- Acções --}}
