@@ -43,6 +43,7 @@ php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
+
 php artisan migrate:fresh --seed
 # Corre apenas uma vez as migrações + seeders
 php artisan migrate --force
