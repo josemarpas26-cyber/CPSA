@@ -455,7 +455,10 @@
         @foreach([
           ['Local','Luanda, República de Angola',
            'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z'],
+            ['período de inscrições','01 de Março a 30 de Julho de 2026.',
+           'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'],
           ['Data','Agosto de 2026 — Em breve',
+
            'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'],
           ['Idioma','Português',
            'M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129'],
@@ -590,6 +593,18 @@
             </div>
           </div>
         </div>
+
+        <div class="slide">
+          <img src="images/FundoEscuro.png"
+               alt="Networking" loading="lazy">
+          <div class="slide-overlay">
+            <div class="slide-caption">
+              <p>Conexões profissionais</p>
+              <h3>Networking & Parcerias</h3>
+            </div>
+          </div>
+        </div>
+
       </div>
       <button class="slider-btn slider-btn-prev" id="sliderPrev" aria-label="Anterior">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24"
@@ -983,7 +998,7 @@
     <div class="cta-block">
       <div style="position:relative;z-index:1;">
         <p style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-                  color:rgba(255,255,255,.4);margin:0 0 .75rem;">Vagas limitadas</p>
+                  color:rgba(255,255,255,.4);margin:0 0 .75rem;">Vagas limitadas O período de inscrições decorre de 01 de Março a 30 de Julho de 2026.</p>
         <h3 style="font-family:var(--font-display);font-style:italic;font-size:1.7rem;
                    color:white;margin:0 0 .875rem;line-height:1.2;">
           Garanta a sua<br>participação

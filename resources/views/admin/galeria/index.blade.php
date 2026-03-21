@@ -76,6 +76,8 @@
     </div>
 </div>
 
+<br>
+
   {{-- Grid de fotos --}}
   @if($items->isEmpty())
     <div class="a3" style="background:var(--card);border:1px solid var(--card-border);border-radius:var(--r-lg);
