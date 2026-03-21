@@ -1,10 +1,8 @@
 #!/bin/bash
 set -e
 
-# Define a porta padrão se não estiver definida
 PORT=${PORT:-8000}
 
-# Cria o .env com variáveis de ambiente
 cat > .env <<EOF
 APP_NAME="CPSA 2025"
 APP_ENV=${APP_ENV:-production}
@@ -31,23 +29,21 @@ QUEUE_CONNECTION=sync
 FILESYSTEM_DISK=local
 EOF
 
-# Autoload (garante que os Seeders são encontrados)
 composer dump-autoload --optimize
 
-# Gera a key real
 php artisan key:generate --force --ansi
 
-# Limpa caches antigas
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
-
-php artisan migrate:fresh --seed
-# Corre apenas uma vez as migrações + seeders
+# --force ignora a confirmação de produção
 php artisan migrate --force
-php artisan db:seed --force
 
-# Inicia o servidor PHP utilizando o Laravel Artisan
+# Seed apenas se a tabela de roles estiver vazia
+php artisan db:seed --class=RoleSeeder --force
+
+php artisan storage:link --force 2>/dev/null || true
+
 php artisan serve --host=0.0.0.0 --port=$PORT
