@@ -274,12 +274,21 @@
          class="navbar-link {{ request()->routeIs('home') ? 'active' : '' }}">
         Início
       </a>
+
       <a href="{{ route('speakers.index') }}"
          class="navbar-link {{ request()->routeIs('speakers.*') ? 'active' : '' }}">
         Palestrantes
       </a>
-      <a href="#programa" class="navbar-link">Programa</a>
-      <a href="#local" class="navbar-link">Galeria</a>
+
+        <a href="{{ route('programa.index') }}"
+          class="navbar-link {{ request()->routeIs('programa.*') ? 'active' : '' }}">
+          Programa
+        </a>
+
+        <a href="{{ route('galeria.index') }}"
+          class="navbar-link {{ request()->routeIs('galeria.*') ? 'active' : '' }}">
+          Galeria
+        </a>
     </div>
 
     {{-- Acções --}}
@@ -317,8 +326,17 @@
        class="mobile-nav-link {{ request()->routeIs('speakers.*') ? 'active' : '' }}">
       Palestrantes
     </a>
-    <a href="#programa" class="mobile-nav-link">Programa</a>
-    <a href="#local" class="mobile-nav-link">Local</a>
+
+    <a href="{{ route('galeria.index') }}"
+      class="mobile-nav-link {{ request()->routeIs('galeria.*') ? 'active' : '' }}">
+      Galeria
+    </a>
+    
+    <a href="{{ route('programa.index') }}"
+      class="mobile-nav-link {{ request()->routeIs('programa.*') ? 'active' : '' }}">
+      Programa
+    </a>
+    
     <hr class="mobile-nav-divider">
     @auth
       <form method="POST" action="{{ route('logout') }}">

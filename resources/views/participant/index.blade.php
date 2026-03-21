@@ -367,7 +367,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
         </svg>
       </a>
-        <a href="#como-funciona" class="hero-btn-sec">Como funciona</a>
+        <a href="#Processo" class="hero-btn-sec">Como funciona</a>
     </div>
 
     {{-- ── COUNTDOWN ── --}}
@@ -639,10 +639,321 @@
   </div>
 </div>
 
+
+
+
+
+
+
+<style>
+  /* ── Porquê participar ───────────────────── */
+  .pq-section{
+    padding:5rem 0;
+    background:linear-gradient(180deg, var(--bg) 0%, rgba(37,99,235,.03) 100%);
+  }
+  .pq-header{text-align:center;margin-bottom:2.75rem;}
+  .pq-header .section-label{margin-bottom:.5rem;}
+  .pq-header h2{
+    font-family:var(--font-heading);
+    font-size:clamp(1.85rem,4vw,2.6rem);
+    color:var(--text-1);margin:0 0 .75rem;line-height:1.15;
+  }
+  .pq-header p{
+    font-size:1rem;color:var(--text-3);max-width:520px;margin:0 auto;line-height:1.6;
+  }
+
+  /* Tabs de perfil */
+  .pq-tabs{
+    display:flex;justify-content:center;gap:.375rem;
+    flex-wrap:wrap;margin-bottom:2.5rem;
+  }
+  .pq-tab{
+    display:flex;align-items:center;gap:.5rem;
+    padding:.55rem 1.375rem;border-radius:99px;
+    font-size:.82rem;font-weight:700;cursor:pointer;
+    border:1.5px solid var(--card-border);background:var(--card);
+    color:var(--text-2);transition:all .2s;font-family:var(--font-body);
+  }
+  .pq-tab:hover{border-color:var(--blue-vivid);color:var(--blue-vivid);}
+  .pq-tab.active{
+    background:var(--blue-vivid);border-color:var(--blue-vivid);color:#fff;
+  }
+
+  /* Painéis de benefícios */
+  .pq-panel{display:none;}
+  .pq-panel.active{display:block;}
+
+  .pq-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:1.125rem;
+  }
+  .pq-card{
+    background:var(--card);border:1px solid var(--card-border);
+    border-radius:var(--r-lg);padding:1.375rem;
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .pq-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 28px rgba(11,31,74,.1);
+  }
+  .pq-icon{
+    width:42px;height:42px;border-radius:var(--r-md);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:.875rem;flex-shrink:0;
+  }
+  .pq-card h3{
+    font-size:.9rem;font-weight:700;color:var(--text-1);margin:0 0 .375rem;
+  }
+  .pq-card p{
+    font-size:.78rem;color:var(--text-3);margin:0;line-height:1.55;
+  }
+
+  /* ── Objectivos ──────────────────────────── */
+  .obj-section{
+    padding:5rem 0;
+    background:var(--navy);
+    position:relative;overflow:hidden;
+  }
+  .obj-section::before{
+    content:'';position:absolute;inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .obj-inner{position:relative;z-index:1;}
+  .obj-header{text-align:center;margin-bottom:3rem;}
+  .obj-header .section-label{color:rgba(180,210,255,.7);}
+  .obj-header h2{
+    font-family:var(--font-heading);
+    font-size:clamp(1.85rem,4vw,2.6rem);
+    color:#fff;margin:0 0 .75rem;line-height:1.15;
+  }
+  .obj-header p{
+    font-size:1rem;color:rgba(210,225,255,.7);max-width:520px;margin:0 auto;
+  }
+  .obj-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1.125rem;
+  }
+  .obj-card{
+    display:flex;gap:1rem;align-items:flex-start;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--r-lg);padding:1.375rem;
+    backdrop-filter:blur(8px);
+    transition:background .2s,transform .2s;
+  }
+  .obj-card:hover{
+    background:rgba(255,255,255,.09);
+    transform:translateY(-3px);
+  }
+  .obj-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:var(--r-sm);
+    background:rgba(96,165,250,.2);border:1px solid rgba(96,165,250,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);font-size:.78rem;font-weight:700;
+    color:#93c5fd;
+  }
+  .obj-card h3{
+    font-size:.88rem;font-weight:700;color:#f0f6ff;margin:0 0 .3rem;
+  }
+  .obj-card p{
+    font-size:.76rem;color:rgba(210,225,255,.65);margin:0;line-height:1.55;
+  }
+
+  @media(max-width:640px){
+    .pq-grid,.obj-grid{grid-template-columns:1fr;}
+  }
+</style>
+
+{{-- ═══ PORQUÊ PARTICIPAR ═══ --}}
+<section class="pq-section">
+  <div class="container">
+    <div class="pq-header">
+      <p class="section-label">O Congresso é para si</p>
+      <h2>Porquê Participar?</h2>
+      <p>O CPSM 2026 foi desenhado para diferentes perfis de profissionais. Seleccione o seu:</p>
+    </div>
+
+    {{-- Tabs de perfil --}}
+    <div class="pq-tabs">
+      @foreach([
+        ['profissional', 'Profissional de Saúde', '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>'],
+        ['estudante',    'Estudante',            '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 3.741-1.342m-7.482 0c1.227.36 2.462.745 3.741 1.342m0 0a24.096 24.096 0 0 0-3.741-1.342m3.741 1.342a24.094 24.094 0 0 1 3.741-1.342"/></svg>'],
+        ['investigador', 'Investigador',         '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>'],
+      ] as [$id,$lbl,$icon])
+        <button class="pq-tab {{ $loop->first ? 'active' : '' }}"
+                onclick="switchPq('{{ $id }}',this)">
+          {!! $icon !!}
+          {{ $lbl }}
+        </button>
+      @endforeach
+    </div>
+
+    {{-- Painel: Profissional --}}
+    <div class="pq-panel active" id="pq-profissional">
+      <div class="pq-grid">
+        @foreach([
+          ['bg'=>'rgba(37,99,235,.09)','col'=>'var(--blue-vivid)',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489"/>',
+           'title'=>'Formação Contínua',
+           'desc' =>'Actualize os seus conhecimentos com os mais recentes avanços em psiquiatria clínica e saúde mental.'],
+          ['bg'=>'rgba(5,150,105,.09)','col'=>'#059669',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>',
+           'title'=>'Networking Profissional',
+           'desc' =>'Conecte-se com colegas de todo o país e da CPLP. Construa relações que duram além do congresso.'],
+          ['bg'=>'rgba(109,40,217,.09)','col'=>'#6d28d9',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"/>',
+           'title'=>'Certificação de Presença',
+           'desc' =>'Certificado reconhecido para fins de desenvolvimento profissional e créditos de formação.'],
+          ['bg'=>'rgba(180,83,9,.09)','col'=>'#b45309',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"/>',
+           'title'=>'Casos Clínicos',
+           'desc' =>'Aprenda com casos clínicos reais discutidos por especialistas nacionais e internacionais.'],
+        ] as $b)
+          <div class="pq-card">
+            <div class="pq-icon" style="background:{{ $b['bg'] }};color:{{ $b['col'] }};">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                {!! $b['icon'] !!}
+              </svg>
+            </div>
+            <h3>{{ $b['title'] }}</h3>
+            <p>{{ $b['desc'] }}</p>
+          </div>
+        @endforeach
+      </div>
+    </div>
+
+    {{-- Painel: Estudante --}}
+    <div class="pq-panel" id="pq-estudante">
+      <div class="pq-grid">
+        @foreach([
+          ['bg'=>'rgba(37,99,235,.09)','col'=>'var(--blue-vivid)',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489"/>',
+           'title'=>'Aprendizagem com Especialistas',
+           'desc' =>'Interaja directamente com psiquiatras e profissionais de saúde mental de referência a nível nacional.'],
+          ['bg'=>'rgba(5,150,105,.09)','col'=>'#059669',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>',
+           'title'=>'Desconto Especial',
+           'desc' =>'Tarifa reduzida para estudantes de medicina, enfermagem, psicologia e áreas afins. Apresente o seu comprovativo.'],
+          ['bg'=>'rgba(109,40,217,.09)','col'=>'#6d28d9',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006-3.75 3.75m0 0-3.75-3.75m3.75 3.75V10.5"/>',
+           'title'=>'Oportunidades de Carreira',
+           'desc' =>'Conheça os caminhos de especialização em psiquiatria em Angola e as oportunidades de residência médica.'],
+          ['bg'=>'rgba(180,83,9,.09)','col'=>'#b45309',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>',
+           'title'=>'Publicação de Trabalhos',
+           'desc' =>'Submeta o seu trabalho científico na sessão de Temas Livres e obtenha feedback de especialistas.'],
+        ] as $b)
+          <div class="pq-card">
+            <div class="pq-icon" style="background:{{ $b['bg'] }};color:{{ $b['col'] }};">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                {!! $b['icon'] !!}
+              </svg>
+            </div>
+            <h3>{{ $b['title'] }}</h3>
+            <p>{{ $b['desc'] }}</p>
+          </div>
+        @endforeach
+      </div>
+    </div>
+
+    {{-- Painel: Investigador --}}
+    <div class="pq-panel" id="pq-investigador">
+      <div class="pq-grid">
+        @foreach([
+          ['bg'=>'rgba(37,99,235,.09)','col'=>'var(--blue-vivid)',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>',
+           'title'=>'Apresentação de Investigação',
+           'desc' =>'Submeta e apresente a sua investigação no fórum mais relevante da psiquiatria angolana.'],
+          ['bg'=>'rgba(5,150,105,.09)','col'=>'#059669',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>',
+           'title'=>'Colaboração Internacional',
+           'desc' =>'Estabeleça parcerias de investigação com centros de excelência da CPLP e da África Subsaariana.'],
+          ['bg'=>'rgba(109,40,217,.09)','col'=>'#6d28d9',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"/>',
+           'title'=>'Acesso a Publicações',
+           'desc' =>'Os trabalhos seleccionados poderão ser publicados nos anais do congresso e em revista indexada parceira.'],
+          ['bg'=>'rgba(180,83,9,.09)','col'=>'#b45309',
+           'icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"/>',
+           'title'=>'Financiamento e Bolsas',
+           'desc' =>'Saiba mais sobre as bolsas de investigação em saúde mental disponíveis para investigadores angolanos.'],
+        ] as $b)
+          <div class="pq-card">
+            <div class="pq-icon" style="background:{{ $b['bg'] }};color:{{ $b['col'] }};">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                {!! $b['icon'] !!}
+              </svg>
+            </div>
+            <h3>{{ $b['title'] }}</h3>
+            <p>{{ $b['desc'] }}</p>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  </div>
+</section>
+{{-- ═══ FIM: PORQUÊ PARTICIPAR ═══ --}}
+
+
+{{-- ═══ OBJECTIVOS DO CONGRESSO ═══ --}}
+<section class="obj-section">
+  <div class="container obj-inner">
+    <div class="obj-header">
+      <p class="section-label">Missão e Visão</p>
+      <h2>Objectivos do Congresso</h2>
+      <p>O CPSM 2026 foi concebido com uma agenda clara para transformar a saúde mental em Angola.</p>
+    </div>
+    <div class="obj-grid">
+      @foreach([
+        ['Promover o Conhecimento Científico',
+         'Difundir os avanços mais recentes em psiquiatria e saúde mental entre os profissionais angolanos, fomentando a prática clínica baseada em evidências.'],
+        ['Fortalecer a Rede Profissional',
+         'Criar e consolidar uma comunidade de profissionais de saúde mental em Angola, facilitando a colaboração e a partilha de experiências.'],
+        ['Elevar os Padrões de Cuidados',
+         'Contribuir para a melhoria da qualidade dos serviços de saúde mental prestados à população angolana, com foco na humanização dos cuidados.'],
+        ['Formar a Nova Geração',
+         'Apoiar a formação especializada de jovens profissionais e investigadores, garantindo a sustentabilidade futura da psiquiatria em Angola.'],
+        ['Debater Políticas de Saúde Mental',
+         'Promover o diálogo entre profissionais, gestores e decisores políticos sobre as necessidades do sector e as reformas necessárias.'],
+        ['Integrar Angola na Comunidade Global',
+         'Posicionar Angola como um polo activo na discussão da saúde mental na África Subsaariana e na Comunidade dos Países de Língua Portuguesa.'],
+      ] as $i => [$titulo,$desc])
+        <div class="obj-card">
+          <div class="obj-num">{{ str_pad($i+1,2,'0',STR_PAD_LEFT) }}</div>
+          <div>
+            <h3>{{ $titulo }}</h3>
+            <p>{{ $desc }}</p>
+          </div>
+        </div>
+      @endforeach
+    </div>
+  </div>
+</section>
+{{-- ═══ FIM: OBJECTIVOS DO CONGRESSO ═══ --}}
+
+<script>
+  function switchPq(id, btn) {
+    document.querySelectorAll('.pq-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.pq-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('pq-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+
+
+
+
+
+
+
+
 {{-- ═══════════════════════════════════════════════
      HOW IT WORKS + CTA
 ═══════════════════════════════════════════════ --}}
-<div class="section">
+<div class="section" id="Processo">
   <div class="grid-2 reveal">
     <div>
       <p class="section-label" style="margin-bottom:.375rem;">Processo</p>

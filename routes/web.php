@@ -13,7 +13,10 @@ use App\Http\Controllers\ComprovativoController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\SpeakerController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\GaleriaPublicController;
+use App\Http\Controllers\ProgramaPublicController;
+use App\Http\Controllers\Admin\AdminGaleriaController;
+use App\Http\Controllers\Admin\AdminProgramaController;
 // ═══════════════════════════════════════════════════════════════
 //  PORTAL PÚBLICO — sem qualquer autenticação
 // ═══════════════════════════════════════════════════════════════
@@ -32,6 +35,12 @@ Route::get('/inscricao/sucesso', [ParticipantInscricao::class, 'sucesso'])->name
 Route::post('/inscricao', [ParticipantInscricao::class, 'store'])
     ->middleware('throttle:inscricao')
     ->name('inscricao.store');
+
+Route::get('/galeria', [GaleriaPublicController::class, 'index'])
+    ->name('galeria.index');
+ 
+Route::get('/programa', [ProgramaPublicController::class, 'index'])
+    ->name('programa.index');
 
 // ── Área pessoal via token único (enviado por email) ───────────
 // Participante consulta estado e descarrega certificado sem login
@@ -90,6 +99,20 @@ Route::middleware(['auth', 'role:admin,organizador'])
         Route::post('/certificados/gerar-todos',           [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
         Route::get('/certificados/{certificado}/download', [CertificadoController::class, 'download'])->name('certificados.download');
 
+        Route::resource('galeria', AdminGaleriaController::class)
+        ->except(['show'])
+        ->names('galeria');
+    
+        Route::patch('galeria/{galeria}/toggle-ativo', [AdminGaleriaController::class, 'toggleAtivo'])
+            ->name('galeria.toggle-ativo');
+        
+        Route::resource('programa', AdminProgramaController::class)
+            ->except(['show'])
+            ->parameters(['programa' => 'programa'])   // necessário: model ProgramaActividade, param 'programa'
+            ->names('programa');
+        
+        Route::patch('programa/{programa}/toggle-ativo', [AdminProgramaController::class, 'toggleAtivo'])
+            ->name('programa.toggle-ativo');
 
 
         // ── Apenas admin ─────────────────────────────────────────

@@ -72,4 +72,14 @@ class Speaker extends Model
     {
         return strtoupper(mb_substr($this->nome, 0, 1));
     }
+
+    public function actividades(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            ProgramaActividade::class,
+            'actividade_speaker',
+            'speaker_id',
+            'actividade_id'
+        );
+    }
 }
