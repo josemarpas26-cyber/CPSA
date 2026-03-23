@@ -55,6 +55,7 @@
   <div class="card animate-in" style="animation-delay:.1s;padding:1rem 1.25rem;">
     <form method="GET" action="{{ route('admin.inscricoes.index') }}"
           class="filter-form" style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;">
+          @csrf
       <div style="flex:1;min-width:200px;">
         <label class="form-label">Pesquisar</label>
         <div style="position:relative;">
