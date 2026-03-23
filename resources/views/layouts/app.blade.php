@@ -6,6 +6,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title','CPSM 2026') — Iº Congresso de Psiquiatria e Saúde Mental em Angola</title>
   <meta name="description" content="@yield('description', 'Congresso de Psiquiatria e Saúde Mental em Angola — Luanda, 2026')">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/faviconC.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/faviconC.png') }}">
   @vite(['resources/css/app.css','resources/js/app.js'])
   @stack('head')
   <style>
