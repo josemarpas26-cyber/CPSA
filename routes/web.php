@@ -99,7 +99,18 @@ Route::middleware(['auth', 'role:admin,organizador'])
         Route::post('/certificados/{inscricao}/gerar',     [CertificadoController::class, 'gerar'])->name('certificados.gerar');
         Route::post('/certificados/gerar-todos',           [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
         Route::get('/certificados/{certificado}/download', [CertificadoController::class, 'download'])->name('certificados.download');
-
+        
+        
+        // ── Certificados — novas rotas adicionadas ────────────────────
+        Route::get ('/certificados',                          [CertificadoController::class, 'index'])->name('certificados.index');
+        Route::post('/certificados/{inscricao}/gerar',        [CertificadoController::class, 'gerar'])->name('certificados.gerar');
+        Route::post('/certificados/gerar-todos',              [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
+        Route::get ('/certificados/{certificado}/download',   [CertificadoController::class, 'download'])->name('certificados.download');
+        // NOVAS:
+        Route::post('/certificados/download-massa',           [CertificadoController::class, 'downloadMassa'])->name('certificados.download-massa');
+        Route::get ('/certificados/download-todos',           [CertificadoController::class, 'downloadTodos'])->name('certificados.download-todos');
+        
+        
         Route::resource('galeria', AdminGaleriaController::class)
         ->except(['show'])
         ->names('galeria');
