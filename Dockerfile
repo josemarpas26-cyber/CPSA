@@ -2,7 +2,8 @@ FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
-# Instalar Node.js
+ENV NODE_OPTIONS=--max_old_space_size=2048
+
 RUN apt-get update && apt-get install -y \
     git unzip curl libzip-dev zip \
     libpng-dev libjpeg-dev libfreetype6-dev \
@@ -13,10 +14,8 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 
-# Instalar dependências JS e buildar assets
-RUN npm install && npm run build
+RUN npm install --legacy-peer-deps && npm run build
 
-# Instalar Composer e dependências PHP
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer \
  && composer install --no-dev --optimize-autoloader
