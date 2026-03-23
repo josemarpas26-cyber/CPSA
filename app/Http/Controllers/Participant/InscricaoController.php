@@ -11,7 +11,7 @@ use App\Services\InscricaoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
+ use App\Models\Speaker;
 class InscricaoController extends Controller
 {
     public function __construct(
@@ -22,7 +22,9 @@ class InscricaoController extends Controller
     /** Página inicial pública */
     public function index(): View
     {
-        return view('participant.index');
+        $cursos   = Curso::ativo()->with(['speakers','inscricoes'])->ordenado()->get();
+        $speakers = Speaker::destaque()->ativo()->ordenado()->take(4)->get();
+        return view('participant.index', compact('cursos', 'speakers'));
     }
 
     /** Formulário de inscrição */

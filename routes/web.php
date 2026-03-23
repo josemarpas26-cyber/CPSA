@@ -21,7 +21,8 @@ use App\Http\Controllers\Admin\AdminProgramaController;
 //  PORTAL PÚBLICO — sem qualquer autenticação
 // ═══════════════════════════════════════════════════════════════
 
-Route::get('/', fn () => view('participant.index'))->name('home');
+// DEPOIS (passa pelo controller que carrega $cursos e $speakers)
+Route::get('/', [ParticipantInscricao::class, 'index'])->name('home');
 
 Route::get('/palestrantes',            [SpeakerController::class, 'index'])->name('speakers.index');
 Route::get('/palestrantes/{speaker}',  [SpeakerController::class, 'show'])->name('speakers.show');

@@ -11,15 +11,15 @@
   }
   .prog-hero::after{
     content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
-    background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%);
+    background:var(--surface);clip-path:ellipse(55% 100% at 50% 100%);
   }
-  .prog-hero .container{position:relative;z-index:1;text-align:center;padding-bottom:4rem;}
+  .prog-hero .container{position:relative;z-index:1;text-align:center;padding-bottom:4rem;padding-left:1rem;padding-right:1rem;}
   .prog-hero-label{
     display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.16em;
     text-transform:uppercase;color:rgba(180,210,255,.7);margin-bottom:1rem;
   }
   .prog-hero h1{
-    font-family:var(--font-heading);font-size:clamp(2.2rem,5vw,3.25rem);
+    font-family:var(--font-heading,var(--font-display));font-size:clamp(2rem,5vw,3.25rem);
     color:#fff;margin:0 0 1.25rem;line-height:1.1;
   }
   .prog-hero p{
@@ -50,13 +50,17 @@
   /* ── Tabs de dias ────────────────────────── */
   .prog-tabs{
     display:flex;border-bottom:2px solid var(--divider);
-    margin:3rem 0 0;gap:.125rem;
+    margin:3rem 0 0;gap:.125rem;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
   }
+  .prog-tabs::-webkit-scrollbar{display:none;}
   .prog-tab{
     padding:.875rem 1.5rem;font-size:.82rem;font-weight:700;
     color:var(--text-3);cursor:pointer;border:none;background:none;
     border-bottom:3px solid transparent;margin-bottom:-2px;
     transition:all .18s;font-family:var(--font-body);white-space:nowrap;
+    flex-shrink:0;
   }
   .prog-tab:hover{color:var(--text-1);}
   .prog-tab.active{
@@ -67,7 +71,7 @@
   /* ── Legenda de tipos ────────────────────── */
   .prog-legend{
     display:flex;flex-wrap:wrap;gap:.5rem;
-    padding:1.5rem 0;
+    padding:1.5rem 0 .75rem;
   }
   .prog-legend-item{
     display:flex;align-items:center;gap:.35rem;
@@ -102,7 +106,7 @@
     content:'';position:absolute;left:-2.025rem;top:1.1rem;
     width:10px;height:10px;border-radius:50%;
     background:var(--blue-vivid);
-    border:2.5px solid var(--bg);
+    border:2.5px solid var(--surface);
     box-shadow:0 0 0 2px var(--blue-vivid);
     z-index:1;
   }
@@ -161,11 +165,177 @@
     border-radius:var(--r-lg);margin:2rem 0;
   }
 
-  @media(max-width:640px){
-    .prog-tabs{gap:0;overflow-x:auto;}
-    .prog-tab{padding:.75rem 1rem;font-size:.75rem;}
+  /* ══════════════════════════════════════════
+     CURSOS & WORKSHOPS SECTION
+  ══════════════════════════════════════════ */
+  .cursos-section{
+    background:white;
+    border-top:2px solid var(--divider);
+    padding:4rem 0;
+  }
+  .cursos-section .container{
+    max-width:1100px;margin:0 auto;padding:0 1rem;
+  }
+  .cursos-header{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    flex-wrap:wrap;gap:1rem;margin-bottom:2rem;
+  }
+  .cursos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:1.25rem;
+  }
+
+  .curso-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--r-lg);
+    overflow:hidden;
+    box-shadow:var(--shadow-sm);
+    transition:transform .22s,box-shadow .22s;
+    display:flex;flex-direction:column;
+  }
+  .curso-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-md);
+  }
+
+  /* Stripe de cor no topo de cada card */
+  .curso-card-stripe{
+    height:3px;
+    background:linear-gradient(90deg, var(--blue-vivid), #6d28d9);
+  }
+
+  .curso-card-body{
+    padding:1.25rem;flex:1;
+    display:flex;flex-direction:column;gap:.625rem;
+  }
+
+  .curso-title{
+    font-size:.92rem;font-weight:700;color:var(--text-1);
+    margin:0;line-height:1.3;
+  }
+
+  .curso-meta-row{
+    display:flex;flex-wrap:wrap;gap:.625rem;align-items:center;
+  }
+  .curso-meta-chip{
+    display:inline-flex;align-items:center;gap:.3rem;
+    font-size:.7rem;color:var(--text-2);font-weight:500;
+    background:var(--surface);padding:.25rem .6rem;
+    border-radius:6px;border:1px solid var(--card-border);
+    white-space:nowrap;
+  }
+  .curso-meta-chip svg{flex-shrink:0;color:var(--text-3);}
+
+  .curso-desc{
+    font-size:.78rem;color:var(--text-3);
+    line-height:1.6;margin:0;flex:1;
+  }
+
+  .curso-speakers-row{
+    display:flex;flex-wrap:wrap;gap:.375rem;
+    padding-top:.5rem;
+    border-top:1px solid var(--divider);
+  }
+  .curso-speaker-tag{
+    display:inline-flex;align-items:center;gap:.35rem;
+    font-size:.67rem;font-weight:600;color:var(--blue-vivid);
+    background:rgba(37,99,235,.07);
+    padding:.2rem .6rem;border-radius:99px;
+  }
+  .curso-speaker-tag::before{
+    content:'';width:5px;height:5px;border-radius:50%;
+    background:var(--blue-vivid);flex-shrink:0;
+  }
+
+  .curso-card-footer{
+    padding:.875rem 1.25rem;
+    background:var(--surface);
+    border-top:1px solid var(--divider);
+    display:flex;align-items:center;justify-content:space-between;
+    gap:.5rem;flex-wrap:wrap;
+  }
+
+  .vagas-pill{
+    display:inline-flex;align-items:center;gap:.35rem;
+    font-size:.68rem;font-weight:700;
+    padding:.25rem .7rem;border-radius:99px;
+    border:1px solid;
+  }
+  .vagas-pill.ok       { color:#059669;background:#ecfdf5;border-color:#a7f3d0; }
+  .vagas-pill.low      { color:#b45309;background:#fffbeb;border-color:#fde68a; }
+  .vagas-pill.esgotado { color:#be123c;background:#fff1f2;border-color:#fecdd3; }
+  .vagas-pill.ilimitado{ color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe; }
+
+  .vagas-pill-dot{
+    width:5px;height:5px;border-radius:50%;
+    background:currentColor;flex-shrink:0;
+  }
+
+  .curso-inscricao-btn{
+    display:inline-flex;align-items:center;gap:.35rem;
+    font-size:.75rem;font-weight:700;
+    color:var(--blue-vivid);text-decoration:none;
+    transition:gap .15s;
+  }
+  .curso-inscricao-btn:hover{ gap:.55rem; }
+  .curso-inscricao-btn.disabled{
+    color:var(--text-4);pointer-events:none;
+  }
+
+  /* Filtro de dia para cursos */
+  .cursos-filter{
+    display:flex;gap:.375rem;flex-wrap:wrap;
+  }
+  .curso-filter-btn{
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.4rem .875rem;border-radius:99px;
+    font-size:.75rem;font-weight:600;cursor:pointer;
+    border:1.5px solid var(--card-border);background:var(--card);
+    color:var(--text-2);transition:all .18s;
+  }
+  .curso-filter-btn:hover{border-color:var(--blue-vivid);color:var(--blue-vivid);}
+  .curso-filter-btn.active{
+    background:var(--blue-vivid);border-color:var(--blue-vivid);color:white;
+  }
+  .curso-filter-btn .filter-dot{
+    width:6px;height:6px;border-radius:50%;background:currentColor;
+  }
+
+  /* Curso escondido por filtro */
+  .curso-card[data-hidden="true"]{ display:none; }
+
+  /* ── Vazio cursos ─────────────────────────── */
+  .cursos-empty{
+    grid-column:1/-1;
+    padding:3.5rem;text-align:center;
+    background:var(--card);border:1px dashed var(--card-border);
+    border-radius:var(--r-lg);color:var(--text-3);
+  }
+
+  /* ── Aviso inscrição ─────────────────────── */
+  .inscricao-banner{
+    background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(13,148,136,.04));
+    border:1px solid rgba(37,99,235,.12);border-radius:var(--r-lg);
+    padding:1.75rem;display:flex;align-items:center;gap:1.5rem;
+    flex-wrap:wrap;margin:4rem 0;
+  }
+
+  /* ── Scroll reveal ───────────────────────── */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  @media(max-width:768px){
     .prog-timeline{padding-left:1.75rem;}
     .prog-card-header{flex-direction:column;gap:.5rem;}
+    .cursos-grid{grid-template-columns:1fr;}
+    .cursos-header{flex-direction:column;align-items:flex-start;}
+    .prog-hero{padding:3.5rem 0 0;}
+    .inscricao-banner{flex-direction:column;text-align:center;}
+  }
+  @media(max-width:480px){
+    .prog-tab{padding:.75rem .875rem;font-size:.75rem;}
   }
 </style>
 
@@ -192,7 +362,10 @@
   </div>
 </section>
 
-<div class="container" style="padding-top:2.5rem;">
+{{-- ═══════════════════════════════════════════
+     ACTIVIDADES DO PROGRAMA (Timeline)
+═══════════════════════════════════════════ --}}
+<div class="container" style="max-width:1100px;margin:0 auto;padding:0 1rem;">
 
   {{-- Legenda de tipos --}}
   @php
@@ -206,7 +379,6 @@
       'abertura'       => ['#059669','Abertura'],
       'encerramento'   => ['#475569','Encerramento'],
     ];
-    // Só mostrar na legenda os tipos que realmente existem no programa
     $tiposUsados = collect($actividades)->flatten()->pluck('tipo')->unique()->values();
   @endphp
   @if($tiposUsados->isNotEmpty())
@@ -287,59 +459,230 @@
     </div>
   @endforeach
 
-  {{-- Aviso inscrição --}}
-  <div style="background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(13,148,136,.04));
-              border:1px solid rgba(37,99,235,.12);border-radius:var(--r-lg);
-              padding:2rem;display:flex;align-items:center;gap:1.5rem;
-              flex-wrap:wrap;margin-bottom:4rem;">
-    <svg width="36" height="36" fill="none" viewBox="0 0 24 24"
-         stroke="var(--blue-vivid)" stroke-width="1.5" style="flex-shrink:0;">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>
-    </svg>
-    <div style="flex:1;min-width:220px;">
-      <p style="font-size:.88rem;font-weight:700;color:var(--text-1);margin:0 0 .25rem;">
-        A participação requer inscrição prévia
-      </p>
-      <p style="font-size:.78rem;color:var(--text-3);margin:0;">
-        Algumas actividades como workshops têm vagas limitadas.
-        Inscreva-se para garantir o seu lugar.
-      </p>
+</div>{{-- /container actividades --}}
+
+
+{{-- ═══════════════════════════════════════════
+     CURSOS & WORKSHOPS
+═══════════════════════════════════════════ --}}
+<section class="cursos-section">
+  <div class="container">
+
+    <div class="cursos-header reveal">
+      <div>
+        <p style="font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+                  color:var(--text-3);margin:0 0 .3rem;">Formação Especializada</p>
+        <h2 style="font-family:var(--font-display);font-style:italic;font-size:clamp(1.5rem,3vw,2rem);
+                   color:var(--text-1);margin:0 0 .5rem;line-height:1.15;">
+          Cursos & Workshops
+        </h2>
+        <p style="font-size:.83rem;color:var(--text-3);margin:0;max-width:480px;line-height:1.6;">
+          Formação prática em pequenos grupos com os melhores especialistas.
+          As vagas são limitadas — inscreva-se com antecedência.
+        </p>
+      </div>
+
+      {{-- Filtros por dia --}}
+      @php
+        use App\Models\Curso;
+        $cursosPublicos = Curso::ativo()
+            ->with(['speakers','inscricoes'])
+            ->ordenado()
+            ->get();
+
+        $diasCursos = $cursosPublicos->pluck('dia')
+            ->map(fn($d) => $d->format('Y-m-d'))
+            ->unique()
+            ->sort()
+            ->values();
+
+        $diasLabels = [
+          '2026-08-13' => 'Dia 1 · 13 Ago',
+          '2026-08-14' => 'Dia 2 · 14 Ago',
+          '2026-08-15' => 'Dia 3 · 15 Ago',
+        ];
+        $dotCores = [
+          '2026-08-13' => '#60a5fa',
+          '2026-08-14' => '#34d399',
+          '2026-08-15' => '#c084fc',
+        ];
+      @endphp
+
+      @if($diasCursos->count() > 1)
+        <div class="cursos-filter" id="cursosFilter">
+          <button class="curso-filter-btn active" data-dia="all" onclick="filtrarCursos('all',this)">
+            Todos
+          </button>
+          @foreach($diasCursos as $dc)
+            <button class="curso-filter-btn" data-dia="{{ $dc }}"
+                    onclick="filtrarCursos('{{ $dc }}',this)">
+              <span class="filter-dot" style="background:{{ $dotCores[$dc] ?? 'var(--blue-vivid)' }};"></span>
+              {{ $diasLabels[$dc] ?? $dc }}
+            </button>
+          @endforeach
+        </div>
+      @endif
     </div>
-    <a href="{{ route('inscricao.create') }}" class="btn-primary">
-      Inscrever-me agora
-    </a>
-  </div>
-</div>
+
+    @if($cursosPublicos->isEmpty())
+      <div class="cursos-empty reveal">
+        <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="var(--text-4)" stroke-width="1.2"
+             style="margin:0 auto 1rem;display:block;">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489"/>
+        </svg>
+        <p style="font-size:.9rem;font-weight:600;margin:0 0 .25rem;color:var(--text-2);">Cursos em breve</p>
+        <p style="font-size:.78rem;margin:0;">O programa de cursos será divulgado brevemente.</p>
+      </div>
+    @else
+      <div class="cursos-grid reveal" id="cursosGrid">
+        @foreach($cursosPublicos as $curso)
+          @php
+            $inscritos  = $curso->inscritos_count;
+            $cheio      = $curso->vagas && $inscritos >= $curso->vagas;
+            $vagasDisp  = $curso->vagas ? max(0, $curso->vagas - $inscritos) : null;
+            $vagasLow   = $vagasDisp !== null && $vagasDisp <= 5 && !$cheio;
+            $diaStr     = $curso->dia->format('Y-m-d');
+          @endphp
+          <div class="curso-card" data-dia="{{ $diaStr }}">
+            <div class="curso-card-stripe"></div>
+            <div class="curso-card-body">
+
+              {{-- Título --}}
+              <h3 class="curso-title">{{ $curso->nome }}</h3>
+
+              {{-- Meta: dia, horário, sala --}}
+              <div class="curso-meta-row">
+                <span class="curso-meta-chip">
+                  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  {{ $curso->dia->isoFormat('ddd, DD MMM') }}
+                </span>
+                <span class="curso-meta-chip">
+                  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path stroke-linecap="round" d="M12 6v6l4 2"/>
+                  </svg>
+                  {{ substr($curso->hora_inicio,0,5) }}–{{ substr($curso->hora_fim,0,5) }}
+                </span>
+                <span class="curso-meta-chip">
+                  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+                  </svg>
+                  {{ $curso->sala }}
+                </span>
+              </div>
+
+              {{-- Descrição --}}
+              @if($curso->descricao)
+                <p class="curso-desc">{{ Str::limit($curso->descricao, 130) }}</p>
+              @endif
+
+              {{-- Palestrantes --}}
+              @if($curso->speakers->isNotEmpty())
+                <div class="curso-speakers-row">
+                  @foreach($curso->speakers as $sp)
+                    <span class="curso-speaker-tag">{{ $sp->nome }}</span>
+                  @endforeach
+                </div>
+              @endif
+
+            </div>
+
+            <div class="curso-card-footer">
+              {{-- Badge de vagas --}}
+              @if($cheio)
+                <span class="vagas-pill esgotado">
+                  <span class="vagas-pill-dot"></span>Esgotado
+                </span>
+              @elseif($vagasLow)
+                <span class="vagas-pill low">
+                  <span class="vagas-pill-dot"></span>Últimas {{ $vagasDisp }} vagas
+                </span>
+              @elseif($vagasDisp !== null)
+                <span class="vagas-pill ok">
+                  <span class="vagas-pill-dot"></span>{{ $vagasDisp }} vagas disponíveis
+                </span>
+              @else
+                <span class="vagas-pill ilimitado">
+                  <span class="vagas-pill-dot"></span>Vagas livres
+                </span>
+              @endif
+
+              {{-- Botão inscrição --}}
+              @if($cheio)
+                <span class="curso-inscricao-btn disabled">Esgotado</span>
+              @else
+                <a href="{{ route('inscricao.create') }}" class="curso-inscricao-btn">
+                  Inscrever-me
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                  </svg>
+                </a>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      </div>{{-- /cursos-grid --}}
+    @endif
+
+    {{-- Banner inscrição --}}
+    <div class="inscricao-banner reveal">
+      <svg width="38" height="38" fill="none" viewBox="0 0 24 24"
+           stroke="var(--blue-vivid)" stroke-width="1.5" style="flex-shrink:0;">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0Zm-9-3.75h.008v.008H12V8.25Z"/>
+      </svg>
+      <div style="flex:1;min-width:200px;">
+        <p style="font-size:.88rem;font-weight:700;color:var(--text-1);margin:0 0 .25rem;">
+          A participação nos cursos requer inscrição prévia
+        </p>
+        <p style="font-size:.78rem;color:var(--text-3);margin:0;line-height:1.5;">
+          As vagas são limitadas. Ao inscrever-se, escolhe o curso da sua preferência
+          e garante o seu lugar.
+        </p>
+      </div>
+      <a href="{{ route('inscricao.create') }}" class="btn-primary" style="flex-shrink:0;">
+        Fazer inscrição
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>{{-- /container cursos --}}
+</section>
+
 
 <script>
-  // Estado activo: dia e botão
+  /* ── Tabs de dias (actividades) ──────────── */
   let activeDia = '2026-08-13';
 
   function switchDay(dia, chipEl, source) {
     if (dia === activeDia) return;
     activeDia = dia;
 
-    // Painéis
     document.querySelectorAll('.prog-day-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('panel-' + dia).classList.add('active');
 
-    // Tabs
     document.querySelectorAll('.prog-tab').forEach(t => t.classList.remove('active'));
     const tabs = document.querySelectorAll('.prog-tab');
     const dias = ['2026-08-13','2026-08-14','2026-08-15'];
     const idx  = dias.indexOf(dia);
     if (tabs[idx]) tabs[idx].classList.add('active');
 
-    // Chips (hero)
     document.querySelectorAll('.prog-date-chip').forEach(c => c.classList.remove('active'));
     if (chipEl) chipEl.classList.add('active');
-    else {
+    else if (idx >= 0) {
       const chips = document.querySelectorAll('.prog-date-chip');
       if (chips[idx]) chips[idx].classList.add('active');
     }
 
-    // Animar os itens do painel activado
     revealItems(dia);
   }
 
@@ -351,7 +694,37 @@
     });
   }
 
-  // Revelar painel inicial
   revealItems('2026-08-13');
+
+  /* ── Filtro de cursos por dia ─────────────── */
+  function filtrarCursos(dia, btn) {
+    /* Actualizar botões */
+    document.querySelectorAll('.curso-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    /* Mostrar/esconder cards */
+    document.querySelectorAll('#cursosGrid .curso-card').forEach(card => {
+      if (dia === 'all' || card.dataset.dia === dia) {
+        card.removeAttribute('data-hidden');
+        card.style.display = '';
+      } else {
+        card.setAttribute('data-hidden', 'true');
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── Scroll reveal ────────────────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(el => obs.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
 </script>
 @endsection

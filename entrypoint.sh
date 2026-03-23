@@ -8,7 +8,7 @@ APP_NAME="CPSA 2025"
 APP_ENV=${APP_ENV:-production}
 APP_KEY=base64:placeholder
 APP_DEBUG=${APP_DEBUG:-false}
-APP_URL=${APP_URL:-http://localhost}
+APP_URL=${APP_URL:-https://localhost}
 
 LOG_CHANNEL=stderr
 LOG_LEVEL=debug
