@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev libonig-dev nodejs npm \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
  && docker-php-ext-install \
-    pdo pdo_mysql mbstring zip xml gd
+    pdo pdo_mysql mbstring zip xml gd bcmath
 
 COPY . .
 
