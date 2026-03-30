@@ -486,6 +486,18 @@
       </div>
       <div class="step-panel" id="panel-4">
 
+{{-- Upload --}}
+<div style="margin-bottom:.5rem;">
+  <label class="form-label" for="comprovativo-input"
+         style="font-size:1rem; color:var(--danger); font-weight:700;">
+    Seleccione o comprovativo de pagamento <span style="color:var(--danger);">*</span>
+  </label>
+
+  <p style="font-size:.9rem; color:var(--danger); margin:.2rem 0 0;">
+    Anexe o comprovativo (PDF/JPG/PNG) até 5 MB.
+  </p>
+</div>
+
         {{-- Upload --}}
         <div class="upload-zone" id="drop-zone"
              onclick="document.getElementById('comprovativo-input').click()">

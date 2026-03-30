@@ -1,27 +1,14 @@
-{{-- resources/views/emails/inscricao-confirmada.blade.php --}}
 <x-mail::message>
 
-# Inscrição Recebida — CPSA 2025
+# Inscrição Recebida — CPSM 2026
 
 Caro(a) **{{ $inscricao->full_name }}**,
 
-A sua inscrição no **Congresso de Psiquiatria e Saúde Mental em Angola 2025** foi recebida com sucesso.
+A sua inscrição no **Iº Congresso de Psiquiatria e Saúde Mental em Angola** foi recebida com sucesso.
 
 **Número de inscrição:** `{{ $inscricao->numero }}`
 
 A comissão organizadora irá verificar o seu comprovativo de pagamento e receberá uma resposta por email em breve.
-
----
-
-## O seu link de acesso pessoal
-
-Use o link abaixo para consultar o estado da sua inscrição e, após o congresso, descarregar o seu certificado de participação — **sem precisar de criar conta**.
-
-<x-mail::button :url="route('inscricao.consultar', $inscricao->access_token)" color="primary">
-Consultar a minha inscrição
-</x-mail::button>
-
-> **Guarde este email.** O link é único e pessoal. Qualquer pessoa com este link pode ver os seus dados de inscrição.
 
 ---
 
@@ -37,9 +24,9 @@ Consultar a minha inscrição
 
 ---
 
-Em caso de dúvida, responda a este email ou contacte-nos através de **geral@cpsa2025.ao**.
+Em caso de dúvida, responda a este email ou contacte-nos através de **geral@cpsm2026.ao**.
 
 Atenciosamente,  
-**Comissão Organizadora do CPSA 2025**
+**Comissão Organizadora do CPSM 2026**
 
 </x-mail::message>

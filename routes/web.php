@@ -17,11 +17,11 @@ use App\Http\Controllers\GaleriaPublicController;
 use App\Http\Controllers\ProgramaPublicController;
 use App\Http\Controllers\Admin\AdminGaleriaController;
 use App\Http\Controllers\Admin\AdminProgramaController;
+
 // ═══════════════════════════════════════════════════════════════
 //  PORTAL PÚBLICO — sem qualquer autenticação
 // ═══════════════════════════════════════════════════════════════
 
-// DEPOIS (passa pelo controller que carrega $cursos e $speakers)
 Route::get('/', [ParticipantInscricao::class, 'index'])->name('home');
 
 Route::get('/palestrantes',            [SpeakerController::class, 'index'])->name('speakers.index');
@@ -37,21 +37,8 @@ Route::post('/inscricao', [ParticipantInscricao::class, 'store'])
     ->middleware('throttle:inscricao')
     ->name('inscricao.store');
 
-Route::get('/galeria', [GaleriaPublicController::class, 'index'])
-    ->name('galeria.index');
- 
-Route::get('/programa', [ProgramaPublicController::class, 'index'])
-    ->name('programa.index');
-
-// ── Área pessoal via token único (enviado por email) ───────────
-// Participante consulta estado e descarrega certificado sem login
-Route::get('/i/{token}', [ParticipantInscricao::class, 'consultar'])
-    ->name('inscricao.consultar')
-    ->where('token', '[A-Za-z0-9]{48}');
-
-Route::get('/i/{token}/certificado', [ParticipantInscricao::class, 'downloadCertificado'])
-    ->name('inscricao.certificado')
-    ->where('token', '[A-Za-z0-9]{48}');
+Route::get('/galeria', [GaleriaPublicController::class, 'index'])->name('galeria.index');
+Route::get('/programa', [ProgramaPublicController::class, 'index'])->name('programa.index');
 
 // ═══════════════════════════════════════════════════════════════
 //  AUTENTICAÇÃO — exclusiva para Admin / Organizador
@@ -69,10 +56,11 @@ Route::post('/logout', [AdminAuthController::class, 'logout'])
 // ═══════════════════════════════════════════════════════════════
 //  PAINEL ADMIN — auth + role obrigatórios
 // ═══════════════════════════════════════════════════════════════
+
         // ── Download de comprovativo (admin) ─────────────────────
         Route::get('/comprovativo/{comprovativo}/download', [ComprovativoController::class, 'download'])
             ->name('comprovativo.download');
-            
+
 Route::middleware(['auth', 'role:admin,organizador'])
     ->prefix('admin')
     ->name('admin.')
@@ -95,37 +83,25 @@ Route::middleware(['auth', 'role:admin,organizador'])
         Route::get('/exportar/presenca', [ExportacaoController::class, 'presenca'])->name('exportar.presenca');
 
         // ── Certificados ─────────────────────────────────────────
-        Route::get('/certificados',                        [CertificadoController::class, 'index'])->name('certificados.index');
-        Route::post('/certificados/{inscricao}/gerar',     [CertificadoController::class, 'gerar'])->name('certificados.gerar');
-        Route::post('/certificados/gerar-todos',           [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
-        Route::get('/certificados/{certificado}/download', [CertificadoController::class, 'download'])->name('certificados.download');
-        
-        
-        // ── Certificados — novas rotas adicionadas ────────────────────
         Route::get ('/certificados',                          [CertificadoController::class, 'index'])->name('certificados.index');
         Route::post('/certificados/{inscricao}/gerar',        [CertificadoController::class, 'gerar'])->name('certificados.gerar');
         Route::post('/certificados/gerar-todos',              [CertificadoController::class, 'gerarTodos'])->name('certificados.gerar-todos');
         Route::get ('/certificados/{certificado}/download',   [CertificadoController::class, 'download'])->name('certificados.download');
-        // NOVAS:
         Route::post('/certificados/download-massa',           [CertificadoController::class, 'downloadMassa'])->name('certificados.download-massa');
         Route::get ('/certificados/download-todos',           [CertificadoController::class, 'downloadTodos'])->name('certificados.download-todos');
-        
-        
+
         Route::resource('galeria', AdminGaleriaController::class)
-        ->except(['show'])
-        ->names('galeria');
-    
+            ->except(['show'])
+            ->names('galeria');
         Route::patch('galeria/{galeria}/toggle-ativo', [AdminGaleriaController::class, 'toggleAtivo'])
             ->name('galeria.toggle-ativo');
-        
+
         Route::resource('programa', AdminProgramaController::class)
             ->except(['show'])
-            ->parameters(['programa' => 'programa'])   // necessário: model ProgramaActividade, param 'programa'
+            ->parameters(['programa' => 'programa'])
             ->names('programa');
-        
         Route::patch('programa/{programa}/toggle-ativo', [AdminProgramaController::class, 'toggleAtivo'])
             ->name('programa.toggle-ativo');
-
 
         // ── Apenas admin ─────────────────────────────────────────
         Route::middleware('role:admin')->group(function () {

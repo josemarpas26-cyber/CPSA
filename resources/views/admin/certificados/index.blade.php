@@ -232,23 +232,19 @@
                       </a>
                     @else
                       {{-- Gerar --}}
-                      <form method="POST"
-                            action="{{ route('admin.certificados.gerar', $insc) }}"
-                            style="display:inline;">
-                        @csrf
-                        <button type="submit"
+                        <button type="button"
+                                onclick="gerarCertificado({{ $insc->id }})"
                                 style="background:none;border:none;cursor:pointer;
-                                       font-size:.73rem;font-weight:600;color:var(--success);
-                                       padding:0;display:inline-flex;align-items:center;gap:.25rem;
-                                       font-family:var(--font-body);">
+                                      font-size:.73rem;font-weight:600;color:var(--success);
+                                      padding:0;display:inline-flex;align-items:center;gap:.25rem;
+                                      font-family:var(--font-body);">
                           <svg width="11" height="11" fill="none" viewBox="0 0 24 24"
-                               stroke="currentColor" stroke-width="2.5">
+                              stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                               d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                           </svg>
                           Gerar
                         </button>
-                      </form>
                     @endif
                   </div>
                 </td>
@@ -291,6 +287,30 @@
 </div>
 
 <script>
+
+function gerarCertificado(id) {
+  if (!confirm('Gerar certificado?')) return;
+
+  fetch(`/admin/certificados/${id}/gerar`, {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': '{{ csrf_token() }}',
+      'Accept': 'application/json'
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    return res.text();
+  })
+  .then(() => {
+    location.reload();
+  })
+  .catch(() => {
+    alert('Erro ao gerar certificado');
+  });
+}
+
+
   function getChecked() {
     return document.querySelectorAll('.row-check:checked');
   }
