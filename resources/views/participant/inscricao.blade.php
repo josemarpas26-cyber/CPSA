@@ -258,9 +258,23 @@
               <p class="field-error" id="err-gender" style="display:none;"></p>
             </div>
             <div>
-              <label class="form-label">Data de nascimento <span style="color:var(--danger);">*</span></label>
-              <input type="date" name="date_of_birth" id="date_of_birth"
-                     value="{{ old('date_of_birth') }}" class="form-input">
+              <label class="form-label">
+                Data de nascimento <span style="color:var(--danger);">*</span>
+              </label>
+
+              <input type="date"
+                    name="date_of_birth"
+                    id="date_of_birth"
+                    value="{{ old('date_of_birth') }}"
+                    class="form-input"
+                    placeholder="DD/MM/AAAA"
+                    max="{{ date('Y-m-d') }}"
+                    style="font-size:.9rem;">
+
+              <p style="font-size:.72rem;color:var(--text-3);margin:.25rem 0 0;">
+                Ex: 25/12/1990
+              </p>
+
               <p class="field-error" id="err-date_of_birth" style="display:none;"></p>
             </div>
           </div>
