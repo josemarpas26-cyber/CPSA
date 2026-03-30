@@ -315,86 +315,115 @@
   }
   .gallery-inner{max-width:1100px;margin:0 auto;}
 
-  /* Wrapper com overflow hidden e touch-action */
+
+  /* ══════════════════════════════════════════════════
+   GALLERY / SLIDER — CORRIGIDO
+══════════════════════════════════════════════════ */
+
+/* Container — tamanho fixo via aspect-ratio */
+.slider-outer{
+  position:relative;
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  touch-action:pan-y;
+  -webkit-user-select:none;
+  user-select:none;
+  aspect-ratio:16/7;          /* ← ratio fixo no container */
+  background:var(--navy);     /* cor de fundo enquanto carrega */
+}
+
+/* Track preenche 100% do container */
+.slider-track{
+  display:flex;
+  height:100%;               /* ← herda a altura do container */
+  transition:transform .45s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+
+/* Cada slide ocupa 100% do container, sem encolher */
+.slide{
+  flex:0 0 100%;
+  width:100%;
+  height:100%;               /* ← todos iguais */
+  position:relative;
+  overflow:hidden;
+}
+
+/* Imagem preenche o slide inteiro sem distorcer */
+.slide img{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;          /* ← corta se preciso, nunca distorce */
+  object-position:center;
+  display:block;
+}
+
+/* Overlay e caption */
+.slide-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(11,31,74,.75) 0%,rgba(11,31,74,.1) 50%,transparent 100%);
+  display:flex;align-items:flex-end;padding:1.5rem;
+  z-index:1;                 /* acima da imagem */
+}
+.slide-caption p{
+  font-size:.68rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 .2rem;
+}
+.slide-caption h3{
+  font-family:var(--font-display);font-style:italic;
+  font-size:clamp(1rem,3vw,1.4rem);margin:0;color:white;line-height:1.2;
+}
+
+/* Botões prev/next */
+.slider-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.25);
+  color:white;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .15s;z-index:5;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.slider-btn:hover,.slider-btn:focus{
+  background:rgba(255,255,255,.3);outline:none;
+}
+.slider-btn:active{transform:translateY(-50%) scale(.92);}
+.slider-btn-prev{left:.75rem;}
+.slider-btn-next{right:.75rem;}
+
+/* Dots */
+.slider-dots{display:flex;gap:.5rem;justify-content:center;margin-top:.875rem;flex-wrap:wrap;}
+.slider-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--card-border);cursor:pointer;
+  transition:background .2s,transform .2s;border:none;padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.slider-dot.active{background:var(--blue-vivid);transform:scale(1.3);}
+
+/* ── Mobile ────────────────────────────────────── */
+@media(max-width:640px){
   .slider-outer{
-    position:relative;
-    border-radius:var(--r-xl);
-    overflow:hidden;
-    box-shadow:var(--shadow-lg);
-    touch-action:pan-y;
-    -webkit-user-select:none;
-    user-select:none;
+    aspect-ratio:4/3;          /* mais alto em mobile */
+    border-radius:var(--r-lg);
   }
-  .slider-track{
-    display:flex;
-    transition:transform .45s cubic-bezier(.4,0,.2,1);
-    will-change:transform;
+  .slider-btn{width:36px;height:36px;}
+  .slider-btn-prev{left:.5rem;}
+  .slider-btn-next{right:.5rem;}
+  .slide-overlay{padding:1rem;}
+}
+
+@media(max-width:480px){
+  .slider-outer{
+    aspect-ratio:3/2;          /* ainda mais quadrado em ecrãs pequenos */
   }
-  .slide{
-    min-width:100%;
-    /* Aspect ratio para consistência em todos os ecrãs */
-    aspect-ratio:16/7;
-    position:relative;
-    flex-shrink:0;
-    overflow:hidden;
-  }
-  @media(max-width:640px){
-    .slide{ aspect-ratio:4/3; }
-  }
-  .slide img{
-    width:100%;height:100%;
-    object-fit:cover;object-position:center;
-    display:block;
-    /* Prevenir gap em alguns browsers */
-    vertical-align:bottom;
-  }
-  .slide-overlay{
-    position:absolute;inset:0;
-    background:linear-gradient(0deg,rgba(11,31,74,.75) 0%,rgba(11,31,74,.1) 50%,transparent 100%);
-    display:flex;align-items:flex-end;padding:1.5rem;
-  }
-  .slide-caption p{
-    font-size:.68rem;font-weight:600;letter-spacing:.08em;
-    text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 .2rem;
-  }
-  .slide-caption h3{
-    font-family:var(--font-display);font-style:italic;
-    font-size:clamp(1rem,3vw,1.4rem);margin:0;color:white;line-height:1.2;
-  }
-  /* Botões prev/next — maiores e mais fáceis de tocar em mobile */
-  .slider-btn{
-    position:absolute;top:50%;transform:translateY(-50%);
-    width:44px;height:44px;border-radius:50%;
-    background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
-    border:1.5px solid rgba(255,255,255,.25);
-    color:white;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    transition:background .2s,transform .15s;z-index:5;
-    -webkit-tap-highlight-color:transparent;
-    touch-action:manipulation;
-  }
-  .slider-btn:hover,.slider-btn:focus{
-    background:rgba(255,255,255,.3);
-    outline:none;
-  }
-  .slider-btn:active{ transform:translateY(-50%) scale(.92); }
-  .slider-btn-prev{left:.75rem;}
-  .slider-btn-next{right:.75rem;}
-  /* Em mobile, botões menores para não cobrir muito da imagem */
-  @media(max-width:480px){
-    .slider-btn{width:36px;height:36px;}
-    .slider-btn-prev{left:.5rem;}
-    .slider-btn-next{right:.5rem;}
-  }
-  /* Dots */
-  .slider-dots{display:flex;gap:.5rem;justify-content:center;margin-top:.875rem;flex-wrap:wrap;}
-  .slider-dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--card-border);cursor:pointer;
-    transition:background .2s,transform .2s;border:none;padding:0;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .slider-dot.active{background:var(--blue-vivid);transform:scale(1.3);}
+}
 
   /* ══════════════════════════════════════════════════
      MAP
@@ -867,7 +896,7 @@
     <div class="slider-outer reveal reveal-delay-1" id="sliderOuter">
       <div class="slider-track" id="sliderTrack">
         <div class="slide">
-          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=75"
+          <img src="images/fundoEscuro.png"
                alt="Conferências plenárias" loading="lazy">
           <div class="slide-overlay">
             <div class="slide-caption">
